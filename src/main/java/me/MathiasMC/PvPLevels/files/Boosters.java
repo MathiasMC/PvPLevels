@@ -44,6 +44,12 @@ public class Boosters {
     private void update() {
         boolean change = false;
         plugin.textUtils.fileHeader(get);
+        if (!get.contains("global-settings.disabled-xp")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("skeleton");
+            get.set("global-settings.disabled-xp", list);
+            change = true;
+        }
         if (!get.contains("global-settings")) {
             get.set("global-settings.prefix", "&7( &6{pvplevels_booster_global_xp} &aBoost XP &7)");
             ArrayList<String> list = new ArrayList<>();
@@ -110,30 +116,29 @@ public class Boosters {
             get.set("global-settings.gui.1.1.OPTIONS", list6);
             change = true;
         }
+        if (!get.contains("personal-settings.disabled-xp")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("skeleton");
+            get.set("personal-settings.disabled-xp", list);
+            change = true;
+        }
         if (!get.contains("personal-settings")) {
             get.set("personal-settings.prefix", "&7( &6{pvplevels_booster_personal_xp} &aPersonal Boost XP &7)");
-
             ArrayList<String> list = new ArrayList<>();
             list.add("pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eStarted a personal booster &6{pvplevels_booster_personal_type} &efor &6{pvplevels_booster_personal_time}");
             get.set("personal-settings.start", list);
-
             ArrayList<String> list1 = new ArrayList<>();
             list1.add("pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYour personal booster has ended");
             get.set("personal-settings.end", list1);
-
             ArrayList<String> list12 = new ArrayList<>();
             list12.add("pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou already have an active personal booster");
             get.set("personal-settings.active", list12);
-
-
             get.set("personal-settings.commands.default.delay", 5);
             get.set("personal-settings.commands.default.permission", "pvplevels.boosters.personal.default");
             ArrayList<String> list22 = new ArrayList<>();
             list22.add("world");
             get.set("personal-settings.commands.default.worlds", list22);
             get.set("personal-settings.commands.default.commands", new ArrayList<>());
-
-
             get.set("personal-settings.gui.none.NAME", "&6Personal Booster");
             ArrayList<String> list3 = new ArrayList<>();
             list3.add("&a<&f&l------&bPower&f&l------&a>");

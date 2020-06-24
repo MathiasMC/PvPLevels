@@ -90,6 +90,8 @@ public class Language {
             list.add("&7&l> &f/pvplevels set/add/remove kills/deaths/xp/level <player> <amount>");
             list.add("&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0> <time>");
             list.add("&7&l> &f/pvplevels gui open <fileName> <player>");
+            list.add("&7&l> &f/pvplevels player get <xpType> <player>");
+            list.add("&7&l> &f/pvplevels player lose <xpType> <player>");
             list.add("&7&l> &f/pvpboosters");
             list.add("&7&l> &f/pvpprofile");
             list.add("&7&l> &f/pvptop kills/deaths/xp/level");
@@ -108,6 +110,8 @@ public class Language {
             list.add("&7&l> &f/pvplevels set/add/remove kills/deaths/xp/level <player> <amount>");
             list.add("&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0> <time>");
             list.add("&7&l> &f/pvplevels gui open <fileName> <player>");
+            list.add("&7&l> &f/pvplevels player get <xpType> <player>");
+            list.add("&7&l> &f/pvplevels player lose <xpType> <player>");
             list.add("&7&l> &f/pvpboosters");
             list.add("&7&l> &f/pvpprofile");
             list.add("&7&l> &f/pvptop kills/deaths/xp/level <player>");
@@ -1024,6 +1028,108 @@ public class Language {
             ArrayList<String> list = new ArrayList<>();
             list.add("&7[&bPvPLevels&7] &cThe file {pvplevels_gui_file} is not found");
             get.set("console.pvplevels.gui.open.found", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels player get, lose");
+            get.set("player.pvplevels.player.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.player.permission", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.player.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels player get, lose");
+            get.set("console.pvplevels.player.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.get.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels player get <xpType> <player>");
+            get.set("player.pvplevels.player.get.usage", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.player.get.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels player get <xpType> <player>");
+            get.set("console.pvplevels.player.get.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.get.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.player.get.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.get.config")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot find {pvplevels_xp_type} in the xp section");
+            get.set("player.pvplevels.player.get.config", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.player.get.config")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot find {pvplevels_xp_type} in the xp section");
+            get.set("console.pvplevels.player.get.config", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.get.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("player.pvplevels.player.get.online", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.player.get.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("console.pvplevels.player.get.online", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.lose.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels player lose <xpType> <player>");
+            get.set("player.pvplevels.player.lose.usage", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.player.lose.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels player lose <xpType> <player>");
+            get.set("console.pvplevels.player.lose.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.lose.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.player.lose.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.lose.config")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot find {pvplevels_xp_type} in the xp section");
+            get.set("player.pvplevels.player.lose.config", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.player.lose.config")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot find {pvplevels_xp_type} in the xp section");
+            get.set("console.pvplevels.player.lose.config", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.player.lose.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("player.pvplevels.player.lose.online", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.player.lose.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("console.pvplevels.player.lose.online", list);
             change = true;
         }
         if (change) {

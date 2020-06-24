@@ -32,7 +32,7 @@ public class XPManager {
         Long xp = playerConnect.xp() + add;
         Long globalBooster = 0L;
         long personalBooster = 0L;
-        if (plugin.boostersManager.hasGlobalActive()) {
+        if (plugin.boostersManager.hasGlobalActive() && !plugin.boosters.get.getStringList("global-settings.disabled-xp").contains(entityType)) {
             Long boosted = Math.round(add * plugin.boostersManager.type());
             globalBooster = boosted - add;
             xp = (xp - add) + boosted;
@@ -40,7 +40,7 @@ public class XPManager {
                 plugin.systemManager.executeCommands(killer, plugin.boosters.get, "global-settings.commands", "commands", 0L);
             }
         }
-        if (playerConnect.getPersonalBooster() != null) {
+        if (playerConnect.getPersonalBooster() != null && !plugin.boosters.get.getStringList("personal-settings.disabled-xp").contains(entityType)) {
             Long boosted = Math.round(add * playerConnect.getPersonalBooster());
             personalBooster = boosted - add;
             xp = (xp - add) + boosted;
@@ -52,10 +52,10 @@ public class XPManager {
         Long need = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp") - xp;
         if (!getLevel(playerConnect, killer)) {
             if (plugin.config.get.contains("xp." + entityType + "." + group + ".level-commands." + playerConnect.level())) {
-                sendCommands(killer, "xp." + entityType + "." + group + ".level-commands." + playerConnect.level(), plugin.config.get, customName, add, need, 0, globalBooster, personalBooster);
+                sendCommands(killer, "xp." + entityType + "." + group + ".level-commands." + playerConnect.level(), plugin.config.get, customName, add, need, 0, globalBooster, personalBooster, entityType);
                 return;
             }
-            sendCommands(killer, "xp." + entityType + "." + group + ".commands", plugin.config.get, customName, add, need, 0, globalBooster, personalBooster);
+            sendCommands(killer, "xp." + entityType + "." + group + ".commands", plugin.config.get, customName, add, need, 0, globalBooster, personalBooster, entityType);
         }
     }
 
@@ -79,7 +79,7 @@ public class XPManager {
                 }
             }
             if (xp >= 0L && xpMessage) {
-                sendCommands(killer, "xp." + entityType + "." + group + ".xp-lose.commands.lose", plugin.config.get, "", 0, 0L, lost, 0L, 0L);
+                sendCommands(killer, "xp." + entityType + "." + group + ".xp-lose.commands.lose", plugin.config.get, "", 0, 0L, lost, 0L, 0L, "");
             }
         }
     }
@@ -87,9 +87,9 @@ public class XPManager {
     private boolean loseLevel(PlayerConnect playerConnect, Long level, Player player, String commandPath) {
         if (level >= 0) {
             playerConnect.level(level);
-            sendCommands(player, commandPath, plugin.config.get, "", 0, 0L, 0, 0L, 0L);
+            sendCommands(player, commandPath, plugin.config.get, "", 0, 0L, 0, 0L, 0L, "");
             if (plugin.levels.get.contains("levels." + level + ".lose-commands")) {
-                sendCommands(player, "levels." + level + ".lose-commands", plugin.levels.get, "", 0, 0L, 0, 0L, 0L);
+                sendCommands(player, "levels." + level + ".lose-commands", plugin.levels.get, "", 0, 0L, 0, 0L, 0L, "");
             }
             return false;
         }
@@ -103,7 +103,7 @@ public class XPManager {
             if (clearXP()) {
                 playerConnect.xp(0L);
             }
-            sendCommands(player, "levels." + nextLevel + ".commands", plugin.levels.get, "", 0, 0L, 0, 0L, 0L);
+            sendCommands(player, "levels." + nextLevel + ".commands", plugin.levels.get, "", 0, 0L, 0, 0L, 0L, "");
             return true;
         }
         return false;
@@ -121,9 +121,9 @@ public class XPManager {
         return plugin.config.get.getBoolean("levelup.xp-clear");
     }
 
-    private void sendCommands(Player killer, String path, FileConfiguration fileConfiguration, String customName, int add, Long need, int lost, Long globalBooster, Long personalBooster) {
+    private void sendCommands(Player killer, String path, FileConfiguration fileConfiguration, String customName, int add, Long need, int lost, Long globalBooster, Long personalBooster, String entityType) {
         for (String command : fileConfiguration.getStringList(path)) {
-            PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(killer, command.replace("{pvplevels_type}", customName).replace("{pvplevels_xp_get}", String.valueOf(add)).replace("{pvplevels_xp_needed}", String.valueOf(need)).replace("{pvplevels_xp_lost}", String.valueOf(lost))).replace("{pvplevels_booster_global_prefix}", plugin.boostersManager.globalPrefix(globalBooster)).replace("{pvplevels_booster_personal_prefix}", plugin.boostersManager.personalPrefix(killer.getUniqueId().toString(), personalBooster)));
+            PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(killer, command.replace("{pvplevels_type}", customName).replace("{pvplevels_xp_get}", String.valueOf(add)).replace("{pvplevels_xp_needed}", String.valueOf(need)).replace("{pvplevels_xp_lost}", String.valueOf(lost))).replace("{pvplevels_booster_global_prefix}", plugin.boostersManager.globalPrefix(globalBooster, entityType)).replace("{pvplevels_booster_personal_prefix}", plugin.boostersManager.personalPrefix(killer.getUniqueId().toString(), personalBooster, entityType)));
         }
     }
 }

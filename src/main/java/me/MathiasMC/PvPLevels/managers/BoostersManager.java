@@ -126,16 +126,16 @@ public class BoostersManager {
         return String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
     }
 
-    public String globalPrefix(Long boost) {
-        if (hasGlobalActive()) {
+    public String globalPrefix(Long boost, String entityType) {
+        if (hasGlobalActive() && !plugin.boosters.get.getStringList("global-settings.disabled-xp").contains(entityType)) {
             return ChatColor.translateAlternateColorCodes('&', plugin.boosters.get.getString("global-settings.prefix").replace("{pvplevels_booster_global_xp}", String.valueOf(boost)));
         } else {
             return "";
         }
     }
 
-    public String personalPrefix(String uuid, Long boost) {
-        if (plugin.get(uuid).getPersonalBooster() != null) {
+    public String personalPrefix(String uuid, Long boost, String entityType) {
+        if (plugin.get(uuid).getPersonalBooster() != null && !plugin.boosters.get.getStringList("personal-settings.disabled-xp").contains(entityType)) {
             return ChatColor.translateAlternateColorCodes('&', plugin.boosters.get.getString("personal-settings.prefix").replace("{pvplevels_booster_personal_xp}", String.valueOf(boost)));
         } else {
             return "";

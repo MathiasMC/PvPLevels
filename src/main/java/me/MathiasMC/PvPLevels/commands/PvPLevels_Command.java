@@ -407,6 +407,29 @@ public class PvPLevels_Command implements CommandExecutor {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                             }
                         }
+                    } else if (args[0].equalsIgnoreCase("player")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.command.player")) {
+                            if (args.length > 1) {
+                                if (args[1].equalsIgnoreCase("get")) {
+                                    playerCheckXP(sender, args, "get", path);
+                                } else if (args[1].equalsIgnoreCase("lose")) {
+                                    playerCheckXP(sender, args, "lose", path);
+                                } else {
+                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.player.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            } else {
+                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.player.usage")) {
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("player.pvplevels.player.permission")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
                     }
                     if (unknown) {
                         for (String message : plugin.language.get.getStringList(path + ".pvplevels.command.unknown")) {
@@ -421,6 +444,39 @@ public class PvPLevels_Command implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    private void playerCheckXP(CommandSender sender, String[] args, String type, String path) {
+        if (sender.hasPermission("pvplevels.command." + type)) {
+            if (args.length == 4) {
+                if (plugin.config.get.contains("xp." + args[2])) {
+                    Player target = PvPLevels.call.getServer().getPlayer(args[3]);
+                    if (target != null) {
+                        if (type.equalsIgnoreCase("get")) {
+                            plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], "", target, true);
+                            return;
+                        }
+                        plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], "", target, false);
+                    } else {
+                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.player." + type + ".online")) {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        }
+                    }
+                } else {
+                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.player." + type + ".config")) {
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_xp_type}", args[2])));
+                    }
+                }
+            } else {
+                for (String message : plugin.language.get.getStringList(path + ".pvplevels.player." + type + ".usage")) {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                }
+            }
+        } else {
+            for (String message : plugin.language.get.getStringList("player.pvplevels.player." + type + ".permission")) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            }
+        }
     }
 
     private void setValue(CommandSender sender, Player target, String colum, Long set, PlayerConnect playerConnect, String[] args) {
