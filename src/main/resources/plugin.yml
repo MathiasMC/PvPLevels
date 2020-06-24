@@ -1,0 +1,18 @@
+main: me.MathiasMC.PvPLevels.PvPLevels
+version: 1.1.1
+name: PvPLevels
+author: MathiasMC
+website: spigotmc.org/resources/pvplevels.20807
+softdepend: [PlaceholderAPI]
+api-version: 1.13
+commands:
+  pvplevels:
+    description: PvPLevels main command
+  pvpstats:
+    description: See stats
+  pvptop:
+    description: See top stats
+  pvpboosters:
+    description: See boosters
+  pvpprofile:
+    description: See profile
