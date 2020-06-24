@@ -19,11 +19,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -165,34 +160,26 @@ public class PvPLevels extends JavaPlugin {
         }
     }
 
-    public String PlaceholderReplace(Player target, String message) {
-        String uuid = target.getUniqueId().toString();
-        PlayerConnect playerConnect = get(uuid);
-        message = message
-                .replace("{pvplevels_player}", target.getName())
-                .replace("{pvplevels_kills}", String.valueOf(playerConnect.kills()))
-                .replace("{pvplevels_deaths}", String.valueOf(playerConnect.deaths()))
-                .replace("{pvplevels_xp}", String.valueOf(playerConnect.xp()))
-                .replace("{pvplevels_xp_required}", String.valueOf(statsManager.xp_required(uuid)))
-                .replace("{pvplevels_xp_progress}", String.valueOf(statsManager.xp_progress(uuid)))
-                .replace("{pvplevels_xp_progress_style}", String.valueOf(statsManager.xp_progress_style(uuid)))
-                .replace("{pvplevels_level}", String.valueOf(playerConnect.level()))
-                .replace("{pvplevels_level_to}", String.valueOf(playerConnect.level() + 1))
-                .replace("{pvplevels_kdr}", String.valueOf(statsManager.kdr(uuid)))
-                .replace("{pvplevels_group}", String.valueOf(statsManager.group(target)))
-                .replace("{pvplevels_group_to}", String.valueOf(statsManager.group_to(target)))
-                .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()));
+    public String PlaceholderReplace(Player player, String message) {
+        message = replacePlaceholders(message, player.getUniqueId().toString(), player.getName(), statsManager.group(player), statsManager.group_to(player));
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(target, message);
+            message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, message);
         }
         return message;
     }
 
     public String OfflinePlaceholderReplace(OfflinePlayer offlinePlayer, String message) {
-        String uuid = offlinePlayer.getUniqueId().toString();
+        message = replacePlaceholders(message, offlinePlayer.getUniqueId().toString(), offlinePlayer.getName(), "", "");
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(offlinePlayer, message);
+        }
+        return message;
+    }
+
+    private String replacePlaceholders(String message, String uuid, String name, String group, String group_to) {
         PlayerConnect playerConnect = get(uuid);
         message = message
-                .replace("{pvplevels_player}", offlinePlayer.getName())
+                .replace("{pvplevels_player}", name)
                 .replace("{pvplevels_kills}", String.valueOf(playerConnect.kills()))
                 .replace("{pvplevels_deaths}", String.valueOf(playerConnect.deaths()))
                 .replace("{pvplevels_xp}", String.valueOf(playerConnect.xp()))
@@ -202,10 +189,9 @@ public class PvPLevels extends JavaPlugin {
                 .replace("{pvplevels_level}", String.valueOf(playerConnect.level()))
                 .replace("{pvplevels_level_to}", String.valueOf(playerConnect.level() + 1))
                 .replace("{pvplevels_kdr}", String.valueOf(statsManager.kdr(uuid)))
+                .replace("{pvplevels_group}", group)
+                .replace("{pvplevels_group_to}", group_to)
                 .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()));
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(offlinePlayer, message);
-        }
         return message;
     }
 
