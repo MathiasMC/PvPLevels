@@ -1,14 +1,12 @@
 package me.MathiasMC.PvPLevels.data;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public class PlayerConnect {
 
-    private String playeruuid;
+    private final String playeruuid;
 
     private Long kills;
 
@@ -110,7 +108,7 @@ public class PlayerConnect {
         String path = "players." + playeruuid + ".personal-active";
         if (PvPLevels.call.boosters.get.contains(path)) {
             String[] get = PvPLevels.call.boosters.get.getString(path).split(" ");
-            timer(Integer.valueOf(get[1]), Double.valueOf(get[0]));
+            timer(Integer.parseInt(get[1]), Double.valueOf(get[0]));
         }
     }
 }

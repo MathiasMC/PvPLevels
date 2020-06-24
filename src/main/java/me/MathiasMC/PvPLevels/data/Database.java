@@ -13,7 +13,7 @@ public class Database {
     private final PvPLevels plugin;
 
     private Connection connection;
-    private boolean debug_database;
+    private final boolean debug_database;
 
     public Database(final PvPLevels plugin) {
         this.plugin = plugin;
@@ -31,7 +31,7 @@ public class Database {
                     if (debug_database) { plugin.textUtils.debug("[Database] connection is not valid creating new"); }
                 }
             }
-        }).runTaskTimerAsynchronously(plugin.call, 60 * 20, 60 * 20);
+        }).runTaskTimerAsynchronously(plugin, 60 * 20, 60 * 20);
     }
 
     private Connection get() {
@@ -43,7 +43,7 @@ public class Database {
             } else {
                 Class.forName("org.sqlite.JDBC");
                 if (debug_database) { plugin.textUtils.debug("[Database] Getting connection (SQLite)"); }
-                return DriverManager.getConnection("jdbc:sqlite:" + new File(plugin.call.getDataFolder(), "data.db"));
+                return DriverManager.getConnection("jdbc:sqlite:" + new File(plugin.getDataFolder(), "data.db"));
             }
         } catch (ClassNotFoundException | SQLException e) {
             plugin.textUtils.exception(e.getStackTrace(), e.getMessage());
@@ -115,7 +115,7 @@ public class Database {
                     }
                 }
             };
-            r.runTaskAsynchronously(plugin.call);
+            r.runTaskAsynchronously(plugin);
         }
     }
 
@@ -155,7 +155,7 @@ public class Database {
                     }
                 }
             };
-            r.runTaskAsynchronously(plugin.call);
+            r.runTaskAsynchronously(plugin);
         }
     }
 
@@ -222,8 +222,8 @@ public class Database {
     }
 
     public void loadOnline() {
-        if (plugin.call.getServer().getOnlinePlayers().size() > 0 && set()) {
-            for (Player player : plugin.call.getServer().getOnlinePlayers()) {
+        if (plugin.getServer().getOnlinePlayers().size() > 0 && set()) {
+            for (Player player : plugin.getServer().getOnlinePlayers()) {
                 if (!plugin.list().contains(player.getUniqueId().toString()))
                     plugin.load(player.getUniqueId().toString());
             }

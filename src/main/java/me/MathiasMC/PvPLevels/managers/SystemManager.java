@@ -34,13 +34,9 @@ public class SystemManager {
     public boolean world(Player player, FileConfiguration fileConfiguration, String path) {
         if (fileConfiguration.contains(path + ".worlds")) {
             List<String> worlds = fileConfiguration.getStringList(path + ".worlds");
-            if (worlds.contains(player.getWorld().getName())) {
-                return true;
-            }
-        } else {
-            return true;
+            return worlds.contains(player.getWorld().getName());
         }
-        return false;
+        return true;
     }
 
     public void executeCommands(Player player, FileConfiguration fileConfiguration, String path, String key, Long value) {
@@ -49,9 +45,7 @@ public class SystemManager {
             if (value > 0 && !fileConfiguration.contains(path + "." + group + "." + value)) {
                 return;
             }
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(PvPLevels.call, new Runnable() {
-                @Override
-                public void run() {
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(PvPLevels.call, () -> {
                     String commandPath = path + "." + group + "." + key;
                     if (value > 0) {
                         commandPath = path + "." + group + "." + value + "." + key;
@@ -59,7 +53,6 @@ public class SystemManager {
                     for (String commands : fileConfiguration.getStringList(commandPath)) {
                         PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(player, commands));
                     }
-                }
                 }, fileConfiguration.getLong(path + "." + group + ".delay"));
         }
     }

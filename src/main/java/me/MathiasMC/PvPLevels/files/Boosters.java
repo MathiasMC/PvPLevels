@@ -11,13 +11,13 @@ import java.util.ArrayList;
 public class Boosters {
 
     public FileConfiguration get;
-    private File file;
+    private final File file;
 
     private final PvPLevels plugin;
 
     public Boosters(final PvPLevels plugin) {
         this.plugin = plugin;
-        file = new File(PvPLevels.call.getDataFolder(), "boosters.yml");
+        file = new File(plugin.getDataFolder(), "boosters.yml");
         if (!file.exists()) {
             try {
                 file.createNewFile();

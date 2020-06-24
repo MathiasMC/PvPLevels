@@ -21,12 +21,9 @@ public class BlockBreak implements Listener {
         Location location = e.getBlock().getLocation();
         if (!plugin.blocksList.contains(location)) {
             final Material material = e.getBlock().getType();
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                @Override
-                public void run() {
-                    if (e.getBlock().getLocation().getBlock().getType().equals(Material.AIR)) {
-                        plugin.xpManager.check(plugin.get(e.getPlayer().getUniqueId().toString()), material.name().toLowerCase(), "", e.getPlayer(), true);
-                    }
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                if (e.getBlock().getLocation().getBlock().getType().equals(Material.AIR)) {
+                    plugin.xpManager.check(plugin.get(e.getPlayer().getUniqueId().toString()), material.name().toLowerCase(), "", e.getPlayer(), true);
                 }
             }, 2L);
         } else {

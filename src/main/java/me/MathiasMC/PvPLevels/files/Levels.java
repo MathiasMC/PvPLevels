@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Levels {
 
     public FileConfiguration get;
-    private File file;
+    private final File file;
 
     private final PvPLevels plugin;
 

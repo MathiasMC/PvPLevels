@@ -26,7 +26,7 @@ public class BoostersManager {
                         String[] globalSelect = globalQueue().get(0).split(" ");
                         globalUUID = globalSelect[0];
                         globalBoost = Double.valueOf(globalSelect[1]);
-                        globalSeconds = Integer.valueOf(globalSelect[2]);
+                        globalSeconds = Integer.parseInt(globalSelect[2]);
                         offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(globalUUID));
                         globalStarted();
                     }

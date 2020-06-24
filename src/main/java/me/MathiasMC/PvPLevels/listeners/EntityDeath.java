@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 public class EntityDeath implements Listener {
@@ -72,9 +71,7 @@ public class EntityDeath implements Listener {
                 }
             }
         }
-        if (plugin.spawners.contains(entityUUID)) {
-            plugin.spawners.remove(entityUUID);
-        }
+        plugin.spawners.remove(entityUUID);
     }
 
     private void death(Player killed, PlayerConnect playerConnect) {

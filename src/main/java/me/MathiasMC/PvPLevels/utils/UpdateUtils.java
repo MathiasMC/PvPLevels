@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 public class UpdateUtils {
 
     private final PvPLevels plugin;
-    private int resourceId;
+    private final int resourceId;
 
     public UpdateUtils(final PvPLevels plugin, int resourceId) {
         this.plugin = plugin;

@@ -119,7 +119,7 @@ public class StatsManager {
                 ArrayList<Integer> list = new ArrayList<>();
                 for (String inter : plugin.config.get.getConfigurationSection("killstreaks." + group).getKeys(false)) {
                     if (!inter.equalsIgnoreCase("delay") && !inter.equalsIgnoreCase("permission") && !inter.equalsIgnoreCase("worlds")) {
-                        if (killstreak >= Integer.valueOf(inter)) {
+                        if (killstreak >= Integer.parseInt(inter)) {
                             list.add(Integer.valueOf(inter));
                         }
                     }

@@ -34,7 +34,7 @@ public class KillSessionUtils {
                     for (int i = 0; i < killsession.get(attacker).size(); i++) {
                         if (killed.getUniqueId().toString().equalsIgnoreCase(killsession.get(attacker).get(i).split(";")[0])) {
                             String uuid = killsession.get(attacker).get(i).split(";")[0];
-                            int nameamount = Integer.valueOf(killsession.get(attacker).get(i).split(";")[1]);
+                            int nameamount = Integer.parseInt(killsession.get(attacker).get(i).split(";")[1]);
                             int SessionInt = plugin.config.get.getInt("kill-session.amount");
                             if (killed.getUniqueId().toString().equalsIgnoreCase(uuid))
                                 if (nameamount >= SessionInt) {
@@ -63,12 +63,12 @@ public class KillSessionUtils {
             int id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     if (killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
                         String[] split = killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=");
-                        int time = Integer.valueOf(split[1]);
+                        int time = Integer.parseInt(split[1]);
                         if (time > -1) {
                             killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, Integer.valueOf(split[0]) + "=" + (time - 1));
                         }
                         if (time == 0) {
-                            PvPLevels.call.getServer().getScheduler().cancelTask(Integer.valueOf(split[0]));
+                            PvPLevels.call.getServer().getScheduler().cancelTask(Integer.parseInt(split[0]));
                             killsessiontime.remove(killed.getUniqueId().toString() + "=" + attacker);
                             killsession.remove(attacker);
                         }

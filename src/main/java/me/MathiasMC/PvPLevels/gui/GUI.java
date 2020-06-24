@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public class GUI implements InventoryHolder {
 
-    private PvPLevels plugin;
+    private final PvPLevels plugin;
 
     private Inventory inventory;
 
@@ -90,10 +90,8 @@ public class GUI implements InventoryHolder {
     }
 
     private ArrayList<Integer> calulatePosition(int id, int pageIndex, int indexSize, ArrayList<ItemStack> itemList, ArrayList<Integer> perPage) {
-        int index = 0;
-        int amtPages = pageIndex;
-        index = id * amtPages - amtPages;
-        int endIndex = Math.min(index + amtPages, itemList.size());
+        int index = id * pageIndex - pageIndex;
+        int endIndex = Math.min(index + pageIndex, itemList.size());
         for (; index < endIndex; index++) {
             perPage.add(index);
         }
@@ -105,8 +103,8 @@ public class GUI implements InventoryHolder {
                     try {
                         inventory.setItem(ii, itemList.get(perPage.get(ItemCount)));
                         ItemCount++;
-                        if (!ac.contains(Integer.valueOf(ii)))
-                            ac.add(Integer.valueOf(ii));
+                        if (!ac.contains(ii))
+                            ac.add(ii);
                     } catch (Exception e) {
                     }
                 }
@@ -122,9 +120,9 @@ public class GUI implements InventoryHolder {
             for (String booster : list) {
                 String[] split = booster.split(" ");
                 if (plugin.boosters.get.contains(path + ".gui." + booster.split(" ")[0])) {
-                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui." + split[0] + ".MATERIAL"), plugin.boosters.get.getInt(path + ".gui." + split[0] + ".AMOUNT"), plugin.boosters.get.getString(path + ".gui." + split[0] + ".NAME"), plugin.boosters.get.getStringList(path + ".gui." + split[0] + ".LORES"), player, path + ".gui." + split[0], plugin.boosters.get, split[0], Integer.valueOf(split[1])));
+                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui." + split[0] + ".MATERIAL"), plugin.boosters.get.getInt(path + ".gui." + split[0] + ".AMOUNT"), plugin.boosters.get.getString(path + ".gui." + split[0] + ".NAME"), plugin.boosters.get.getStringList(path + ".gui." + split[0] + ".LORES"), player, path + ".gui." + split[0], plugin.boosters.get, split[0], Integer.parseInt(split[1])));
                 } else {
-                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui.none.MATERIAL"), plugin.boosters.get.getInt(path + ".gui.none.AMOUNT"), plugin.boosters.get.getString(path + ".gui.none.NAME"), plugin.boosters.get.getStringList(path + ".gui.none.LORES"), player, path + ".gui.none", plugin.boosters.get, split[0], Integer.valueOf(split[1])));
+                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui.none.MATERIAL"), plugin.boosters.get.getInt(path + ".gui.none.AMOUNT"), plugin.boosters.get.getString(path + ".gui.none.NAME"), plugin.boosters.get.getStringList(path + ".gui.none.LORES"), player, path + ".gui.none", plugin.boosters.get, split[0], Integer.parseInt(split[1])));
                 }
             }
             ArrayList<Integer> perPage = new ArrayList<>();

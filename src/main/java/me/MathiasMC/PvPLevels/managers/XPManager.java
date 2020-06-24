@@ -112,18 +112,13 @@ public class XPManager {
     public boolean isMaxLevel(Player player, PlayerConnect playerConnect) {
         String group = plugin.systemManager.getGroup(player, plugin.config.get, "level-max", false);
         if (group != null) {
-            if (playerConnect.level() >= plugin.config.get.getInt("level-max." + group + ".max")) {
-                return true;
-            }
+            return playerConnect.level() >= plugin.config.get.getInt("level-max." + group + ".max");
         }
         return false;
     }
 
     private boolean clearXP() {
-        if (plugin.config.get.getBoolean("levelup.xp-clear")) {
-            return true;
-        }
-        return false;
+        return plugin.config.get.getBoolean("levelup.xp-clear");
     }
 
     private void sendCommands(Player killer, String path, FileConfiguration fileConfiguration, String customName, int add, Long need, int lost, Long globalBooster, Long personalBooster) {

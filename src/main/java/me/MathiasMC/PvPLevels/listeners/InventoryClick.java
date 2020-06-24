@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class InventoryClick implements Listener {
         List<String> list = plugin.boosters.get.getStringList("players." + player.getUniqueId().toString() + "." + key);
         for (String line : list) {
             if (line.split(" ").length == 3) {
-                if (slot == Integer.valueOf(line.split(" ")[2])) {
+                if (slot == Integer.parseInt(line.split(" ")[2])) {
                     if (global) {
                         global(player, line, list);
                     } else {
@@ -105,7 +104,7 @@ public class InventoryClick implements Listener {
             queue.add(player.getUniqueId().toString() + " " + line.split(" ")[0] + " " + line.split(" ")[1]);
             plugin.boosters.get.set("global-queue", queue);
             for (String command : plugin.boosters.get.getStringList("global-settings.queue.add")) {
-                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.valueOf(line.split(" ")[1]))).replace("{pvplevels_booster_global_queue}", String.valueOf(plugin.boostersManager.queueNumber(player.getUniqueId().toString()))));
+                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))).replace("{pvplevels_booster_global_queue}", String.valueOf(plugin.boostersManager.queueNumber(player.getUniqueId().toString()))));
             }
             list.remove(line);
             plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".global", list);
@@ -120,10 +119,10 @@ public class InventoryClick implements Listener {
     private void personal(Player player, String line, List<String> list) {
         PlayerConnect playerConnect = plugin.get(player.getUniqueId().toString());
         if (playerConnect.getPersonalBooster() == null && !plugin.boosters.get.contains("players." + player.getUniqueId().toString() + ".personal-active")) {
-            playerConnect.timer(Integer.valueOf(line.split(" ")[1]), Double.valueOf(line.split(" ")[0]));
+            playerConnect.timer(Integer.parseInt(line.split(" ")[1]), Double.valueOf(line.split(" ")[0]));
             plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".personal-active", line.split(" ")[0] + " " + line.split(" ")[1]);
             for (String command : plugin.boosters.get.getStringList("personal-settings.start")) {
-                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_personal_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.valueOf(line.split(" ")[1]))));
+                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_personal_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))));
             }
             list.remove(line);
             plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".personal", list);

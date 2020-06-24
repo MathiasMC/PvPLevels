@@ -20,12 +20,7 @@ public class InventoryClose implements Listener {
         if (e.getInventory().getHolder() instanceof GUI) {
             Player player = (Player) e.getPlayer();
             player.updateInventory();
-            PvPLevels.call.getServer().getScheduler().runTaskLater(PvPLevels.call, new Runnable() {
-                @Override
-                public void run() {
-                    player.updateInventory();
-                }
-            }, 3L);
+            PvPLevels.call.getServer().getScheduler().runTaskLater(plugin, player::updateInventory, 3L);
         }
     }
 }

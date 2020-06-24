@@ -13,7 +13,7 @@ public class TextUtils {
 
     private final Logger logger = Bukkit.getLogger();
 
-    private String prefix;
+    private final String prefix;
 
     public TextUtils(final PvPLevels plugin) {
         this.plugin = plugin;

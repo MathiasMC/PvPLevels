@@ -137,40 +137,40 @@ public class PvPLevels_Command implements CommandExecutor {
                                                 setValue(sender, target, "kills", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "kills", playerConnect.kills() + Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "kills", playerConnect.kills() + Long.parseLong(args[3]), playerConnect, args);
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "kills", playerConnect.kills() - Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "kills", playerConnect.kills() - Long.parseLong(args[3]), playerConnect, args);
                                             }
                                         } else if (args[1].equalsIgnoreCase("deaths")) {
                                             if (args[0].equalsIgnoreCase("set")) {
                                                 setValue(sender, target, "deaths", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "deaths", playerConnect.deaths() + Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "deaths", playerConnect.deaths() + Long.parseLong(args[3]), playerConnect, args);
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "deaths", playerConnect.deaths() - Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "deaths", playerConnect.deaths() - Long.parseLong(args[3]), playerConnect, args);
                                             }
                                         } else if (args[1].equalsIgnoreCase("xp")) {
                                             if (args[0].equalsIgnoreCase("set")) {
                                                 setValue(sender, target, "xp", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "xp", playerConnect.xp() + Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "xp", playerConnect.xp() + Long.parseLong(args[3]), playerConnect, args);
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "xp", playerConnect.xp() - Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "xp", playerConnect.xp() - Long.parseLong(args[3]), playerConnect, args);
                                             }
                                         } else if (args[1].equalsIgnoreCase("level")) {
                                             if (args[0].equalsIgnoreCase("set")) {
                                                 setValue(sender, target, "level", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "level", playerConnect.level() + Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "level", playerConnect.level() + Long.parseLong(args[3]), playerConnect, args);
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "level", playerConnect.level() - Long.valueOf(args[3]), playerConnect, args);
+                                                setValue(sender, target, "level", playerConnect.level() - Long.parseLong(args[3]), playerConnect, args);
                                             }
                                         } else {
                                             for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + ".usage")) {
@@ -205,7 +205,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                     if (plugin.isInt(args[1]) && !args[1].contains("-")) {
                                         ArrayList<Integer> xpList = new ArrayList<>();
                                         xpList.add(plugin.config.get.getInt("generate.xp.static") + plugin.random(plugin.config.get.getInt("generate.xp.min"), plugin.config.get.getInt("generate.xp.max")));
-                                        for (int i = 0; i < Integer.valueOf(args[1]) - 1; i++) {
+                                        for (int i = 0; i < Integer.parseInt(args[1]) - 1; i++) {
                                             xpList.add(xpList.get(i) + (plugin.config.get.getInt("generate.xp.static") + plugin.random(plugin.config.get.getInt("generate.xp.min"), plugin.config.get.getInt("generate.xp.max"))));
                                         }
                                         for (int i = 1; i <= xpList.size(); i++) {
@@ -256,16 +256,16 @@ public class PvPLevels_Command implements CommandExecutor {
                                                             plugin.boosters.save();
                                                             if (path.equalsIgnoreCase("player")) {
                                                                 for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.give.message")) {
-                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player_target}", target.getName()).replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.valueOf(args[5])))));
+                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player_target}", target.getName()).replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
                                                                 }
-                                                                if (target.getName() != sender.getName()) {
+                                                                if (!target.getName().equals(sender.getName())) {
                                                                     for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.give.target")) {
-                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.valueOf(args[5])))));
+                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
                                                                     }
                                                                 }
                                                             } else {
                                                                 for (String message : plugin.language.get.getStringList("console.pvplevels.boosters.give.target")) {
-                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.valueOf(args[5])))));
+                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
                                                                 }
                                                             }
                                                         } else {
@@ -287,16 +287,16 @@ public class PvPLevels_Command implements CommandExecutor {
                                                             plugin.boosters.save();
                                                             if (path.equalsIgnoreCase("player")) {
                                                                 for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.personal.give.message")) {
-                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player_target}", target.getName()).replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.valueOf(args[5])))));
+                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player_target}", target.getName()).replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
                                                                 }
-                                                                if (target.getName() != sender.getName()) {
+                                                                if (!target.getName().equals(sender.getName())) {
                                                                     for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.personal.give.target")) {
-                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.valueOf(args[5])))));
+                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
                                                                     }
                                                                 }
                                                             } else {
                                                                 for (String message : plugin.language.get.getStringList("console.pvplevels.boosters.personal.give.target")) {
-                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.valueOf(args[5])))));
+                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
                                                                 }
                                                             }
                                                         } else {
