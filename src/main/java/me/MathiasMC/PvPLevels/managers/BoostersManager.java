@@ -3,7 +3,6 @@ package me.MathiasMC.PvPLevels.managers;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -21,10 +20,7 @@ public class BoostersManager {
 
     public BoostersManager(final PvPLevels plugin) {
         this.plugin = plugin;
-
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-            @Override
-            public void run() {
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                 if (!hasGlobalActive()) {
                     if (globalQueueSize() > 0) {
                         String[] globalSelect = globalQueue().get(0).split(" ");
@@ -47,7 +43,6 @@ public class BoostersManager {
                 globalBoost = null;
                 globalSeconds = 0;
                 offlinePlayer = null;
-            }
         }, 20L, 20L);
     }
 
@@ -56,6 +51,18 @@ public class BoostersManager {
             return false;
         }
         return true;
+    }
+
+    public OfflinePlayer getGlobalOfflinePlayer() {
+        return offlinePlayer;
+    }
+
+    public Double getGlobalBooster() {
+        return globalBoost;
+    }
+
+    public int getGlobalSeconds() {
+        return globalSeconds;
     }
 
     public List<String> globalQueue() {

@@ -1,8 +1,10 @@
 package me.MathiasMC.PvPLevels;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
 public class PvPLevelsAPI {
@@ -89,5 +91,37 @@ public class PvPLevelsAPI {
 
     public Double getPersonalBooster(String uuid) {
         return PvPLevels.call.get(uuid).getPersonalBooster();
+    }
+
+    public boolean hasGlobalActive() {
+        return PvPLevels.call.boostersManager.hasGlobalActive();
+    }
+
+    public OfflinePlayer getGlobalOfflinePlayer() {
+        return PvPLevels.call.boostersManager.getGlobalOfflinePlayer();
+    }
+
+    public Double getGlobalBooster() {
+        return PvPLevels.call.boostersManager.getGlobalBooster();
+    }
+
+    public int getGlobalSeconds() {
+        return PvPLevels.call.boostersManager.getGlobalSeconds();
+    }
+
+    public String getTimeFormat(int seconds) {
+        return PvPLevels.call.boostersManager.timeLeft(seconds);
+    }
+
+    public List<String> getGlobalQueue() {
+        return PvPLevels.call.boostersManager.globalQueue();
+    }
+
+    public int getGlobalQueueNumber(String uuid) {
+        return PvPLevels.call.boostersManager.queueNumber(uuid);
+    }
+
+    public int getGlobalQueueSize(String uuid) {
+        return PvPLevels.call.boostersManager.isInQueueSize(uuid);
     }
 }
