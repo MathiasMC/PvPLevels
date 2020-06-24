@@ -17,9 +17,9 @@ public class KillSessionUtils {
         this.plugin = plugin;
     }
 
-    private static final HashMap<String, ArrayList<String>> killsession = new HashMap<>();
+    private final HashMap<String, ArrayList<String>> killsession = new HashMap<>();
 
-    private static final Map<String, String> killsessiontime = new HashMap<>();
+    private final Map<String, String> killsessiontime = new HashMap<>();
 
     public boolean check(Entity entity, Entity killer) {
         if (plugin.config.get.getBoolean("kill-session.use")) {
@@ -60,21 +60,19 @@ public class KillSessionUtils {
 
     private void task(final Player killed, final String attacker) {
         if (!killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
-            int id = PvPLevels.call.getServer().getScheduler().scheduleSyncRepeatingTask(PvPLevels.call, new Runnable() {
-                public void run() {
+            int id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     if (killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
-                        int time = Integer.valueOf(killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=")[1]);
-                        int id = Integer.valueOf(killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=")[0]);
+                        String[] split = killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=");
+                        int time = Integer.valueOf(split[1]);
                         if (time > -1) {
-                            killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, String.valueOf(id) + "=" + String.valueOf(time - 1));
+                            killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, Integer.valueOf(split[0]) + "=" + (time - 1));
                         }
                         if (time == 0) {
-                            PvPLevels.call.getServer().getScheduler().cancelTask(Integer.valueOf(killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=")[0]));
+                            PvPLevels.call.getServer().getScheduler().cancelTask(Integer.valueOf(split[0]));
                             killsessiontime.remove(killed.getUniqueId().toString() + "=" + attacker);
                             killsession.remove(attacker);
                         }
                     }
-                }
             },0L, 20L);
             killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, id + "=" + plugin.config.get.getInt("kill-session.time"));
         }
