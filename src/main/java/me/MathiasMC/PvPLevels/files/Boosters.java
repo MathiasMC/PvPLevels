@@ -44,12 +44,6 @@ public class Boosters {
     private void update() {
         boolean change = false;
         plugin.textUtils.fileHeader(get);
-        if (!get.contains("global-settings.disabled-xp")) {
-            ArrayList<String> list = new ArrayList<>();
-            list.add("skeleton");
-            get.set("global-settings.disabled-xp", list);
-            change = true;
-        }
         if (!get.contains("global-settings")) {
             get.set("global-settings.prefix", "&7( &6{pvplevels_booster_global_xp} &aBoost XP &7)");
             ArrayList<String> list = new ArrayList<>();
@@ -114,12 +108,9 @@ public class Boosters {
             list6.add("GLOW");
             list6.add("CLOSE");
             get.set("global-settings.gui.1.1.OPTIONS", list6);
-            change = true;
-        }
-        if (!get.contains("personal-settings.disabled-xp")) {
-            ArrayList<String> list = new ArrayList<>();
-            list.add("skeleton");
-            get.set("personal-settings.disabled-xp", list);
+            ArrayList<String> listskeleton = new ArrayList<>();
+            listskeleton.add("skeleton");
+            get.set("global-settings.disabled-xp", listskeleton);
             change = true;
         }
         if (!get.contains("personal-settings")) {
@@ -179,6 +170,9 @@ public class Boosters {
             list6.add("GLOW");
             list6.add("CLOSE");
             get.set("personal-settings.gui.1.1.OPTIONS", list6);
+            ArrayList<String> listskeleton = new ArrayList<>();
+            listskeleton.add("skeleton");
+            get.set("personal-settings.disabled-xp", listskeleton);
             change = true;
         }
         if (!get.contains("global-queue")) {
