@@ -92,6 +92,7 @@ public class PvPLevels extends JavaPlugin {
                     }
                 });
             }
+            if (config.get.getBoolean("save.use")) { systemManager.saveSchedule(); }
             int pluginId = 1174;
             Metrics metrics = new Metrics(this, pluginId);
             metrics.addCustomChart(new Metrics.SimplePie("levels", () -> String.valueOf(levels.get.getConfigurationSection("levels").getKeys(false).size())));

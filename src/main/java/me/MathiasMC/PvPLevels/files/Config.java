@@ -44,6 +44,10 @@ public class Config {
             get.set("debug.database", false);
             change = true;
         }
+        if (!get.contains("debug.save")) {
+            get.set("debug.save", false);
+            change = true;
+        }
         if (!get.contains("mysql")) {
             get.set("mysql.use", false);
             get.set("mysql.host", "localhost");
@@ -63,6 +67,11 @@ public class Config {
         }
         if (!get.contains("unload-players.quit")) {
             get.set("unload-players.quit", true);
+            change = true;
+        }
+        if (!get.contains("save")) {
+            get.set("save.use", true);
+            get.set("save.interval", 60);
             change = true;
         }
         if (!get.contains("levelup.xp-clear")) {

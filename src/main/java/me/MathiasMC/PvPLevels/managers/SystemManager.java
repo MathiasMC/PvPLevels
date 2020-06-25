@@ -56,4 +56,15 @@ public class SystemManager {
                 }, fileConfiguration.getLong(path + "." + group + ".delay"));
         }
     }
+
+    public void saveSchedule() {
+        final int interval = plugin.config.get.getInt("save.interval");
+        plugin.textUtils.info("Saving cached data to the database every " + interval + " minutes");
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            for (String uuid : plugin.list()) {
+                plugin.get(uuid).save();
+            }
+            if (plugin.config.get.getBoolean("debug.save")) { plugin.textUtils.debug("Saved cached data to database"); }
+        }, interval * 1200,interval * 1200);
+    }
 }

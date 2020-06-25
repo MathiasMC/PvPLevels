@@ -27,11 +27,10 @@ public class XPManager {
     }
 
     public void getXP(PlayerConnect playerConnect, Player killer, String entityType, String entityName, String group) {
-        String customName = plugin.config.get.getString("xp." + entityType + "." + group + ".name").replace("{pvplevels_player}", entityName);
         int add = plugin.random(plugin.config.get.getInt("xp." + entityType + "." + group + ".min"), plugin.config.get.getInt("xp." + entityType + "." + group + ".max"));
         Long xp = playerConnect.xp() + add;
         Long globalBooster = 0L;
-        long personalBooster = 0L;
+        Long personalBooster = 0L;
         if (plugin.boostersManager.hasGlobalActive() && !plugin.boosters.get.getStringList("global-settings.disabled-xp").contains(entityType)) {
             Long boosted = Math.round(add * plugin.boostersManager.type());
             globalBooster = boosted - add;
@@ -49,8 +48,9 @@ public class XPManager {
             }
         }
         playerConnect.xp(xp);
-        Long need = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp") - xp;
         if (!getLevel(playerConnect, killer)) {
+            String customName = plugin.config.get.getString("xp." + entityType + "." + group + ".name").replace("{pvplevels_player}", entityName);
+            Long need = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp") - xp;
             if (plugin.config.get.contains("xp." + entityType + "." + group + ".level-commands." + playerConnect.level())) {
                 sendCommands(killer, "xp." + entityType + "." + group + ".level-commands." + playerConnect.level(), plugin.config.get, customName, add, need, 0, globalBooster, personalBooster, entityType);
                 return;
