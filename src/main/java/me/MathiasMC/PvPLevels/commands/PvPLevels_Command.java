@@ -134,43 +134,43 @@ public class PvPLevels_Command implements CommandExecutor {
                                     if (plugin.isInt(args[3]) && !args[3].contains("-")) {
                                         if (args[1].equalsIgnoreCase("kills")) {
                                             if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "kills", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
+                                                setValue(sender, target, "kills", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set");
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "kills", playerConnect.kills() + Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "kills", playerConnect.kills() + Long.parseLong(args[3]), playerConnect, args, "add");
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "kills", playerConnect.kills() - Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "kills", playerConnect.kills() - Long.parseLong(args[3]), playerConnect, args, "remove");
                                             }
                                         } else if (args[1].equalsIgnoreCase("deaths")) {
                                             if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "deaths", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
+                                                setValue(sender, target, "deaths", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set");
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "deaths", playerConnect.deaths() + Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "deaths", playerConnect.deaths() + Long.parseLong(args[3]), playerConnect, args, "add");
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "deaths", playerConnect.deaths() - Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "deaths", playerConnect.deaths() - Long.parseLong(args[3]), playerConnect, args, "remove");
                                             }
                                         } else if (args[1].equalsIgnoreCase("xp")) {
                                             if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "xp", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
+                                                setValue(sender, target, "xp", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set");
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "xp", playerConnect.xp() + Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "xp", playerConnect.xp() + Long.parseLong(args[3]), playerConnect, args, "add");
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "xp", playerConnect.xp() - Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "xp", playerConnect.xp() - Long.parseLong(args[3]), playerConnect, args, "remove");
                                             }
                                         } else if (args[1].equalsIgnoreCase("level")) {
                                             if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "level", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args);
+                                                setValue(sender, target, "level", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set");
                                             } else if (args[0].equalsIgnoreCase("add")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "level", playerConnect.level() + Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "level", playerConnect.level() + Long.parseLong(args[3]), playerConnect, args, "add");
                                             } else if (args[0].equalsIgnoreCase("remove")) {
                                                 PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "level", playerConnect.level() - Long.parseLong(args[3]), playerConnect, args);
+                                                setValue(sender, target, "level", playerConnect.level() - Long.parseLong(args[3]), playerConnect, args, "remove");
                                             }
                                         } else {
                                             for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + ".usage")) {
@@ -479,7 +479,7 @@ public class PvPLevels_Command implements CommandExecutor {
         }
     }
 
-    private void setValue(CommandSender sender, Player target, String colum, Long set, PlayerConnect playerConnect, String[] args) {
+    private void setValue(CommandSender sender, Player target, String colum, Long set, PlayerConnect playerConnect, String[] args, String type) {
         boolean level = true;
         if (colum.equalsIgnoreCase("kills")) {
             if (set > 0L) {
@@ -494,13 +494,35 @@ public class PvPLevels_Command implements CommandExecutor {
                 playerConnect.deaths(0L);
             }
         } else if (colum.equalsIgnoreCase("xp")) {
-            if (set > 0L) {
+            if (type.equalsIgnoreCase("add")) {
                 if (!plugin.xpManager.isMaxLevel(target, playerConnect)) {
                     playerConnect.xp(set);
                     plugin.xpManager.getLevel(playerConnect, target);
                 }
+            } else if (type.equalsIgnoreCase("remove")) {
+                if (set >= 0) {
+                    playerConnect.xp(set);
+                    if (!plugin.xpManager.clearXP() && playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
+                        plugin.xpManager.loseLevel(playerConnect, playerConnect.level() - 1, target, null);
+                    }
+                } else {
+                    if (plugin.xpManager.clearXP() && plugin.levels.get.contains("levels." + (playerConnect.level() - 1) + ".xp")) {
+                        plugin.xpManager.loseLevel(playerConnect, playerConnect.level() - 1, target, null);
+                    }
+                }
             } else {
-                playerConnect.xp(0L);
+                ArrayList<Integer> list = new ArrayList<>();
+                for (String s : plugin.levels.get.getConfigurationSection("levels").getKeys(false)) {
+                    if (set >= plugin.levels.get.getLong("levels." + s + ".xp")) {
+                        list.add(Integer.parseInt(s));
+                    }
+                }
+                if (plugin.xpManager.clearXP()) {
+                    playerConnect.xp(0L);
+                } else {
+                    playerConnect.xp(set);
+                }
+                playerConnect.level(Long.parseLong(String.valueOf(list.get(list.size() - 1))));
             }
         } else if (colum.equalsIgnoreCase("level")) {
             if (set > 0L) {

@@ -49,12 +49,16 @@ public class StatsManager {
 
     public String xp_progress_style(String uuid) {
         PlayerConnect playerConnect = plugin.get(uuid);
-        char xp = (char)Integer.parseInt(plugin.config.get.getString("xp-progress-style.xp.symbol").substring(2), 16);
-        char none = (char)Integer.parseInt(plugin.config.get.getString("xp-progress-style.none.symbol").substring(2), 16);
+        char xp = (char) Integer.parseInt(plugin.config.get.getString("xp-progress-style.xp.symbol").substring(2), 16);
+        char none = (char) Integer.parseInt(plugin.config.get.getString("xp-progress-style.none.symbol").substring(2), 16);
         ChatColor xpColor = getChatColor(plugin.config.get.getString("xp-progress-style.xp.color"));
         ChatColor noneColor = getChatColor(plugin.config.get.getString("xp-progress-style.none.color"));
         int bars = plugin.config.get.getInt("xp-progress-style.amount");
-        float percent = (float) playerConnect.xp() / plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp");
+        Long nextXP = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp");
+        float percent = (float) playerConnect.xp() / nextXP;
+        if (nextXP == 0L) {
+            percent = 0;
+        }
         int progressBars = (int) (bars * percent);
         return Strings.repeat("" + xpColor + xp, progressBars) + Strings.repeat("" + noneColor + none, bars - progressBars);
     }

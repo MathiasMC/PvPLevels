@@ -84,7 +84,7 @@ public class XPManager {
         }
     }
 
-    private boolean loseLevel(PlayerConnect playerConnect, Long level, Player player, String commandPath) {
+    public boolean loseLevel(PlayerConnect playerConnect, Long level, Player player, String commandPath) {
         if (level >= 0) {
             playerConnect.level(level);
             sendCommands(player, commandPath, plugin.config.get, "", 0, 0L, 0, 0L, 0L, "");
@@ -117,13 +117,15 @@ public class XPManager {
         return false;
     }
 
-    private boolean clearXP() {
+    public boolean clearXP() {
         return plugin.config.get.getBoolean("levelup.xp-clear");
     }
 
     private void sendCommands(Player killer, String path, FileConfiguration fileConfiguration, String customName, int add, Long need, int lost, Long globalBooster, Long personalBooster, String entityType) {
-        for (String command : fileConfiguration.getStringList(path)) {
-            PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(killer, command.replace("{pvplevels_type}", customName).replace("{pvplevels_xp_get}", String.valueOf(add)).replace("{pvplevels_xp_needed}", String.valueOf(need)).replace("{pvplevels_xp_lost}", String.valueOf(lost))).replace("{pvplevels_booster_global_prefix}", plugin.boostersManager.globalPrefix(globalBooster, entityType)).replace("{pvplevels_booster_personal_prefix}", plugin.boostersManager.personalPrefix(killer.getUniqueId().toString(), personalBooster, entityType)));
+        if (path != null) {
+            for (String command : fileConfiguration.getStringList(path)) {
+                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(killer, command.replace("{pvplevels_type}", customName).replace("{pvplevels_xp_get}", String.valueOf(add)).replace("{pvplevels_xp_needed}", String.valueOf(need)).replace("{pvplevels_xp_lost}", String.valueOf(lost))).replace("{pvplevels_booster_global_prefix}", plugin.boostersManager.globalPrefix(globalBooster, entityType)).replace("{pvplevels_booster_personal_prefix}", plugin.boostersManager.personalPrefix(killer.getUniqueId().toString(), personalBooster, entityType)));
+            }
         }
     }
 }
