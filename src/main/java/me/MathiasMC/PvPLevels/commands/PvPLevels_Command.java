@@ -495,9 +495,15 @@ public class PvPLevels_Command implements CommandExecutor {
             }
         } else if (colum.equalsIgnoreCase("xp")) {
             if (type.equalsIgnoreCase("add")) {
-                if (!plugin.xpManager.isMaxLevel(target, playerConnect)) {
-                    playerConnect.xp(set);
-                    plugin.xpManager.getLevel(playerConnect, target);
+                ArrayList<Integer> xp = new ArrayList<>();
+                for (String s : plugin.levels.get.getConfigurationSection("levels").getKeys(false)) {
+                    xp.add(plugin.levels.get.getInt("levels." + s + ".xp"));
+                }
+                if (set <= xp.get(xp.size() - 1)) {
+                    if (!plugin.xpManager.isMaxLevel(target, playerConnect)) {
+                        playerConnect.xp(set);
+                        plugin.xpManager.getLevel(playerConnect, target);
+                    }
                 }
             } else if (type.equalsIgnoreCase("remove")) {
                 if (set >= 0) {
@@ -512,21 +518,25 @@ public class PvPLevels_Command implements CommandExecutor {
                 }
             } else {
                 ArrayList<Integer> list = new ArrayList<>();
+                ArrayList<Integer> xp = new ArrayList<>();
                 for (String s : plugin.levels.get.getConfigurationSection("levels").getKeys(false)) {
                     if (set >= plugin.levels.get.getLong("levels." + s + ".xp")) {
                         list.add(Integer.parseInt(s));
                     }
+                    xp.add(plugin.levels.get.getInt("levels." + s + ".xp"));
                 }
-                if (plugin.xpManager.clearXP()) {
-                    playerConnect.xp(0L);
-                } else {
-                    playerConnect.xp(set);
+                if (set <= xp.get(xp.size() - 1)) {
+                    if (plugin.xpManager.clearXP()) {
+                        playerConnect.xp(0L);
+                    } else {
+                        playerConnect.xp(set);
+                    }
+                    playerConnect.level(Long.parseLong(String.valueOf(list.get(list.size() - 1))));
                 }
-                playerConnect.level(Long.parseLong(String.valueOf(list.get(list.size() - 1))));
             }
         } else if (colum.equalsIgnoreCase("level")) {
             if (set > 0L) {
-                if (plugin.levels.get.getConfigurationSection("levels").getKeys(false).size() >= set) {
+                if (plugin.levels.get.contains("levels." + set)) {
                     playerConnect.level(set);
                     if (plugin.config.get.getBoolean("levelup.xp-clear")) {
                         playerConnect.xp(0L);

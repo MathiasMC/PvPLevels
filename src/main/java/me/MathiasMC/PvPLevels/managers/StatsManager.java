@@ -37,30 +37,32 @@ public class StatsManager {
         return 0L;
     }
 
-    public double xp_progress(String uuid) {
+    public String xp_progress(String uuid) {
         PlayerConnect playerConnect = plugin.get(uuid);
-        Long value = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp");
-        if (value != 0L) {
-            Long percent = playerConnect.xp() * 100 / value;
-            return Math.round(percent * 10.0) / 10.0;
+        Long currentXP = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp");
+        if (plugin.xpManager.clearXP()) {
+            currentXP = 0L;
         }
-        return 0L;
+        Long nextXP = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp");
+        try {
+        return new DecimalFormat("#").format(Math.round(((Double.valueOf(playerConnect.xp()) - currentXP) / (nextXP - currentXP) * 100) * 10.0) / 10.0);
+        } catch (Exception exception) {
+            return "";
+        }
     }
 
     public String xp_progress_style(String uuid) {
-        PlayerConnect playerConnect = plugin.get(uuid);
         char xp = (char) Integer.parseInt(plugin.config.get.getString("xp-progress-style.xp.symbol").substring(2), 16);
         char none = (char) Integer.parseInt(plugin.config.get.getString("xp-progress-style.none.symbol").substring(2), 16);
         ChatColor xpColor = getChatColor(plugin.config.get.getString("xp-progress-style.xp.color"));
         ChatColor noneColor = getChatColor(plugin.config.get.getString("xp-progress-style.none.color"));
         int bars = plugin.config.get.getInt("xp-progress-style.amount");
-        Long nextXP = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp");
-        float percent = (float) playerConnect.xp() / nextXP;
-        if (nextXP == 0L) {
-            percent = 0;
+        int progressBars = (int) (bars * Double.parseDouble(xp_progress(uuid)) / 100);
+        try {
+            return Strings.repeat("" + xpColor + xp, progressBars) + Strings.repeat("" + noneColor + none, bars - progressBars);
+        } catch (Exception exception) {
+            return "";
         }
-        int progressBars = (int) (bars * percent);
-        return Strings.repeat("" + xpColor + xp, progressBars) + Strings.repeat("" + noneColor + none, bars - progressBars);
     }
 
     public String group(Player player) {

@@ -53,7 +53,7 @@ public class PvPLevelsAPI {
         return PvPLevels.call.statsManager.kdr(uuid);
     }
 
-    public double xp_progress(String uuid) {
+    public String xp_progress(String uuid) {
         return PvPLevels.call.statsManager.xp_progress(uuid);
     }
 
