@@ -526,12 +526,10 @@ public class PvPLevels_Command implements CommandExecutor {
                     xp.add(plugin.levels.get.getInt("levels." + s + ".xp"));
                 }
                 if (set <= xp.get(xp.size() - 1)) {
-                    if (plugin.xpManager.clearXP()) {
-                        playerConnect.xp(0L);
-                    } else {
-                        playerConnect.xp(set);
+                    playerConnect.xp(set);
+                    if (list.size() > 0) {
+                        playerConnect.level(Long.parseLong(String.valueOf(list.get(list.size() - 1))));
                     }
-                    playerConnect.level(Long.parseLong(String.valueOf(list.get(list.size() - 1))));
                 }
             }
         } else if (colum.equalsIgnoreCase("level")) {
