@@ -66,13 +66,18 @@ public class XPManager {
             Long xp = playerConnect.xp() - lost;
             if (xp > 0L) {
                 playerConnect.xp(xp);
-                if (!clearXP() && playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
+                if (playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
                     xpMessage = loseLevel(playerConnect, playerConnect.level() - 1, killer, "xp." + entityType + "." + group + ".xp-lose.commands.level");
                 }
             } else {
                 Long level = playerConnect.level() - 1;
                 xpMessage = loseLevel(playerConnect, level, killer, "xp." + entityType + "." + group + ".xp-lose.commands.level");
-                playerConnect.xp(plugin.levels.get.getLong("levels." + level + ".xp"));
+                Long lostXP = plugin.levels.get.getLong("levels." + level + ".xp") - lost;
+                if (lostXP >= 0) {
+                    playerConnect.xp(lostXP);
+                } else {
+                    playerConnect.xp(0L);
+                }
             }
             if (xp >= 0L && xpMessage) {
                 sendCommands(killer, "xp." + entityType + "." + group + ".xp-lose.commands.lose", plugin.config.get, "", 0, 0L, lost, 0L, 0L, "");
@@ -95,7 +100,7 @@ public class XPManager {
     public boolean getLevel(PlayerConnect playerConnect, Player player) {
         Long nextLevel = playerConnect.level() + 1;
         if (playerConnect.xp() >= plugin.levels.get.getLong("levels." + nextLevel + ".xp")) {
-            if (clearXP()) {
+            if (plugin.config.get.getBoolean("levelup.xp-clear")) {
                 playerConnect.xp(0L);
             }
             sendCommands(player, "levels." + nextLevel + ".commands", plugin.levels.get, "", 0, 0L, 0, 0L, 0L, "");
@@ -111,10 +116,6 @@ public class XPManager {
             return playerConnect.level() >= plugin.config.get.getInt("level-max." + group + ".max");
         }
         return false;
-    }
-
-    public boolean clearXP() {
-        return plugin.config.get.getBoolean("levelup.xp-clear");
     }
 
     private void sendCommands(Player killer, String path, FileConfiguration fileConfiguration, String customName, int add, Long need, int lost, Long globalBooster, Long personalBooster, String entityType) {

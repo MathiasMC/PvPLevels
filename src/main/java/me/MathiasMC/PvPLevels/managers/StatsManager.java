@@ -40,7 +40,7 @@ public class StatsManager {
     public String xp_progress(String uuid) {
         PlayerConnect playerConnect = plugin.get(uuid);
         Long currentXP = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp");
-        if (plugin.xpManager.clearXP()) {
+        if (plugin.config.get.getBoolean("levelup.xp-clear")) {
             currentXP = 0L;
         }
         try {

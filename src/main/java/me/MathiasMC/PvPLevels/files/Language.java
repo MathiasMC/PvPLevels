@@ -1132,6 +1132,78 @@ public class Language {
             get.set("console.pvplevels.player.lose.online", list);
             change = true;
         }
+        if (!get.contains("player.pvplevels.set.kills-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cKills cannot be under 0!");
+            get.set("player.pvplevels.set.kills-cannot", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.set.kills-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cKills cannot be under 0!");
+            get.set("console.pvplevels.set.kills-cannot", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.set.deaths-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cDeaths cannot be under 0!");
+            get.set("player.pvplevels.set.deaths-cannot", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.set.deaths-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cDeaths cannot be under 0!");
+            get.set("console.pvplevels.set.deaths-cannot", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.set.xp-add-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot add xp higher than max level!");
+            get.set("player.pvplevels.set.xp-add-cannot", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.set.xp-add-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot add xp higher than max level!");
+            get.set("console.pvplevels.set.xp-add-cannot", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.set.xp-remove-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot remove more xp already at the lowest level and xp!");
+            get.set("player.pvplevels.set.xp-remove-cannot", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.set.xp-remove-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot remove more xp already at the lowest level and xp!");
+            get.set("console.pvplevels.set.xp-remove-cannot", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.set.xp-set-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot set xp higher than max level!");
+            get.set("player.pvplevels.set.xp-set-cannot", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.set.xp-set-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot set xp higher than max level!");
+            get.set("console.pvplevels.set.xp-set-cannot", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.set.level-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot find that level!");
+            get.set("player.pvplevels.set.level-cannot", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.set.level-cannot")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot find that level!");
+            get.set("console.pvplevels.set.level-cannot", list);
+            change = true;
+        }
         if (change) {
             try {
                 get.save(file);
