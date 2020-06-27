@@ -43,9 +43,8 @@ public class StatsManager {
         if (plugin.xpManager.clearXP()) {
             currentXP = 0L;
         }
-        Long nextXP = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp");
         try {
-        return new DecimalFormat("#").format(Math.round(((Double.valueOf(playerConnect.xp()) - currentXP) / (nextXP - currentXP) * 100) * 10.0) / 10.0);
+        return new DecimalFormat("#").format(Math.round(((Double.valueOf(playerConnect.xp()) - currentXP) / (plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp") - currentXP) * 100) * 10.0) / 10.0);
         } catch (Exception exception) {
             return "";
         }
