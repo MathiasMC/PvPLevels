@@ -518,13 +518,13 @@ public class PvPLevels_Command implements CommandExecutor {
             } else if (type.equalsIgnoreCase("remove")) {
                 if (set >= 0) {
                     playerConnect.xp(set);
-                    if (playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
+                    if (!plugin.config.get.getBoolean("levelup.xp-clear") && playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
                         plugin.xpManager.loseLevel(playerConnect, playerConnect.level() - 1, target, null);
                     }
                 } else {
                     Long lowerLevel = playerConnect.level() - 1;
                     if (plugin.levels.get.contains("levels." + lowerLevel + ".xp")) {
-                        Long all = plugin.levels.get.getLong("levels." + lowerLevel + ".xp") - Long.parseLong(args[3]);
+                        Long all = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp") - Long.parseLong(args[3]);
                         if (all >= 0) {
                             playerConnect.xp(all);
                         } else {
