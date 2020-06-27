@@ -66,13 +66,13 @@ public class XPManager {
             Long xp = playerConnect.xp() - lost;
             if (xp > 0L) {
                 playerConnect.xp(xp);
-                if (playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
+                if (!plugin.config.get.getBoolean("levelup.xp-clear") && playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
                     xpMessage = loseLevel(playerConnect, playerConnect.level() - 1, killer, "xp." + entityType + "." + group + ".xp-lose.commands.level");
                 }
             } else {
                 Long level = playerConnect.level() - 1;
-                xpMessage = loseLevel(playerConnect, level, killer, "xp." + entityType + "." + group + ".xp-lose.commands.level");
                 Long lostXP = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp") - lost;
+                xpMessage = loseLevel(playerConnect, level, killer, "xp." + entityType + "." + group + ".xp-lose.commands.level");
                 if (lostXP >= 0) {
                     playerConnect.xp(lostXP);
                 } else {

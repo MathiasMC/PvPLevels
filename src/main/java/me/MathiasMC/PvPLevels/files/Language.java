@@ -92,6 +92,7 @@ public class Language {
             list.add("&7&l> &f/pvplevels gui open <fileName> <player>");
             list.add("&7&l> &f/pvplevels player get <xpType> <player>");
             list.add("&7&l> &f/pvplevels player lose <xpType> <player>");
+            list.add("&7&l> &f/pvplevels actionbar <player> <text>");
             list.add("&7&l> &f/pvpboosters");
             list.add("&7&l> &f/pvpprofile");
             list.add("&7&l> &f/pvptop kills/deaths/xp/level");
@@ -112,6 +113,7 @@ public class Language {
             list.add("&7&l> &f/pvplevels gui open <fileName> <player>");
             list.add("&7&l> &f/pvplevels player get <xpType> <player>");
             list.add("&7&l> &f/pvplevels player lose <xpType> <player>");
+            list.add("&7&l> &f/pvplevels actionbar <player> <text>");
             list.add("&7&l> &f/pvpboosters");
             list.add("&7&l> &f/pvpprofile");
             list.add("&7&l> &f/pvptop kills/deaths/xp/level <player>");
@@ -1202,6 +1204,36 @@ public class Language {
             ArrayList<String> list = new ArrayList<>();
             list.add("&7[&bPvPLevels&7] &cCannot find that level!");
             get.set("console.pvplevels.set.level-cannot", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.actionbar.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels actionbar <player> <text>");
+            get.set("player.pvplevels.actionbar.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.actionbar.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.actionbar.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.actionbar.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("player.pvplevels.actionbar.online", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.actionbar.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels actionbar <player> <text>");
+            get.set("console.pvplevels.actionbar.usage", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.actionbar.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("console.pvplevels.actionbar.online", list);
             change = true;
         }
         if (change) {

@@ -3,6 +3,8 @@ package me.MathiasMC.PvPLevels.commands;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.gui.GUI;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -108,6 +110,36 @@ public class PvPLevels_Command implements CommandExecutor {
                             }
                         } else {
                             for (String message : plugin.language.get.getStringList("player.pvplevels.message.permission")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("actionbar")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.command.actionbar")) {
+                            if (args.length <= 2) {
+                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.actionbar.usage")) {
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                }
+                            } else {
+                                Player target = PvPLevels.call.getServer().getPlayer(args[1]);
+                                if (target != null) {
+                                    StringBuilder sb = new StringBuilder();
+                                    for (int i = 2; i < args.length; i++) {
+                                        sb.append(args[i]).append(" ");
+                                    }
+                                    try {
+                                        target.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, sb.toString().trim()))));
+                                    } catch (NoSuchMethodError exception) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bPvPLevels&7] &cThis command is not supported in this spigot version"));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.actionbar.online")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("player.pvplevels.actionbar.permission")) {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                             }
                         }
