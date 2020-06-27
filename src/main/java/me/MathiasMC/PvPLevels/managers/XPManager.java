@@ -95,11 +95,11 @@ public class XPManager {
     public boolean getLevel(PlayerConnect playerConnect, Player player) {
         Long nextLevel = playerConnect.level() + 1;
         if (playerConnect.xp() >= plugin.levels.get.getLong("levels." + nextLevel + ".xp")) {
-            playerConnect.level(nextLevel);
             if (clearXP()) {
                 playerConnect.xp(0L);
             }
             sendCommands(player, "levels." + nextLevel + ".commands", plugin.levels.get, "", 0, 0L, 0, 0L, 0L, "");
+            playerConnect.level(nextLevel);
             return true;
         }
         return false;
