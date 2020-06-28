@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class PvPLevels_Command implements CommandExecutor {
 
@@ -69,13 +70,16 @@ public class PvPLevels_Command implements CommandExecutor {
                         if (sender.hasPermission("pvplevels.command.broadcast")) {
                             if (args.length > 2) {
                                 StringBuilder sb = new StringBuilder();
-                                for (int i = 2; i < args.length; i++)
+                                for (int i = 2; i < args.length; i++) {
                                     sb.append(args[i]).append(" ");
-                                String message = ChatColor.translateAlternateColorCodes('&', sb.toString().trim());
-                                if (args[1].equalsIgnoreCase("null")) {
-                                    PvPLevels.call.getServer().broadcastMessage(message);
+                                }
+                                String text = sb.toString().trim();
+                                if (!text.contains("\\n")) {
+                                    broadcast(ChatColor.translateAlternateColorCodes('&', text), args);
                                 } else {
-                                    PvPLevels.call.getServer().broadcast(message, args[1]);
+                                    for (String message : text.split(Pattern.quote("\\n"))) {
+                                        broadcast(ChatColor.translateAlternateColorCodes('&', message), args);
+                                    }
                                 }
                             } else {
                                 for (String message : plugin.language.get.getStringList(path + ".pvplevels.broadcast.usage")) {
@@ -101,7 +105,14 @@ public class PvPLevels_Command implements CommandExecutor {
                                     for (int i = 2; i < args.length; i++) {
                                         sb.append(args[i]).append(" ");
                                     }
-                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, sb.toString().trim())));
+                                    String text = sb.toString().trim();
+                                    if (!text.contains("\\n")) {
+                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, text)));
+                                    } else {
+                                        for (String message : text.split(Pattern.quote("\\n"))) {
+                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, message)));
+                                        }
+                                    }
                                 } else {
                                     for (String message : plugin.language.get.getStringList(path + ".pvplevels.message.online")) {
                                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
@@ -634,5 +645,13 @@ public class PvPLevels_Command implements CommandExecutor {
             xp.add(plugin.levels.get.getInt("levels." + level + ".xp"));
         }
         return xp;
+    }
+
+    private void broadcast(String text, String[] args) {
+        if (args[1].equalsIgnoreCase("null")) {
+            PvPLevels.call.getServer().broadcastMessage(text);
+        } else {
+            PvPLevels.call.getServer().broadcast(text, args[1]);
+        }
     }
 }

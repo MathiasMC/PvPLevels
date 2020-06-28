@@ -114,7 +114,7 @@ public class Config {
             get.set("generate.random.max", 35);
             change = true;
         }
-        if (!get.contains("placeholders")) {
+        if (!get.contains("placeholders.global-booster")) {
             get.set("placeholders.PlaceholderAPI", true);
             get.set("placeholders.prefix.default.permission", "pvplevels.prefix.default");
             get.set("placeholders.prefix.default.list.0", "&e[&7Default&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
@@ -122,6 +122,17 @@ public class Config {
             get.set("placeholders.prefix.vip.permission", "pvplevels.group.vip");
             get.set("placeholders.prefix.vip.list.0", "&e[&7VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
             get.set("placeholders.prefix.vip.none", "&e[&6VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
+            get.set("placeholders.global-booster.none", "&cNone");
+            get.set("placeholders.global-booster.name", "&cNone");
+            get.set("placeholders.global-booster.time", "&cNone");
+            get.set("placeholders.global-booster.time-left", "&cNone");
+            get.set("placeholders.global-booster.time-prefix", "&cNone");
+            get.set("placeholders.global-booster.time-left-prefix", "&cNone");
+            get.set("placeholders.personal-booster.none", "&cNone");
+            get.set("placeholders.personal-booster.time", "&cNone");
+            get.set("placeholders.personal-booster.time-left", "&cNone");
+            get.set("placeholders.personal-booster.time-prefix", "&cNone");
+            get.set("placeholders.personal-booster.time-left-prefix", "&cNone");
             change = true;
         }
         if (!get.contains("level-max")) {

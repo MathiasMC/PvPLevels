@@ -78,6 +78,39 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(identifier.equals("prefix")){
             return String.valueOf(plugin.statsManager.prefix(player));
         }
+        if(identifier.equals("global_booster")){
+            return plugin.boostersManager.getGlobalPlaceholder();
+        }
+        if(identifier.equals("global_booster_name")){
+            return plugin.boostersManager.getGlobalNamePlaceholder();
+        }
+        if(identifier.equals("global_booster_time")){
+            return plugin.boostersManager.getGlobalTimePlaceholder();
+        }
+        if(identifier.equals("global_booster_time_left")){
+            return plugin.boostersManager.getGlobalTimeLeftPlaceholder();
+        }
+        if(identifier.equals("global_booster_time_prefix")){
+            return plugin.boostersManager.getGlobalTimePrefixPlaceholder();
+        }
+        if(identifier.equals("global_booster_time_left_prefix")){
+            return plugin.boostersManager.getGlobalTimeLeftPrefixPlaceholder();
+        }
+        if(identifier.equals("personal_booster")){
+            return plugin.boostersManager.getPersonalPlaceholder(player.getUniqueId().toString());
+        }
+        if(identifier.equals("personal_booster_time")){
+            return plugin.boostersManager.getPersonalTimePlaceholder(player.getUniqueId().toString());
+        }
+        if(identifier.equals("personal_booster_time_left")){
+            return plugin.boostersManager.getPersonalTimeLeftPlaceholder(player.getUniqueId().toString());
+        }
+        if(identifier.equals("personal_booster_time_prefix")){
+            return plugin.boostersManager.getPersonalTimePrefixPlaceholder(player.getUniqueId().toString());
+        }
+        if(identifier.equals("personal_booster_time_left_prefix")){
+            return plugin.boostersManager.getPersonalTimeLeftPrefixPlaceholder(player.getUniqueId().toString());
+        }
         if(identifier.equals("top_1_kills_name")){
             return plugin.statsManager.getTopValue("kills", 0, true);
         }

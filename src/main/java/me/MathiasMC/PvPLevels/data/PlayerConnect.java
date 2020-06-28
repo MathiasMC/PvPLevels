@@ -1,6 +1,7 @@
 package me.MathiasMC.PvPLevels.data;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+import org.bukkit.OfflinePlayer;
 
 import java.util.UUID;
 
@@ -19,6 +20,10 @@ public class PlayerConnect {
     private Long killstreak;
 
     private Double personalBooster;
+
+    private int personalBoosterTime = 0;
+
+    private int personalBoosterTime_left = 0;
 
     private int taskID;
 
@@ -81,11 +86,21 @@ public class PlayerConnect {
         return personalBooster;
     }
 
+    public int getPersonalBoosterTime() {
+        return personalBoosterTime;
+    }
+
+    public int getPersonalBoosterTime_left() {
+        return personalBoosterTime_left;
+    }
+
     public void timer(int timeAmount, Double personalBooster) {
         this.personalBooster = personalBooster;
+        this.personalBoosterTime = timeAmount;
         this.taskID = PvPLevels.call.getServer().getScheduler().scheduleSyncRepeatingTask(PvPLevels.call, new Runnable(){
             int timeRemaining = timeAmount;
             public void run(){
+                personalBoosterTime_left = timeRemaining;
                 if (timeRemaining <= 0) {
                     endBoost();
                     PvPLevels.call.boosters.get.set("players." + playeruuid + ".personal-active", null);
@@ -99,6 +114,8 @@ public class PlayerConnect {
     private void endBoost() {
         PvPLevels.call.getServer().getScheduler().cancelTask(this.taskID);
         this.personalBooster = null;
+        this.personalBoosterTime = 0;
+        this.personalBoosterTime_left = 0;
         for (String command : PvPLevels.call.boosters.get.getStringList("personal-settings.end")) {
             PvPLevels.call.getServer().dispatchCommand(PvPLevels.call.consoleCommandSender, command.replace("{pvplevels_player}", PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(playeruuid)).getName()));
         }

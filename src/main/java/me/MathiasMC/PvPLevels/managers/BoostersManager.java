@@ -16,6 +16,8 @@ public class BoostersManager {
 
     private int globalSeconds = 0;
 
+    private int globalSeconds_time = 0;
+
     private OfflinePlayer offlinePlayer;
 
     public BoostersManager(final PvPLevels plugin) {
@@ -29,6 +31,7 @@ public class BoostersManager {
                         globalSeconds = Integer.parseInt(globalSelect[2]);
                         offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(globalUUID));
                         globalStarted();
+                        globalSeconds_time = globalSeconds;
                     }
                     return;
                 }
@@ -42,6 +45,7 @@ public class BoostersManager {
                 globalUUID = null;
                 globalBoost = null;
                 globalSeconds = 0;
+                globalSeconds_time = 0;
                 offlinePlayer = null;
         }, 20L, 20L);
     }
@@ -140,5 +144,87 @@ public class BoostersManager {
         } else {
             return "";
         }
+    }
+
+    public String getGlobalNamePlaceholder() {
+        if (offlinePlayer != null) {
+            return String.valueOf(offlinePlayer.getName());
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.global-booster.name"));
+    }
+
+    public String getGlobalPlaceholder() {
+        if (globalBoost != null) {
+            return String.valueOf(globalBoost);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.global-booster.none"));
+    }
+
+    public String getGlobalTimePlaceholder() {
+        if (globalSeconds_time > 0) {
+            return String.valueOf(globalSeconds_time);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.global-booster.time"));
+    }
+
+    public String getGlobalTimeLeftPlaceholder() {
+        if (globalSeconds > 0) {
+            return String.valueOf(globalSeconds);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.global-booster.time-left"));
+    }
+
+    public String getGlobalTimePrefixPlaceholder() {
+        if (globalSeconds_time > 0) {
+            return timeLeft(globalSeconds_time);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.global-booster.time-prefix"));
+    }
+
+    public String getGlobalTimeLeftPrefixPlaceholder() {
+        if (globalSeconds > 0) {
+            return timeLeft(globalSeconds);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.global-booster.time-left-prefix"));
+    }
+
+    public String getPersonalPlaceholder(String uuid) {
+        Double booster = plugin.get(uuid).getPersonalBooster();
+        if (booster != null) {
+            return String.valueOf(booster);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.personal-booster.none"));
+    }
+
+    public String getPersonalTimePlaceholder(String uuid) {
+        int time = plugin.get(uuid).getPersonalBoosterTime();
+        if (time > 0) {
+            return String.valueOf(time);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.personal-booster.time"));
+    }
+
+    public String getPersonalTimeLeftPlaceholder(String uuid) {
+        int time = plugin.get(uuid).getPersonalBoosterTime_left();
+        if (time > 0) {
+            return String.valueOf(time);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.personal-booster.time-left"));
+    }
+
+    public String getPersonalTimePrefixPlaceholder(String uuid) {
+        int time = plugin.get(uuid).getPersonalBoosterTime();
+        if (time > 0) {
+            return timeLeft(time);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.personal-booster.time-prefix"));
+    }
+
+    public String getPersonalTimeLeftPrefixPlaceholder(String uuid) {
+        int time = plugin.get(uuid).getPersonalBoosterTime_left();
+        if (time > 0) {
+            return timeLeft(time);
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("placeholders.personal-booster.time-left-prefix"));
     }
 }
