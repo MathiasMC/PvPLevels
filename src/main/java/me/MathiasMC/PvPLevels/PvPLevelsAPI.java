@@ -53,6 +53,10 @@ public class PvPLevelsAPI {
         return PvPLevels.call.statsManager.kdr(uuid);
     }
 
+    public String kill_factor(String uuid) {
+        return PvPLevels.call.statsManager.kill_factor(uuid);
+    }
+
     public String xp_progress(String uuid) {
         return PvPLevels.call.statsManager.xp_progress(uuid);
     }
@@ -123,5 +127,49 @@ public class PvPLevelsAPI {
 
     public int getGlobalQueueSize(String uuid) {
         return PvPLevels.call.boostersManager.isInQueueSize(uuid);
+    }
+
+    public String getGlobalNamePlaceholder() {
+        return PvPLevels.call.boostersManager.getGlobalNamePlaceholder();
+    }
+
+    public String getGlobalPlaceholder() {
+        return PvPLevels.call.boostersManager.getGlobalPlaceholder();
+    }
+
+    public String getGlobalTimePlaceholder() {
+        return PvPLevels.call.boostersManager.getGlobalTimePlaceholder();
+    }
+
+    public String getGlobalTimeLeftPlaceholder() {
+        return PvPLevels.call.boostersManager.getGlobalTimeLeftPlaceholder();
+    }
+
+    public String getGlobalTimePrefixPlaceholder() {
+        return PvPLevels.call.boostersManager.getGlobalTimePrefixPlaceholder();
+    }
+
+    public String getGlobalTimeLeftPrefixPlaceholder() {
+        return PvPLevels.call.boostersManager.getGlobalTimeLeftPrefixPlaceholder();
+    }
+
+    public String getPersonalPlaceholder(String uuid) {
+        return PvPLevels.call.boostersManager.getPersonalPlaceholder(uuid);
+    }
+
+    public String getPersonalTimePlaceholder(String uuid) {
+        return PvPLevels.call.boostersManager.getPersonalTimePlaceholder(uuid);
+    }
+
+    public String getPersonalTimeLeftPlaceholder(String uuid) {
+        return PvPLevels.call.boostersManager.getPersonalTimeLeftPlaceholder(uuid);
+    }
+
+    public String getPersonalTimePrefixPlaceholder(String uuid) {
+        return PvPLevels.call.boostersManager.getPersonalTimePrefixPlaceholder(uuid);
+    }
+
+    public String getPersonalTimeLeftPrefixPlaceholder(String uuid) {
+        return PvPLevels.call.boostersManager.getPersonalTimeLeftPrefixPlaceholder(uuid);
     }
 }

@@ -65,7 +65,7 @@ public class InventoryClick implements Listener {
                                 if (fileConfiguration.contains(keyItem + ".OPTIONS") && fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("CLOSE")) { player.closeInventory(); }
                                 if (fileConfiguration.contains(keyItem + ".COMMANDS")) {
                                     for (String command : fileConfiguration.getStringList(keyItem + ".COMMANDS")) {
-                                        PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));
+                                        plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));
                                     }
                                 }
                                 break;
@@ -104,14 +104,14 @@ public class InventoryClick implements Listener {
             queue.add(player.getUniqueId().toString() + " " + line.split(" ")[0] + " " + line.split(" ")[1]);
             plugin.boosters.get.set("global-queue", queue);
             for (String command : plugin.boosters.get.getStringList("global-settings.queue.add")) {
-                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))).replace("{pvplevels_booster_global_queue}", String.valueOf(plugin.boostersManager.queueNumber(player.getUniqueId().toString()))));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))).replace("{pvplevels_booster_global_queue}", String.valueOf(plugin.boostersManager.queueNumber(player.getUniqueId().toString()))));
             }
             list.remove(line);
             plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".global", list);
             plugin.boosters.save();
         } else {
             for (String command : plugin.boosters.get.getStringList("global-settings.queue.max")) {
-                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_max}", String.valueOf(maxQueue)));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_max}", String.valueOf(maxQueue)));
             }
         }
     }
@@ -122,14 +122,14 @@ public class InventoryClick implements Listener {
             playerConnect.timer(Integer.parseInt(line.split(" ")[1]), Double.valueOf(line.split(" ")[0]));
             plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".personal-active", line.split(" ")[0] + " " + line.split(" ")[1]);
             for (String command : plugin.boosters.get.getStringList("personal-settings.start")) {
-                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_personal_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_personal_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))));
             }
             list.remove(line);
             plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".personal", list);
             plugin.boosters.save();
         } else {
             for (String command : plugin.boosters.get.getStringList("personal-settings.active")) {
-                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));
             }
         }
     }

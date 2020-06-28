@@ -22,7 +22,7 @@ public class StatsManager {
         PlayerConnect playerConnect = plugin.get(uuid);
         if (playerConnect.deaths() > 0L) {
             DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
-            decimalFormat.applyPattern("#.#");
+            decimalFormat.applyPattern("#.##");
             return decimalFormat.format(Double.valueOf(playerConnect.kills()) / Double.valueOf(playerConnect.deaths()));
         } else if (playerConnect.deaths() == 0L) {
             return String.valueOf(playerConnect.kills());
@@ -34,7 +34,7 @@ public class StatsManager {
         PlayerConnect playerConnect = plugin.get(uuid);
         if (playerConnect.kills() > 0L) {
             DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
-            decimalFormat.applyPattern("#.#");
+            decimalFormat.applyPattern("#.##");
             return decimalFormat.format(Double.valueOf(playerConnect.kills()) / (Double.valueOf(playerConnect.kills()) + Double.valueOf(playerConnect.deaths())));
         }
         return String.valueOf(0L);
