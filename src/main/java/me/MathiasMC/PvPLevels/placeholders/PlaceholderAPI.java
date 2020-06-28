@@ -58,7 +58,10 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return String.valueOf(plugin.get(player.getUniqueId().toString()).killstreak());
         }
         if(identifier.equals("kdr")){
-            return String.valueOf(plugin.statsManager.kdr(player.getUniqueId().toString()));
+            return plugin.statsManager.kdr(player.getUniqueId().toString());
+        }
+        if(identifier.equals("kill_factor")){
+            return plugin.statsManager.kill_factor(player.getUniqueId().toString());
         }
         if(identifier.equals("xp_required")){
             return String.valueOf(plugin.statsManager.xp_required(player.getUniqueId().toString()));

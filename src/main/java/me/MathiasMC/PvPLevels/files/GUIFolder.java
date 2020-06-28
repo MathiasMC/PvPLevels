@@ -245,8 +245,9 @@ public class GUIFolder {
         list2.add("&eDeaths: &7> &6{pvplevels_deaths}");
         list2.add("&eXP: &7> &6{pvplevels_xp}");
         list2.add("&eLevel: &7> &6{pvplevels_level}");
-        list2.add("&eKillStreak: &7> &6{pvplevels_killstreak}");
         list2.add("&eKDR: &7> &6{pvplevels_kdr}");
+        list2.add("&eKill Factor: &7> &6{pvplevels_kill_factor}");
+        list2.add("&eKillStreak: &7> &6{pvplevels_killstreak}");
         list2.add("&eXP Required: &7> &6{pvplevels_xp_required}");
         list2.add("&eXP Progress: &7> &6{pvplevels_xp_progress}%");
         list2.add("&6{pvplevels_xp_progress_style}");
@@ -275,8 +276,9 @@ public class GUIFolder {
         list21.add("&eDeaths: &7> &6{pvplevels_deaths}");
         list21.add("&eXP: &7> &6{pvplevels_xp}");
         list21.add("&eLevel: &7> &6{pvplevels_level}");
-        list21.add("&eKillStreak: &7> &6{pvplevels_killstreak}");
         list21.add("&eKDR: &7> &6{pvplevels_kdr}");
+        list21.add("&eKill Factor: &7> &6{pvplevels_kill_factor}");
+        list21.add("&eKillStreak: &7> &6{pvplevels_killstreak}");
         list21.add("&eXP Required: &7> &6{pvplevels_xp_required}");
         list21.add("&eXP Progress: &7> &6{pvplevels_xp_progress}%");
         list21.add("&6{pvplevels_xp_progress_style}");

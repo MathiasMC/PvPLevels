@@ -20,12 +20,24 @@ public class StatsManager {
 
     public String kdr(String uuid) {
         PlayerConnect playerConnect = plugin.get(uuid);
-        if (playerConnect.deaths()> 0L) {
+        if (playerConnect.deaths() > 0L) {
             DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
             decimalFormat.applyPattern("#.#");
             return decimalFormat.format(Double.valueOf(playerConnect.kills()) / Double.valueOf(playerConnect.deaths()));
+        } else if (playerConnect.deaths() == 0L) {
+            return String.valueOf(playerConnect.kills());
         }
         return String.valueOf(0.0D);
+    }
+
+    public String kill_factor(String uuid) {
+        PlayerConnect playerConnect = plugin.get(uuid);
+        if (playerConnect.kills() > 0L) {
+            DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
+            decimalFormat.applyPattern("#.#");
+            return decimalFormat.format(Double.valueOf(playerConnect.kills()) / (Double.valueOf(playerConnect.kills()) + Double.valueOf(playerConnect.deaths())));
+        }
+        return String.valueOf(0L);
     }
 
     public Long xp_required(String uuid) {

@@ -503,6 +503,8 @@ public class Language {
             list.add("&7&l> &eXP: &6{pvplevels_xp}");
             list.add("&7&l> &eLevel: &6{pvplevels_level}");
             list.add("&7&l> &eKDR: &6{pvplevels_kdr}");
+            list.add("&7&l> &eKill Factor: &6{pvplevels_kill_factor}");
+            list.add("&7&l> &eKillStreak: &6{pvplevels_killstreak}");
             list.add("&7&l> &eRequired XP: &6{pvplevels_xp_required}");
             list.add("&7&l> &eProgress: {pvplevels_xp_progress_style} &6{pvplevels_xp_progress}%");
             list.add("&7&l> &eGroup: &6{pvplevels_group}/{pvplevels_group_to}");
@@ -532,6 +534,8 @@ public class Language {
             list.add("&7&l> &eXP: &6{pvplevels_xp}");
             list.add("&7&l> &eLevel: &6{pvplevels_level}");
             list.add("&7&l> &eKDR: &6{pvplevels_kdr}");
+            list.add("&7&l> &eKill Factor: &6{pvplevels_kill_factor}");
+            list.add("&7&l> &eKillStreak: &6{pvplevels_killstreak}");
             list.add("&7&l> &eRequired XP: &6{pvplevels_xp_required}");
             list.add("&7&l> &eProgress: {pvplevels_xp_progress_style} &6{pvplevels_xp_progress}%");
             list.add("&7&l> &eGroup: &6{pvplevels_group}/{pvplevels_group_to}");
@@ -559,11 +563,13 @@ public class Language {
             list.add("&7&l> &eKills: &6{pvplevels_kills}");
             list.add("&7&l> &eDeaths: &6{pvplevels_deaths}");
             list.add("&7&l> &eXP: &6{pvplevels_xp}");
-            list.add("&7&l> &eRequired XP: &6{pvplevels_xp_required}");
-            list.add("&7&l> &eProgress: {pvplevels_xp_progress_style}");
             list.add("&7&l> &eLevel: &6{pvplevels_level}");
             list.add("&7&l> &eKDR: &6{pvplevels_kdr}");
+            list.add("&7&l> &eKill Factor: &6{pvplevels_kill_factor}");
             list.add("&7&l> &eKillStreak: &6{pvplevels_killstreak}");
+            list.add("&7&l> &eRequired XP: &6{pvplevels_xp_required}");
+            list.add("&7&l> &eProgress: {pvplevels_xp_progress_style} &6{pvplevels_xp_progress}%");
+            list.add("&7&l> &eGroup: &6{pvplevels_group}/{pvplevels_group_to}");
             list.add("&c&m---------------------------------------------");
             get.set("console.pvpstats.message", list);
             change = true;

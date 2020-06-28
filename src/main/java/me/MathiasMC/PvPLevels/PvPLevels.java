@@ -189,7 +189,8 @@ public class PvPLevels extends JavaPlugin {
                 .replace("{pvplevels_xp_progress_style}", String.valueOf(statsManager.xp_progress_style(uuid)))
                 .replace("{pvplevels_level}", String.valueOf(playerConnect.level()))
                 .replace("{pvplevels_level_to}", String.valueOf(playerConnect.level() + 1))
-                .replace("{pvplevels_kdr}", String.valueOf(statsManager.kdr(uuid)))
+                .replace("{pvplevels_kdr}", statsManager.kdr(uuid))
+                .replace("{pvplevels_kill_factor}", statsManager.kill_factor(uuid))
                 .replace("{pvplevels_group}", group)
                 .replace("{pvplevels_group_to}", group_to)
                 .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()));
