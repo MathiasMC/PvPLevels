@@ -6,8 +6,11 @@ import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class StatsManager {
@@ -190,5 +193,17 @@ public class StatsManager {
             case "&r" : return ChatColor.RESET;
             default: return ChatColor.WHITE;
         }
+    }
+
+    public String time(String uuid) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(plugin.config.get.getString("placeholders.time.format"));
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(plugin.config.get.getString("placeholders.time.zone")));
+        return simpleDateFormat.format(new Date(plugin.get(uuid).getTime().getTime()));
+    }
+
+    public String date(String uuid) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(plugin.config.get.getString("placeholders.date.format"));
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(plugin.config.get.getString("placeholders.date.zone")));
+        return simpleDateFormat.format(new Date(plugin.get(uuid).getTime().getTime()));
     }
 }

@@ -7,6 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Database {
 
@@ -64,7 +65,13 @@ public class Database {
             if (connection == null || connection.isClosed()) {
                 return false;
             }
-            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255));");
+            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `lastseen` DATETIME);");
+            if (plugin.config.get.getBoolean("mysql.alter")) {
+                connection.createStatement().execute("ALTER TABLE `players` ADD COLUMN `lastseen` DATETIME AFTER `level`");
+                plugin.config.get.set("mysql.alter", false);
+                plugin.config.save();
+                plugin.textUtils.warning("[Database] Alter table players");
+            }
             if (debug_database) { plugin.textUtils.debug("[Database] Creating table if not exists"); }
         }
         return true;
@@ -88,12 +95,13 @@ public class Database {
                     try {
                         resultSet = connection.createStatement().executeQuery("SELECT * FROM players WHERE uuid= '" + uuid + "';");
                         if (!resultSet.next()) {
-                            preparedStatement = connection.prepareStatement("INSERT INTO players (uuid, kills, deaths, xp, level) VALUES(?, ?, ?, ?, ?);");
+                            preparedStatement = connection.prepareStatement("INSERT INTO players (uuid, kills, deaths, xp, level, lastseen) VALUES(?, ?, ?, ?, ?, ?);");
                             preparedStatement.setString(1, uuid);
                             preparedStatement.setLong(2, 0L);
                             preparedStatement.setLong(3, 0L);
                             preparedStatement.setLong(4, 0L);
                             preparedStatement.setLong(5, 0L);
+                            preparedStatement.setTimestamp(6, new Timestamp(new Date().getTime()));
                             preparedStatement.executeUpdate();
                             if (debug_database) { plugin.textUtils.debug("[Database] Inserting default values for UUID: " + uuid); }
                         }
@@ -119,7 +127,7 @@ public class Database {
         }
     }
 
-    public void setValues(final String uuid, final Long kills, final Long deaths, final Long xp, final Long level) {
+    public void setValues(final String uuid, final Long kills, final Long deaths, final Long xp, final Long level, Timestamp timestamp) {
         if (set()) {
             BukkitRunnable r = new BukkitRunnable() {
                 public void run() {
@@ -128,12 +136,13 @@ public class Database {
                     try {
                         resultSet = connection.createStatement().executeQuery("SELECT * FROM players WHERE uuid= '" + uuid + "';");
                         if (resultSet.next()) {
-                            preparedStatement = connection.prepareStatement("UPDATE players SET kills = ?, deaths = ?, xp = ?, level = ? WHERE uuid = ?");
+                            preparedStatement = connection.prepareStatement("UPDATE players SET kills = ?, deaths = ?, xp = ?, level = ?, lastseen = ? WHERE uuid = ?");
                             preparedStatement.setLong(1, kills);
                             preparedStatement.setLong(2, deaths);
                             preparedStatement.setLong(3, xp);
                             preparedStatement.setLong(4, level);
-                            preparedStatement.setString(5, uuid);
+                            preparedStatement.setTimestamp(5, timestamp);
+                            preparedStatement.setString(6, uuid);
                             preparedStatement.executeUpdate();
                             if (debug_database) { plugin.textUtils.debug("[Database] Updating values for UUID: " + uuid); }
                         }
@@ -159,7 +168,7 @@ public class Database {
         }
     }
 
-    public Long[] getValues(String uuid) {
+    public String[] getValues(String uuid) {
         Statement statement = null;
         ResultSet resultSet = null;
         try {
@@ -167,7 +176,7 @@ public class Database {
             resultSet = statement.executeQuery("SELECT * FROM players WHERE uuid= '" + uuid + "';");
             if (resultSet.next()) {
                 if (debug_database) { plugin.textUtils.debug("[Database] Getting values for UUID: " + uuid); }
-                return new Long[]{ resultSet.getLong("kills"), resultSet.getLong("deaths"), resultSet.getLong("xp"), resultSet.getLong("level") };
+                return new String[]{ String.valueOf(resultSet.getLong("kills")), String.valueOf(resultSet.getLong("deaths")), String.valueOf(resultSet.getLong("xp")), String.valueOf(resultSet.getLong("level")), String.valueOf(resultSet.getTime("lastseen")) };
             }
         } catch (SQLException exception) {
             plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
@@ -185,7 +194,7 @@ public class Database {
                     plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
                 }
         }
-        return new Long[] { 0L, 0L, 0L, 0L };
+        return new String[] { String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(0L) };
     }
 
     private ArrayList<String> getUUIDList() {

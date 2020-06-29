@@ -81,6 +81,12 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(identifier.equals("prefix")){
             return String.valueOf(plugin.statsManager.prefix(player));
         }
+        if(identifier.equals("time")){
+            return String.valueOf(plugin.statsManager.time(player.getUniqueId().toString()));
+        }
+        if(identifier.equals("date")){
+            return String.valueOf(plugin.statsManager.date(player.getUniqueId().toString()));
+        }
         if(identifier.equals("global_booster")){
             return plugin.boostersManager.getGlobalPlaceholder();
         }

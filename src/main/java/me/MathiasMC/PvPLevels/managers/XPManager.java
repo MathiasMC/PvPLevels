@@ -113,7 +113,7 @@ public class XPManager {
     public boolean isMaxLevel(Player player, PlayerConnect playerConnect) {
         String group = plugin.systemManager.getGroup(player, plugin.config.get, "level-max", false);
         if (group != null) {
-            return playerConnect.level() >= plugin.config.get.getInt("level-max." + group + ".max");
+            return playerConnect.level() >= plugin.config.get.getLong("level-max." + group + ".max");
         }
         return false;
     }

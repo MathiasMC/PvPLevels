@@ -33,6 +33,14 @@ public class Config {
         get = YamlConfiguration.loadConfiguration(file);
     }
 
+    public void save() {
+        try {
+            get.save(file);
+        } catch (IOException exception) {
+            plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+        }
+    }
+
     private void update() {
         boolean change = false;
         plugin.textUtils.fileHeader(get);
@@ -48,13 +56,16 @@ public class Config {
             get.set("debug.save", false);
             change = true;
         }
-        if (!get.contains("mysql")) {
-            get.set("mysql.use", false);
-            get.set("mysql.host", "localhost");
-            get.set("mysql.port", 3306);
-            get.set("mysql.database", "database");
-            get.set("mysql.username", "username");
-            get.set("mysql.password", "password");
+        if (!get.contains("mysql.alter")) {
+            if (!get.contains("mysql.use")) {
+                get.set("mysql.use", false);
+                get.set("mysql.host", "localhost");
+                get.set("mysql.port", 3306);
+                get.set("mysql.database", "database");
+                get.set("mysql.username", "username");
+                get.set("mysql.password", "password");
+            }
+            get.set("mysql.alter", true);
             change = true;
         }
         if (!get.contains("load-players.all")) {
@@ -114,25 +125,31 @@ public class Config {
             get.set("generate.random.max", 35);
             change = true;
         }
-        if (!get.contains("placeholders.global-booster")) {
-            get.set("placeholders.PlaceholderAPI", true);
-            get.set("placeholders.prefix.default.permission", "pvplevels.prefix.default");
-            get.set("placeholders.prefix.default.list.0", "&e[&7Default&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
-            get.set("placeholders.prefix.default.none", "&e[&6Default&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
-            get.set("placeholders.prefix.vip.permission", "pvplevels.group.vip");
-            get.set("placeholders.prefix.vip.list.0", "&e[&7VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
-            get.set("placeholders.prefix.vip.none", "&e[&6VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
-            get.set("placeholders.global-booster.none", "&cNone");
-            get.set("placeholders.global-booster.name", "&cNone");
-            get.set("placeholders.global-booster.time", "&cNone");
-            get.set("placeholders.global-booster.time-left", "&cNone");
-            get.set("placeholders.global-booster.time-prefix", "&cNone");
-            get.set("placeholders.global-booster.time-left-prefix", "&cNone");
-            get.set("placeholders.personal-booster.none", "&cNone");
-            get.set("placeholders.personal-booster.time", "&cNone");
-            get.set("placeholders.personal-booster.time-left", "&cNone");
-            get.set("placeholders.personal-booster.time-prefix", "&cNone");
-            get.set("placeholders.personal-booster.time-left-prefix", "&cNone");
+        if (!get.contains("placeholders.time")) {
+            if (!get.contains("placeholders.global-booster")) {
+                get.set("placeholders.PlaceholderAPI", true);
+                get.set("placeholders.prefix.default.permission", "pvplevels.prefix.default");
+                get.set("placeholders.prefix.default.list.0", "&e[&7Default&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
+                get.set("placeholders.prefix.default.none", "&e[&6Default&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
+                get.set("placeholders.prefix.vip.permission", "pvplevels.group.vip");
+                get.set("placeholders.prefix.vip.list.0", "&e[&7VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
+                get.set("placeholders.prefix.vip.none", "&e[&6VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]");
+                get.set("placeholders.global-booster.none", "&cNone");
+                get.set("placeholders.global-booster.name", "&cNone");
+                get.set("placeholders.global-booster.time", "&cNone");
+                get.set("placeholders.global-booster.time-left", "&cNone");
+                get.set("placeholders.global-booster.time-prefix", "&cNone");
+                get.set("placeholders.global-booster.time-left-prefix", "&cNone");
+                get.set("placeholders.personal-booster.none", "&cNone");
+                get.set("placeholders.personal-booster.time", "&cNone");
+                get.set("placeholders.personal-booster.time-left", "&cNone");
+                get.set("placeholders.personal-booster.time-prefix", "&cNone");
+                get.set("placeholders.personal-booster.time-left-prefix", "&cNone");
+            }
+            get.set("placeholders.time.format", "HH.mm.ss");
+            get.set("placeholders.time.zone", "Europe/Copenhagen");
+            get.set("placeholders.date.format", "dd.MM.yyyy");
+            get.set("placeholders.date.zone", "Europe/Copenhagen");
             change = true;
         }
         if (!get.contains("level-max")) {
@@ -343,11 +360,7 @@ public class Config {
             change = true;
         }
         if (change) {
-            try {
-                get.save(file);
-            } catch (IOException exception) {
-                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
-            }
+            save();
             plugin.textUtils.info("config.yml ( A change was made )");
         } else {
             plugin.textUtils.info("config.yml ( Loaded )");

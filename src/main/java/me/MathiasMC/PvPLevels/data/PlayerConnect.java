@@ -1,8 +1,8 @@
 package me.MathiasMC.PvPLevels.data;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
-import org.bukkit.OfflinePlayer;
-
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 public class PlayerConnect {
@@ -27,13 +27,16 @@ public class PlayerConnect {
 
     private int taskID;
 
+    private Timestamp time;
+
     public PlayerConnect(String uuid) {
         playeruuid = uuid;
-        Long[] data = PvPLevels.call.database.getValues(uuid);
-        kills = data[0];
-        deaths = data[1];
-        xp = data[2];
-        level = data[3];
+        String[] data = PvPLevels.call.database.getValues(uuid);
+        kills = Long.parseLong(data[0]);
+        deaths = Long.parseLong(data[1]);
+        xp = Long.parseLong(data[2]);
+        level = Long.parseLong(data[3]);
+        setTime();
         killstreak = 0L;
         loadTimer();
     }
@@ -74,12 +77,20 @@ public class PlayerConnect {
         level = set;
     }
 
+    public void setTime() {
+        time = new Timestamp(new Date().getTime());
+    }
+
+    public Timestamp getTime() {
+        return time;
+    }
+
     public void killstreak(Long set) {
         killstreak = set;
     }
 
     public void save() {
-        PvPLevels.call.database.setValues(playeruuid, kills, deaths, xp, level);
+        PvPLevels.call.database.setValues(playeruuid, kills, deaths, xp, level, time);
     }
 
     public Double getPersonalBooster() {

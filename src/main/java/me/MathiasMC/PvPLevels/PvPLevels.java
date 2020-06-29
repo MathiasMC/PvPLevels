@@ -193,7 +193,9 @@ public class PvPLevels extends JavaPlugin {
                 .replace("{pvplevels_kill_factor}", statsManager.kill_factor(uuid))
                 .replace("{pvplevels_group}", group)
                 .replace("{pvplevels_group_to}", group_to)
-                .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()));
+                .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()))
+                .replace("{pvplevels_time}", statsManager.time(uuid))
+                .replace("{pvplevels_date}", statsManager.date(uuid));
         return message;
     }
 

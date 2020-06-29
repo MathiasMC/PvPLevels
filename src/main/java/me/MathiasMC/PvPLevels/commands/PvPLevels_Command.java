@@ -547,7 +547,7 @@ public class PvPLevels_Command implements CommandExecutor {
             }
         } else if (colum.equalsIgnoreCase("xp")) {
             if (type.equalsIgnoreCase("add")) {
-                ArrayList<Integer> xp = xpControl();
+                ArrayList<Long> xp = xpControl();
                 if (set <= xp.get(xp.size() - 1)) {
                     if (!plugin.xpManager.isMaxLevel(target, playerConnect)) {
                         playerConnect.xp(set);
@@ -579,7 +579,7 @@ public class PvPLevels_Command implements CommandExecutor {
                     }
                 }
             } else {
-                ArrayList<Integer> xp = xpControl();
+                ArrayList<Long> xp = xpControl();
                 if (set <= xp.get(xp.size() - 1)) {
                     if (!plugin.xpManager.isMaxLevel(target, playerConnect)) {
                         playerConnect.xp(set);
@@ -639,10 +639,10 @@ public class PvPLevels_Command implements CommandExecutor {
         }
     }
 
-    private ArrayList<Integer> xpControl() {
-        ArrayList<Integer> xp = new ArrayList<>();
+    private ArrayList<Long> xpControl() {
+        ArrayList<Long> xp = new ArrayList<>();
         for (String level : plugin.levels.get.getConfigurationSection("levels").getKeys(false)) {
-            xp.add(plugin.levels.get.getInt("levels." + level + ".xp"));
+            xp.add(plugin.levels.get.getLong("levels." + level + ".xp"));
         }
         return xp;
     }
