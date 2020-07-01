@@ -56,16 +56,13 @@ public class Config {
             get.set("debug.save", false);
             change = true;
         }
-        if (!get.contains("mysql.alter")) {
-            if (!get.contains("mysql.use")) {
-                get.set("mysql.use", false);
-                get.set("mysql.host", "localhost");
-                get.set("mysql.port", 3306);
-                get.set("mysql.database", "database");
-                get.set("mysql.username", "username");
-                get.set("mysql.password", "password");
-            }
-            get.set("mysql.alter", true);
+        if (!get.contains("mysql")) {
+            get.set("mysql.use", false);
+            get.set("mysql.host", "localhost");
+            get.set("mysql.port", 3306);
+            get.set("mysql.database", "database");
+            get.set("mysql.username", "username");
+            get.set("mysql.password", "password");
             change = true;
         }
         if (!get.contains("load-players.all")) {

@@ -66,12 +66,6 @@ public class Database {
                 return false;
             }
             connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `lastseen` DATETIME);");
-            if (plugin.config.get.getBoolean("mysql.alter")) {
-                connection.createStatement().execute("ALTER TABLE `players` ADD COLUMN `lastseen` DATETIME AFTER `level`");
-                plugin.config.get.set("mysql.alter", false);
-                plugin.config.save();
-                plugin.textUtils.warning("[Database] Alter table players");
-            }
             if (debug_database) { plugin.textUtils.debug("[Database] Creating table if not exists"); }
         }
         return true;
@@ -194,7 +188,7 @@ public class Database {
                     plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
                 }
         }
-        return new String[] { String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(0L) };
+        return new String[] { String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(0L) };
     }
 
     private ArrayList<String> getUUIDList() {
