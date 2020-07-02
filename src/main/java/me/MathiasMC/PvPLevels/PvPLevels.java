@@ -3,6 +3,7 @@ package me.MathiasMC.PvPLevels;
 import me.MathiasMC.PvPLevels.commands.*;
 import me.MathiasMC.PvPLevels.data.Database;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import me.MathiasMC.PvPLevels.data.Purge;
 import me.MathiasMC.PvPLevels.files.*;
 import me.MathiasMC.PvPLevels.gui.GUI;
 import me.MathiasMC.PvPLevels.listeners.*;
@@ -96,6 +97,7 @@ public class PvPLevels extends JavaPlugin {
             int pluginId = 1174;
             Metrics metrics = new Metrics(this, pluginId);
             metrics.addCustomChart(new Metrics.SimplePie("levels", () -> String.valueOf(levels.get.getConfigurationSection("levels").getKeys(false).size())));
+            if (config.get.getBoolean("mysql.purge.use")) { new Purge(this); }
         } else {
             textUtils.error("Disabling plugin cannot connect to database");
             getServer().getPluginManager().disablePlugin(this);

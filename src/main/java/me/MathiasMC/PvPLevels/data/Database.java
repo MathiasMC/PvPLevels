@@ -121,6 +121,43 @@ public class Database {
         }
     }
 
+    public void delete(final String uuid) {
+        if (set()) {
+            BukkitRunnable r = new BukkitRunnable() {
+                public void run() {
+                    PreparedStatement preparedStatement = null;
+                    ResultSet resultSet = null;
+                    try {
+                        resultSet = connection.createStatement().executeQuery("SELECT * FROM players WHERE uuid= '" + uuid + "';");
+                        if (resultSet.next()) {
+                            preparedStatement = connection.prepareStatement("DELETE FROM players WHERE uuid = ?");
+                            preparedStatement.setString(1, uuid);
+                            preparedStatement.executeUpdate();
+                            plugin.unload(uuid);
+                            if (debug_database) { plugin.textUtils.debug("[Database] Deleting player: " + uuid); }
+                        }
+                    } catch (SQLException exception) {
+                        plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                    } finally {
+                        if (resultSet != null)
+                            try {
+                                resultSet.close();
+                            } catch (SQLException exception) {
+                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                            }
+                        if (preparedStatement != null)
+                            try {
+                                preparedStatement.close();
+                            } catch (SQLException exception) {
+                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                            }
+                    }
+                }
+            };
+            r.runTaskAsynchronously(plugin);
+        }
+    }
+
     public void setValues(final String uuid, final Long kills, final Long deaths, final Long xp, final Long level, Timestamp timestamp) {
         if (set()) {
             BukkitRunnable r = new BukkitRunnable() {
@@ -170,7 +207,7 @@ public class Database {
             resultSet = statement.executeQuery("SELECT * FROM players WHERE uuid= '" + uuid + "';");
             if (resultSet.next()) {
                 if (debug_database) { plugin.textUtils.debug("[Database] Getting values for UUID: " + uuid); }
-                return new String[]{ String.valueOf(resultSet.getLong("kills")), String.valueOf(resultSet.getLong("deaths")), String.valueOf(resultSet.getLong("xp")), String.valueOf(resultSet.getLong("level")), String.valueOf(resultSet.getTime("lastseen")) };
+                return new String[]{ String.valueOf(resultSet.getLong("kills")), String.valueOf(resultSet.getLong("deaths")), String.valueOf(resultSet.getLong("xp")), String.valueOf(resultSet.getLong("level")), String.valueOf(resultSet.getTimestamp("lastseen")) };
             }
         } catch (SQLException exception) {
             plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
@@ -188,7 +225,7 @@ public class Database {
                     plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
                 }
         }
-        return new String[] { String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(0L) };
+        return new String[] { String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(new Timestamp(new Date().getTime())) };
     }
 
     private ArrayList<String> getUUIDList() {

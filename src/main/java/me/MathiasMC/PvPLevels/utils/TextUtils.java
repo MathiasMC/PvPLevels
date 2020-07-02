@@ -21,19 +21,19 @@ public class TextUtils {
     }
 
     public void info(String text) {
-        logger.info("[ " + prefix + " ] " + text);
+        logger.info("[" + prefix + "] " + text);
     }
 
     public void warning(String text) {
-        logger.warning("[ " + prefix + " ] " + text);
+        logger.warning("[" + prefix + "] " + text);
     }
 
     public void error(String text) {
-        logger.severe("[ " + prefix + " ] " + text);
+        logger.severe("[" + prefix + "] " + text);
     }
 
     public void debug(String text) {
-        logger.warning("[ " + prefix + " ] [DEBUG] " + text);
+        logger.warning("[" + prefix + "] [DEBUG] " + text);
     }
 
     public void exception(StackTraceElement[] stackTraceElement, String text) {

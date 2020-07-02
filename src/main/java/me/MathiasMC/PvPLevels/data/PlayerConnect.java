@@ -36,7 +36,7 @@ public class PlayerConnect {
         deaths = Long.parseLong(data[1]);
         xp = Long.parseLong(data[2]);
         level = Long.parseLong(data[3]);
-        setTime();
+        time = Timestamp.valueOf(data[4]);
         killstreak = 0L;
         loadTimer();
     }

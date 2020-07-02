@@ -48,21 +48,26 @@ public class Config {
             get.set("update-check", true);
             change = true;
         }
-        if (!get.contains("debug.database")) {
+        if (!get.contains("debug.purge")) {
             get.set("debug.database", false);
-            change = true;
-        }
-        if (!get.contains("debug.save")) {
             get.set("debug.save", false);
+            get.set("debug.purge", false);
             change = true;
         }
-        if (!get.contains("mysql")) {
-            get.set("mysql.use", false);
-            get.set("mysql.host", "localhost");
-            get.set("mysql.port", 3306);
-            get.set("mysql.database", "database");
-            get.set("mysql.username", "username");
-            get.set("mysql.password", "password");
+        if (!get.contains("mysql.purge")) {
+            if (!get.contains("mysql")) {
+                get.set("mysql.use", false);
+                get.set("mysql.host", "localhost");
+                get.set("mysql.port", 3306);
+                get.set("mysql.database", "database");
+                get.set("mysql.username", "username");
+                get.set("mysql.password", "password");
+            }
+            get.set("mysql.purge.use", true);
+            get.set("mysql.purge.interval", 7200);
+            get.set("mysql.purge.check-on-startup", true);
+            get.set("mysql.purge.inactive-days", 30);
+            get.set("mysql.purge.commands", new ArrayList<String>());
             change = true;
         }
         if (!get.contains("load-players.all")) {
@@ -74,7 +79,7 @@ public class Config {
             change = true;
         }
         if (!get.contains("unload-players.quit")) {
-            get.set("unload-players.quit", true);
+            get.set("unload-players.quit", false);
             change = true;
         }
         if (!get.contains("save")) {
