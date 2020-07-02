@@ -21,7 +21,7 @@ public class PlayerQuit implements Listener {
         String uuid = player.getUniqueId().toString();
         if (plugin.list().contains(uuid)) {
             plugin.get(uuid).setTime();
-            if (plugin.config.get.getBoolean("events.KillStreaks") && !plugin.config.get.getBoolean("unload-players.killstreak")) { plugin.statsManager.clearKillStreak(plugin.get(uuid), player, "Quit"); }
+            if (plugin.config.get.getBoolean("events.KillStreaks") && plugin.config.get.getBoolean("unload-players.killstreak")) { plugin.statsManager.clearKillStreak(plugin.get(uuid), player, "Quit"); }
             if (plugin.config.get.getBoolean("unload-players.quit")) {
                 plugin.unload(uuid);
             } else {
