@@ -162,10 +162,21 @@ public class Config {
             get.set("level-max.default.max", 10);
             change = true;
         }
-        if (!get.contains("kill-session")) {
-            get.set("kill-session.use", false);
-            get.set("kill-session.amount", 4);
-            get.set("kill-session.time", 150);
+        if (!get.contains("kill-session.commands.get")) {
+            if (!get.contains("kill-session")) {
+                get.set("kill-session.use", false);
+                get.set("kill-session.amount", 4);
+                get.set("kill-session.time", 150);
+            }
+            ArrayList<String> list = new ArrayList<>();
+            list.add("pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou have been put in a kill session for killing {pvplevels_killed} {pvplevels_amount} times");
+            get.set("kill-session.commands.get", list);
+            ArrayList<String> list1 = new ArrayList<>();
+            list1.add("kick {pvplevels_player} You cannot kill the same player so many times");
+            get.set("kill-session.commands.abuse", list1);
+            ArrayList<String> list2 = new ArrayList<>();
+            list2.add("pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou have been removed from the kill session");
+            get.set("kill-session.commands.remove", list2);
             change = true;
         }
         if (!get.contains("pvptop.killstreak")) {

@@ -4,10 +4,7 @@ import me.MathiasMC.PvPLevels.PvPLevels;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class KillSessionUtils {
 
@@ -29,7 +26,7 @@ public class KillSessionUtils {
                 Player killed = (Player) entity;
                 String attacker = killer.getUniqueId().toString();
                 if (!killsession.containsKey(attacker)) {
-                    killsession.put(attacker, new ArrayList<>(Arrays.asList(new String[]{killed.getUniqueId() + ";1"})));
+                    killsession.put(attacker, new ArrayList<>(Collections.singletonList(killed.getUniqueId() + ";1")));
                 } else {
                     for (int i = 0; i < killsession.get(attacker).size(); i++) {
                         if (killed.getUniqueId().toString().equalsIgnoreCase(killsession.get(attacker).get(i).split(";")[0])) {
@@ -39,7 +36,7 @@ public class KillSessionUtils {
                             if (killed.getUniqueId().toString().equalsIgnoreCase(uuid))
                                 if (nameamount >= SessionInt) {
                                     returning = true;
-                                    task(killed, attacker);
+                                    task(killed, attacker, killer);
                                 } else {
                                     killsession.get(attacker).set(i, uuid + ";" + (nameamount + 1));
                                 }
@@ -58,7 +55,7 @@ public class KillSessionUtils {
         return false;
     }
 
-    private void task(final Player killed, final String attacker) {
+    private void task(final Player killed, final String attacker, final Entity killer) {
         if (!killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
             int id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                     if (killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
@@ -71,10 +68,20 @@ public class KillSessionUtils {
                             PvPLevels.call.getServer().getScheduler().cancelTask(Integer.parseInt(split[0]));
                             killsessiontime.remove(killed.getUniqueId().toString() + "=" + attacker);
                             killsession.remove(attacker);
+                            sendMessage(killer, killed, "remove");
                         }
                     }
             },0L, 20L);
             killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, id + "=" + plugin.config.get.getInt("kill-session.time"));
+            sendMessage(killer, killed, "get");
+        } else {
+            sendMessage(killer, killed, "abuse");
+        }
+    }
+
+    private void sendMessage(final Entity killer, final Player killed, final String path) {
+        for (String command : plugin.config.get.getStringList("kill-session.commands." + path)) {
+            plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", killer.getName()).replace("{pvplevels_killed}", killed.getName()).replace("{pvplevels_amount}", String.valueOf(plugin.config.get.getInt("kill-session.amount"))));
         }
     }
 }
