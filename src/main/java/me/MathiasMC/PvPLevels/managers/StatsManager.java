@@ -161,6 +161,7 @@ public class StatsManager {
             if (type.equalsIgnoreCase("deaths") && !plugin.config.get.getStringList("pvptop.deaths.excluded").contains(uuid)) { unsorted.put(PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(uuid)).getName(), plugin.get(uuid).deaths()); }
             if (type.equalsIgnoreCase("xp") && !plugin.config.get.getStringList("pvptop.xp.excluded").contains(uuid)) { unsorted.put(PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(uuid)).getName(), plugin.get(uuid).xp()); }
             if (type.equalsIgnoreCase("level") && !plugin.config.get.getStringList("pvptop.level.excluded").contains(uuid)) { unsorted.put(PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(uuid)).getName(), plugin.get(uuid).level()); }
+            if (type.equalsIgnoreCase("killstreak") && !plugin.config.get.getStringList("pvptop.killstreak.excluded").contains(uuid)) { unsorted.put(PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(uuid)).getName(), plugin.get(uuid).killstreak()); }
         }
         LinkedHashMap<String, Long> sorted = new LinkedHashMap<>();
         unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));

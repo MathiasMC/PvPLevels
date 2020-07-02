@@ -360,6 +360,66 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(identifier.equals("top_10_level")){
             return plugin.statsManager.getTopValue("level", 9, false);
         }
+        if(identifier.equals("top_1_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 0, true);
+        }
+        if(identifier.equals("top_1_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 0, false);
+        }
+        if(identifier.equals("top_2_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 1, true);
+        }
+        if(identifier.equals("top_2_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 1, false);
+        }
+        if(identifier.equals("top_3_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 2, true);
+        }
+        if(identifier.equals("top_3_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 2, false);
+        }
+        if(identifier.equals("top_4_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 3, true);
+        }
+        if(identifier.equals("top_4_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 3, false);
+        }
+        if(identifier.equals("top_5_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 4, true);
+        }
+        if(identifier.equals("top_5_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 4, false);
+        }
+        if(identifier.equals("top_6_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 5, true);
+        }
+        if(identifier.equals("top_6_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 5, false);
+        }
+        if(identifier.equals("top_7_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 6, true);
+        }
+        if(identifier.equals("top_7_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 6, false);
+        }
+        if(identifier.equals("top_8_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 7, true);
+        }
+        if(identifier.equals("top_8_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 7, false);
+        }
+        if(identifier.equals("top_9_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 8, true);
+        }
+        if(identifier.equals("top_9_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 8, false);
+        }
+        if(identifier.equals("top_10_killstreak_name")){
+            return plugin.statsManager.getTopValue("killstreak", 9, true);
+        }
+        if(identifier.equals("top_10_killstreak")){
+            return plugin.statsManager.getTopValue("killstreak", 9, false);
+        }
         return null;
     }
 }

@@ -392,7 +392,7 @@ public class PvPLevels_Command implements CommandExecutor {
                         if (sender.hasPermission("pvplevels.command.gui")) {
                             if (args.length > 1) {
                                 if (args[1].equalsIgnoreCase("open")) {
-                                    if (sender.hasPermission("pvplevels.command.gui.open")) {
+                                    if (sender.hasPermission("pvplevels.command.gui.open." + args[2])) {
                                         if (args.length == 3) {
                                             if (path.equalsIgnoreCase("player")) {
                                                 Player player = (Player) sender;

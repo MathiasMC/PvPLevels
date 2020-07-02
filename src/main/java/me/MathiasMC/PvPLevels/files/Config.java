@@ -78,8 +78,11 @@ public class Config {
             get.set("load-players.reload", true);
             change = true;
         }
-        if (!get.contains("unload-players.quit")) {
-            get.set("unload-players.quit", false);
+        if (!get.contains("unload-players.killstreak")) {
+            if (!get.contains("unload-players.quit")) {
+                get.set("unload-players.quit", false);
+            }
+            get.set("unload-players.killstreak", false);
             change = true;
         }
         if (!get.contains("save")) {
@@ -165,27 +168,34 @@ public class Config {
             get.set("kill-session.time", 150);
             change = true;
         }
-        if (!get.contains("pvptop")) {
-            get.set("pvptop.kills.name", "&cNone");
-            get.set("pvptop.kills.value", "&cNone");
-            ArrayList<String> list = new ArrayList<>();
-            list.add("uuid");
-            get.set("pvptop.kills.excluded", list);
-            get.set("pvptop.deaths.name", "&cNone");
-            get.set("pvptop.deaths.value", "&cNone");
-            ArrayList<String> list2 = new ArrayList<>();
-            list2.add("uuid");
-            get.set("pvptop.deaths.excluded", list2);
-            get.set("pvptop.xp.name", "&cNone");
-            get.set("pvptop.xp.value", "&cNone");
-            ArrayList<String> list3 = new ArrayList<>();
-            list3.add("uuid");
-            get.set("pvptop.xp.excluded", list3);
-            get.set("pvptop.level.name", "&cNone");
-            get.set("pvptop.level.value", "&cNone");
-            ArrayList<String> list4 = new ArrayList<>();
-            list4.add("uuid");
-            get.set("pvptop.level.excluded", list4);
+        if (!get.contains("pvptop.killstreak")) {
+            if (!get.contains("pvptop.kills")) {
+                get.set("pvptop.kills.name", "&cNone");
+                get.set("pvptop.kills.value", "&cNone");
+                ArrayList<String> list = new ArrayList<>();
+                list.add("uuid");
+                get.set("pvptop.kills.excluded", list);
+                get.set("pvptop.deaths.name", "&cNone");
+                get.set("pvptop.deaths.value", "&cNone");
+                ArrayList<String> list2 = new ArrayList<>();
+                list2.add("uuid");
+                get.set("pvptop.deaths.excluded", list2);
+                get.set("pvptop.xp.name", "&cNone");
+                get.set("pvptop.xp.value", "&cNone");
+                ArrayList<String> list3 = new ArrayList<>();
+                list3.add("uuid");
+                get.set("pvptop.xp.excluded", list3);
+                get.set("pvptop.level.name", "&cNone");
+                get.set("pvptop.level.value", "&cNone");
+                ArrayList<String> list4 = new ArrayList<>();
+                list4.add("uuid");
+                get.set("pvptop.level.excluded", list4);
+            }
+            get.set("pvptop.killstreak.name", "&cNone");
+            get.set("pvptop.killstreak.value", "&cNone");
+            ArrayList<String> list5 = new ArrayList<>();
+            list5.add("uuid");
+            get.set("pvptop.killstreak.excluded", list5);
             change = true;
         }
         if (!get.contains("spawners")) {
