@@ -59,9 +59,29 @@ sortXP:
   LORES: []
   MATERIAL: EXPERIENCE_BOTTLE
   AMOUNT: 1
-  POSITION: 3
+  POSITION: 2
   OPTIONS:
     - SORT_XP
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortLevel:
+  NAME: '&f&lSort &7&l- &b&lLevel'
+  LORES: []
+  MATERIAL: DRAGON_EGG
+  AMOUNT: 1
+  POSITION: 3
+  OPTIONS:
+    - SORT_LEVEL
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortKillStreak:
+  NAME: '&f&lSort &7&l- &b&lKillStreak'
+  LORES: []
+  MATERIAL: BOW
+  AMOUNT: 1
+  POSITION: 4
+  OPTIONS:
+    - SORT_KILLSTREAK
   COMMANDS:
     - pvplevels gui open admin.yml {pvplevels_player}
 sortLastSeen:
@@ -74,23 +94,33 @@ sortLastSeen:
     - SORT_LASTSEEN
   COMMANDS:
     - pvplevels gui open admin.yml {pvplevels_player}
-sortLevel:
-  NAME: '&f&lSort &7&l- &b&lLevel'
+sortKDR:
+  NAME: '&f&lSort &7&l- &b&lKDR'
   LORES: []
-  MATERIAL: DRAGON_EGG
+  MATERIAL: BEACON
+  AMOUNT: 1
+  POSITION: 6
+  OPTIONS:
+    - SORT_KDR
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortKillFactor:
+  NAME: '&f&lSort &7&l- &b&lKill Factor'
+  LORES: []
+  MATERIAL: ANVIL
   AMOUNT: 1
   POSITION: 7
   OPTIONS:
-    - SORT_LEVEL
+    - SORT_KILLFACTOR
   COMMANDS:
     - pvplevels gui open admin.yml {pvplevels_player}
-sortKillStreak:
-  NAME: '&f&lSort &7&l- &b&lKillStreak'
+sortXPRequired:
+  NAME: '&f&lSort &7&l- &b&lXP Required'
   LORES: []
-  MATERIAL: BOW
+  MATERIAL: SLIME_BALL
   AMOUNT: 1
   POSITION: 8
   OPTIONS:
-    - SORT_KILLSTREAK
+    - SORT_XPREQUIRED
   COMMANDS:
     - pvplevels gui open admin.yml {pvplevels_player}

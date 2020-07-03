@@ -328,6 +328,23 @@ player:
         - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
     commands:
       - pvplevels gui open profile.yml {pvplevels_player}
+  pvpadmin:
+    usage:
+      - '&7[&bPvPLevels&7] &cUsage: /pvpadmin <player>'
+    online:
+      - '&7[&bPvPLevels&7] &cThe player is not online!'
+    permission:
+      - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    target:
+      permission:
+        - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    commands:
+      - pvplevels gui open admin.yml {pvplevels_player}
+    deleted-commands:
+      - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eDeleted player: {pvplevels_target}'
+      - pvplevels gui open admin.yml {pvplevels_player}
+    you:
+      - '&7[&bPvPLevels&7] &cYou cannot delete your own profile!'
 console:
   pvplevels:
     command:
@@ -582,3 +599,10 @@ console:
       - '&7[&bPvPLevels&7] &cThe player is not online!'
     commands:
       - pvplevels gui open profile.yml {pvplevels_player}
+  pvpadmin:
+    usage:
+      - '&7[&bPvPLevels&7] &cUsage: /pvpadmin <player>'
+    online:
+      - '&7[&bPvPLevels&7] &cThe player is not online!'
+    commands:
+      - pvplevels gui open admin.yml {pvplevels_player}

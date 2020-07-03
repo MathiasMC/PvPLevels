@@ -157,6 +157,7 @@ public class StatsManager {
 
     public LinkedHashMap getTopMap(String type) {
         Map<String, Long> unsorted = new HashMap<>();
+        Map<String, Double> unsortedDouble = new HashMap<>();
         for (String uuid : plugin.list()) {
             if (type.equalsIgnoreCase("kills") && !plugin.config.get.getStringList("pvptop.kills.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).kills()); }
             if (type.equalsIgnoreCase("deaths") && !plugin.config.get.getStringList("pvptop.deaths.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).deaths()); }
@@ -164,10 +165,19 @@ public class StatsManager {
             if (type.equalsIgnoreCase("level") && !plugin.config.get.getStringList("pvptop.level.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).level()); }
             if (type.equalsIgnoreCase("killstreak") && !plugin.config.get.getStringList("pvptop.killstreak.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).killstreak()); }
             if (type.equalsIgnoreCase("lastseen")) { unsorted.put(uuid, plugin.get(uuid).getTime().getTime()); }
+            if (type.equalsIgnoreCase("kdr")) { unsortedDouble.put(uuid, Double.parseDouble(plugin.statsManager.kdr(uuid))); }
+            if (type.equalsIgnoreCase("killfactor")) { unsortedDouble.put(uuid, Double.parseDouble(plugin.statsManager.kill_factor(uuid))); }
+            if (type.equalsIgnoreCase("xprequired")) { unsorted.put(uuid, plugin.statsManager.xp_required(uuid)); }
         }
-        LinkedHashMap<String, Long> sorted = new LinkedHashMap<>();
-        unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
-        return sorted;
+        if (type.equalsIgnoreCase("kdr") || type.equalsIgnoreCase("killfactor")) {
+            LinkedHashMap<String, Double> sortedDouble = new LinkedHashMap<>();
+            unsortedDouble.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sortedDouble.put(x.getKey(), x.getValue()));
+            return sortedDouble;
+        } else {
+            LinkedHashMap<String, Long> sorted = new LinkedHashMap<>();
+            unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
+            return sorted;
+        }
     }
 
     private ChatColor getChatColor(String colorCode){

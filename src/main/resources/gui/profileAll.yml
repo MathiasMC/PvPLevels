@@ -121,7 +121,7 @@ sortDeaths:
   LORES: []
   MATERIAL: LAVA_BUCKET
   AMOUNT: 1
-  POSITION: 2
+  POSITION: 1
   OPTIONS:
     - SORT_DEATHS
   COMMANDS:
@@ -131,7 +131,7 @@ sortXP:
   LORES: []
   MATERIAL: EXPERIENCE_BOTTLE
   AMOUNT: 1
-  POSITION: 4
+  POSITION: 2
   OPTIONS:
     - SORT_XP
   COMMANDS:
@@ -141,7 +141,7 @@ sortLevel:
   LORES: []
   MATERIAL: DRAGON_EGG
   AMOUNT: 1
-  POSITION: 6
+  POSITION: 3
   OPTIONS:
     - SORT_LEVEL
   COMMANDS:
@@ -151,8 +151,48 @@ sortKillStreak:
   LORES: []
   MATERIAL: BOW
   AMOUNT: 1
-  POSITION: 8
+  POSITION: 4
   OPTIONS:
     - SORT_KILLSTREAK
+  COMMANDS:
+    - pvplevels gui open profileAll.yml {pvplevels_player}
+sortLastSeen:
+  NAME: '&f&lSort &7&l- &b&lLast Seen'
+  LORES: []
+  MATERIAL: CLOCK
+  AMOUNT: 1
+  POSITION: 5
+  OPTIONS:
+    - SORT_LASTSEEN
+  COMMANDS:
+    - pvplevels gui open profileAll.yml {pvplevels_player}
+sortKDR:
+  NAME: '&f&lSort &7&l- &b&lKDR'
+  LORES: []
+  MATERIAL: BEACON
+  AMOUNT: 1
+  POSITION: 6
+  OPTIONS:
+    - SORT_KDR
+  COMMANDS:
+    - pvplevels gui open profileAll.yml {pvplevels_player}
+sortKillFactor:
+  NAME: '&f&lSort &7&l- &b&lKill Factor'
+  LORES: []
+  MATERIAL: ANVIL
+  AMOUNT: 1
+  POSITION: 7
+  OPTIONS:
+    - SORT_KILLFACTOR
+  COMMANDS:
+    - pvplevels gui open profileAll.yml {pvplevels_player}
+sortXPRequired:
+  NAME: '&f&lSort &7&l- &b&lXP Required'
+  LORES: []
+  MATERIAL: SLIME_BALL
+  AMOUNT: 1
+  POSITION: 8
+  OPTIONS:
+    - SORT_XPREQUIRED
   COMMANDS:
     - pvplevels gui open profileAll.yml {pvplevels_player}
