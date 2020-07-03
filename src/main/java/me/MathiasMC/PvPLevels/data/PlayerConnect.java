@@ -36,8 +36,8 @@ public class PlayerConnect {
         deaths = Long.parseLong(data[1]);
         xp = Long.parseLong(data[2]);
         level = Long.parseLong(data[3]);
-        time = Timestamp.valueOf(data[4]);
-        killstreak = 0L;
+        killstreak = Long.parseLong(data[4]);
+        time = Timestamp.valueOf(data[5]);
         loadTimer();
     }
 
@@ -90,7 +90,7 @@ public class PlayerConnect {
     }
 
     public void save() {
-        PvPLevels.call.database.setValues(playeruuid, kills, deaths, xp, level, time);
+        PvPLevels.call.database.setValues(playeruuid, kills, deaths, xp, level, killstreak, time);
     }
 
     public Double getPersonalBooster() {

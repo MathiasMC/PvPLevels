@@ -28,11 +28,11 @@ public class XPManager {
 
     public void getXP(PlayerConnect playerConnect, Player killer, String entityType, String entityName, String group) {
         int add = plugin.random(plugin.config.get.getInt("xp." + entityType + "." + group + ".min"), plugin.config.get.getInt("xp." + entityType + "." + group + ".max"));
-        Long xp = playerConnect.xp() + add;
-        Long globalBooster = 0L;
-        Long personalBooster = 0L;
+        long xp = playerConnect.xp() + add;
+        long globalBooster = 0L;
+        long personalBooster = 0L;
         if (plugin.boostersManager.hasGlobalActive() && !plugin.boosters.get.getStringList("global-settings.disabled-xp").contains(entityType)) {
-            Long boosted = Math.round(add * plugin.boostersManager.type());
+            long boosted = Math.round(add * plugin.boostersManager.type());
             globalBooster = boosted - add;
             xp = (xp - add) + boosted;
             if (plugin.boosters.get.contains("global-settings.commands")) {
@@ -40,7 +40,7 @@ public class XPManager {
             }
         }
         if (playerConnect.getPersonalBooster() != null && !plugin.boosters.get.getStringList("personal-settings.disabled-xp").contains(entityType)) {
-            Long boosted = Math.round(add * playerConnect.getPersonalBooster());
+            long boosted = Math.round(add * playerConnect.getPersonalBooster());
             personalBooster = boosted - add;
             xp = (xp - add) + boosted;
             if (plugin.boosters.get.contains("personal-settings.commands")) {
@@ -63,15 +63,15 @@ public class XPManager {
         if (plugin.config.get.contains("xp." + entityType + "." + group + ".xp-lose")) {
             boolean xpMessage = true;
             int lost = plugin.random(plugin.config.get.getInt("xp." + entityType + "." + group + ".xp-lose.min"), plugin.config.get.getInt("xp." + entityType + "." + group + ".xp-lose.max"));
-            Long xp = playerConnect.xp() - lost;
+            long xp = playerConnect.xp() - lost;
             if (xp > 0L) {
                 playerConnect.xp(xp);
                 if (!plugin.config.get.getBoolean("levelup.xp-clear") && playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
                     xpMessage = loseLevel(playerConnect, playerConnect.level() - 1, killer, "xp." + entityType + "." + group + ".xp-lose.commands.level");
                 }
             } else {
-                Long level = playerConnect.level() - 1;
-                Long lostXP = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp") - lost;
+                long level = playerConnect.level() - 1;
+                long lostXP = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp") - lost;
                 xpMessage = loseLevel(playerConnect, level, killer, "xp." + entityType + "." + group + ".xp-lose.commands.level");
                 if (lostXP >= 0) {
                     playerConnect.xp(lostXP);
