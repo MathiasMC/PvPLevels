@@ -65,23 +65,8 @@ public class Database {
             if (connection == null || connection.isClosed()) {
                 return false;
             }
-            if (plugin.config.get.contains("mysql.alter") && plugin.config.get.getBoolean("mysql.alter")) {
-                connection.createStatement().execute("ALTER TABLE `players` ADD COLUMN `killstreak` bigint(255);");
-                connection.createStatement().execute("ALTER TABLE `players` RENAME TO `players_temp`;");
-                connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `lastseen` DATETIME);");
-                connection.createStatement().execute("INSERT INTO `players` (uuid, kills, deaths, xp, level, killstreak, lastseen) SELECT uuid, kills, deaths, xp, level, killstreak, lastseen FROM players_temp");
-                connection.createStatement().execute("DROP TABLE `players_temp`;");
-                plugin.config.get.set("mysql.alter", null);
-                plugin.config.save();
-                plugin.textUtils.warning(" ");
-                plugin.textUtils.warning(" ");
-                plugin.textUtils.warning("Altered database with new data (Restart the server!)");
-                plugin.textUtils.warning(" ");
-                plugin.textUtils.warning(" ");
-            } else {
             connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `lastseen` DATETIME);");
             if (debug_database) { plugin.textUtils.debug("[Database] Creating table if not exists"); }
-            }
         }
         return true;
     }
