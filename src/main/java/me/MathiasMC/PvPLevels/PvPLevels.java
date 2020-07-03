@@ -45,6 +45,7 @@ public class PvPLevels extends JavaPlugin {
     public final HashSet<String> spawners = new HashSet<>();
     public final HashMap<String, GUI> guiList = new HashMap<>();
     public HashMap<String, Integer> guiPageID = new HashMap<>();
+    public HashMap<String, String> guiPageSort = new HashMap<>();
 
     public void onEnable() {
         call = this;

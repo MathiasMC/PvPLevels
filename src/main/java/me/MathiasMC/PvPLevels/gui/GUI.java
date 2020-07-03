@@ -67,9 +67,12 @@ public class GUI implements InventoryHolder {
             if (plugin.guiPageID.get(player.getUniqueId().toString()) > 1) {
                 inventory.setItem(fileConfiguration.getInt("settings.profile-all.back.POSITION"), getItem(fileConfiguration.getString("settings.profile-all.back.MATERIAL"), fileConfiguration.getInt("settings.profile-all.back.AMOUNT"), fileConfiguration.getString("settings.profile-all.back.NAME"), fileConfiguration.getStringList("settings.profile-all.back.LORES"), player, "settings.profile-all.back", fileConfiguration, "", 0));
             }
-
-            for (String uuid : plugin.list()) {
-                OfflinePlayer offlinePlayer = PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(uuid));
+            if (!plugin.guiPageSort.containsKey(player.getUniqueId().toString())) {
+                plugin.guiPageSort.put(player.getUniqueId().toString(), fileConfiguration.getString("settings.profile-all.default-sort"));
+            }
+            List<String> map = new ArrayList<String>(plugin.statsManager.getTopMap(plugin.guiPageSort.get(player.getUniqueId().toString())).keySet());
+            for (int i = 0; i < map.size(); i++) {
+                OfflinePlayer offlinePlayer = PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(map.get(i)));
                 ItemStack itemStack = getID(fileConfiguration.getString("settings.profile-all.MATERIAL"), fileConfiguration.getInt("settings.profile-all.AMOUNT"));
                 SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
                 skullMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.OfflinePlaceholderReplace(offlinePlayer, fileConfiguration.getString("settings.profile-all.NAME"))));

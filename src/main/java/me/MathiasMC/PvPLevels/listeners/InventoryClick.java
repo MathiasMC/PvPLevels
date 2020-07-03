@@ -62,7 +62,14 @@ public class InventoryClick implements Listener {
                     for (String keyItem : fileConfiguration.getConfigurationSection("").getKeys(false)) {
                         if (!keyItem.equalsIgnoreCase("settings")) {
                             if (e.getSlot() == fileConfiguration.getInt(keyItem + ".POSITION")) {
-                                if (fileConfiguration.contains(keyItem + ".OPTIONS") && fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("CLOSE")) { player.closeInventory(); }
+                                if (fileConfiguration.contains(keyItem + ".OPTIONS")) {
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLS")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "kills"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_DEATHS")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "deaths"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_XP")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "xp"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_LEVEL")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "level"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLSTREAK")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "killstreak"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("CLOSE")) { player.closeInventory(); }
+                                }
                                 if (fileConfiguration.contains(keyItem + ".COMMANDS")) {
                                     for (String command : fileConfiguration.getStringList(keyItem + ".COMMANDS")) {
                                         plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));

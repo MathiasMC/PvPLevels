@@ -28,5 +28,7 @@ public class PlayerQuit implements Listener {
                 plugin.get(uuid).save();
             }
         }
+        plugin.guiPageID.remove(uuid);
+        plugin.guiPageSort.remove(uuid);
     }
 }

@@ -270,6 +270,7 @@ public class GUIFolder {
         fileConfiguration.set("settings.size", 54);
         fileConfiguration.set("settings.profile-all.INDEX", 10);
         fileConfiguration.set("settings.profile-all.PAGE", 28);
+        fileConfiguration.set("settings.profile-all.default-sort", "level");
         fileConfiguration.set("settings.profile-all.NAME", "&6{pvplevels_player}");
         ArrayList<String> list21 = new ArrayList<>();
         list21.add("&eKills: &7> &6{pvplevels_kills}");
@@ -428,5 +429,80 @@ public class GUIFolder {
         ArrayList<String> list14 = new ArrayList<>();
         list14.add("pvplevels gui open profile.yml {pvplevels_player}");
         fileConfiguration.set("backMenu.COMMANDS", list14);
+        fileConfiguration.set("sortKills.NAME", "&f&lSort &7&l- &b&lKills");
+        fileConfiguration.set("sortKills.LORES", new ArrayList<>());
+        if (plugin.versionID()) {
+            fileConfiguration.set("sortKills.MATERIAL", "267:0");
+        } else {
+            fileConfiguration.set("sortKills.MATERIAL", "IRON_SWORD");
+        }
+        fileConfiguration.set("sortKills.AMOUNT", 1);
+        fileConfiguration.set("sortKills.POSITION", 0);
+        ArrayList<String> list15 = new ArrayList<>();
+        list15.add("SORT_KILLS");
+        fileConfiguration.set("sortKills.OPTIONS", list15);
+        ArrayList<String> list16 = new ArrayList<>();
+        list16.add("pvplevels gui open profileAll.yml {pvplevels_player}");
+        fileConfiguration.set("sortKills.COMMANDS", list16);
+        fileConfiguration.set("sortDeaths.NAME", "&f&lSort &7&l- &b&lDeaths");
+        fileConfiguration.set("sortDeaths.LORES", new ArrayList<>());
+        if (plugin.versionID()) {
+            fileConfiguration.set("sortDeaths.MATERIAL", "327:0");
+        } else {
+            fileConfiguration.set("sortDeaths.MATERIAL", "LAVA_BUCKET");
+        }
+        fileConfiguration.set("sortDeaths.AMOUNT", 1);
+        fileConfiguration.set("sortDeaths.POSITION", 2);
+        ArrayList<String> list17 = new ArrayList<>();
+        list17.add("SORT_DEATHS");
+        fileConfiguration.set("sortDeaths.OPTIONS", list17);
+        ArrayList<String> list18 = new ArrayList<>();
+        list18.add("pvplevels gui open profileAll.yml {pvplevels_player}");
+        fileConfiguration.set("sortDeaths.COMMANDS", list18);
+        fileConfiguration.set("sortXP.NAME", "&f&lSort &7&l- &b&lXP");
+        fileConfiguration.set("sortXP.LORES", new ArrayList<>());
+        if (plugin.versionID()) {
+            fileConfiguration.set("sortXP.MATERIAL", "384:0");
+        } else {
+            fileConfiguration.set("sortXP.MATERIAL", "EXPERIENCE_BOTTLE");
+        }
+        fileConfiguration.set("sortXP.AMOUNT", 1);
+        fileConfiguration.set("sortXP.POSITION", 4);
+        ArrayList<String> list19 = new ArrayList<>();
+        list19.add("SORT_XP");
+        fileConfiguration.set("sortXP.OPTIONS", list19);
+        ArrayList<String> list20 = new ArrayList<>();
+        list20.add("pvplevels gui open profileAll.yml {pvplevels_player}");
+        fileConfiguration.set("sortXP.COMMANDS", list20);
+        fileConfiguration.set("sortLevel.NAME", "&f&lSort &7&l- &b&lLevel");
+        fileConfiguration.set("sortLevel.LORES", new ArrayList<>());
+        if (plugin.versionID()) {
+            fileConfiguration.set("sortLevel.MATERIAL", "122:0");
+        } else {
+            fileConfiguration.set("sortLevel.MATERIAL", "DRAGON_EGG");
+        }
+        fileConfiguration.set("sortLevel.AMOUNT", 1);
+        fileConfiguration.set("sortLevel.POSITION", 6);
+        ArrayList<String> list22 = new ArrayList<>();
+        list22.add("SORT_LEVEL");
+        fileConfiguration.set("sortLevel.OPTIONS", list22);
+        ArrayList<String> list23 = new ArrayList<>();
+        list23.add("pvplevels gui open profileAll.yml {pvplevels_player}");
+        fileConfiguration.set("sortLevel.COMMANDS", list23);
+        fileConfiguration.set("sortKillStreak.NAME", "&f&lSort &7&l- &b&lKillStreak");
+        fileConfiguration.set("sortKillStreak.LORES", new ArrayList<>());
+        if (plugin.versionID()) {
+            fileConfiguration.set("sortKillStreak.MATERIAL", "261:0");
+        } else {
+            fileConfiguration.set("sortKillStreak.MATERIAL", "BOW");
+        }
+        fileConfiguration.set("sortKillStreak.AMOUNT", 1);
+        fileConfiguration.set("sortKillStreak.POSITION", 8);
+        ArrayList<String> list24 = new ArrayList<>();
+        list24.add("SORT_KILLSTREAK");
+        fileConfiguration.set("sortKillStreak.OPTIONS", list24);
+        ArrayList<String> list25 = new ArrayList<>();
+        list25.add("pvplevels gui open profileAll.yml {pvplevels_player}");
+        fileConfiguration.set("sortKillStreak.COMMANDS", list25);
     }
 }
