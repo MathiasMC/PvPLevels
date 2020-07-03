@@ -57,6 +57,7 @@ public class PvPLevels_Command implements CommandExecutor {
                             plugin.language.load();
                             plugin.levels.load();
                             plugin.boosters.load();
+                            plugin.guiFolder.load();
                             for (String message : plugin.language.get.getStringList(path + ".pvplevels.reload.reloaded")) {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                             }

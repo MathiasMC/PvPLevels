@@ -1,0 +1,78 @@
+#                                         #
+#                PvPLevels                #
+#                   by                    #
+#                MathiasMC                #
+#  Any ideas for the plugin or need help? #
+#           contact me on spigot          #
+#                                         #
+levels:
+  '1':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 650
+  '2':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 1200
+  '3':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 1500
+  '4':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 1800
+  '5':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 2300
+  '6':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 2600
+  '7':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 2800
+  '8':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 3600
+  '9':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 4500
+  '10':
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+    lose-commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
+        are now {pvplevels_level}
+    xp: 5600

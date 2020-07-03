@@ -1,0 +1,123 @@
+#                                         #
+#                PvPLevels                #
+#                   by                    #
+#                MathiasMC                #
+#  Any ideas for the plugin or need help? #
+#           contact me on spigot          #
+#                                         #
+global-settings:
+  prefix: '&7( &6{pvplevels_booster_global_xp} &aBoost XP &7)'
+  start:
+    - pvplevels broadcast null &7[&bPvPLevels&7] &6{pvplevels_player} &estarted a global
+      booster &6{pvplevels_booster_global_type} &efor &6{pvplevels_booster_global_time}
+  stop:
+    ended:
+      - pvplevels broadcast null &7[&bPvPLevels&7] &6{pvplevels_player} &ebooster has
+        ended
+    queue:
+      - pvplevels broadcast null &7[&bPvPLevels&7] &cThe global booster queue is now
+        empty
+  queue:
+    add:
+      - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eGlobal queue added
+      &6{pvplevels_booster_global_type} &efor &6{pvplevels_booster_global_time} &equeue:
+      {pvplevels_booster_global_queue}'
+    max:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are already in
+        the queue with the max of &6{pvplevels_booster_global_max}
+  commands:
+    default:
+      delay: 5
+      permission: pvplevels.boosters.global.default
+      worlds:
+        - world
+      commands: []
+  max-queue: 1
+  gui:
+    none:
+      NAME: '&6Global Booster'
+      LORES:
+        - '&a<&f&l------&bPower&f&l------&a>'
+        - ''
+        - '             &6{pvplevels_booster_type}'
+        - ''
+        - '&a<&f&l-----&bDuration&f&l-----&a>'
+        - ''
+        - '          &6{pvplevels_booster_time}'
+      MATERIAL: IRON_INGOT
+      AMOUNT: 1
+      OPTIONS:
+        - GLOW
+        - CLOSE
+    '1':
+      '1':
+        NAME: '&6Global Booster'
+        LORES:
+          - '&a<&f&l------&bPower&f&l------&a>'
+          - ''
+          - '             &6{pvplevels_booster_type}'
+          - ''
+          - '&a<&f&l-----&bDuration&f&l-----&a>'
+          - ''
+          - '          &6{pvplevels_booster_time}'
+        MATERIAL: COAL
+        AMOUNT: 1
+        OPTIONS:
+          - GLOW
+          - CLOSE
+  disabled-xp:
+    - skeleton
+personal-settings:
+  prefix: '&7( &6{pvplevels_booster_personal_xp} &aPersonal Boost XP &7)'
+  start:
+    - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eStarted a personal booster
+      &6{pvplevels_booster_personal_type} &efor &6{pvplevels_booster_personal_time}
+  end:
+    - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYour personal booster
+      has ended
+  active:
+    - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou already have an active
+      personal booster
+  commands:
+    default:
+      delay: 5
+      permission: pvplevels.boosters.personal.default
+      worlds:
+        - world
+      commands: []
+  gui:
+    none:
+      NAME: '&6Personal Booster'
+      LORES:
+        - '&a<&f&l------&bPower&f&l------&a>'
+        - ''
+        - '             &6{pvplevels_booster_type}'
+        - ''
+        - '&a<&f&l-----&bDuration&f&l-----&a>'
+        - ''
+        - '          &6{pvplevels_booster_time}'
+      MATERIAL: IRON_INGOT
+      AMOUNT: 1
+      OPTIONS:
+        - GLOW
+        - CLOSE
+    '1':
+      '1':
+        NAME: '&6Personal Booster'
+        LORES:
+          - '&a<&f&l------&bPower&f&l------&a>'
+          - ''
+          - '             &6{pvplevels_booster_type}'
+          - ''
+          - '&a<&f&l-----&bDuration&f&l-----&a>'
+          - ''
+          - '          &6{pvplevels_booster_time}'
+        MATERIAL: COAL
+        AMOUNT: 1
+        OPTIONS:
+          - GLOW
+          - CLOSE
+  disabled-xp:
+    - skeleton
+global-queue: []
+players: []

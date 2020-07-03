@@ -1,0 +1,420 @@
+#                                         #
+#                PvPLevels                #
+#                   by                    #
+#                MathiasMC                #
+#  Any ideas for the plugin or need help? #
+#           contact me on spigot          #
+#                                         #
+
+# Check for updates on startup?
+update-check: true
+
+# Debug/information messages in console
+debug:
+  database: false
+  save: false
+  purge: false
+
+# Database settings
+mysql:
+  use: false
+  host: localhost
+  port: 3306
+  database: database
+  username: username
+  password: password
+
+  # Automatically remove inactive players from the database
+  purge:
+
+    use: true
+
+    # How often to check the activity of players? Seconds.
+    interval: 7200
+
+    # Check on server startup?
+    check-on-startup: true
+
+    # How many days a player must be offline to remove him from the database.
+    inactive-days: 30
+
+    # Additional commands that will be executed along with the purge. It may
+    # be useful for deleting player data from a databases of other plugins.
+    commands: []
+
+load-players:
+
+  # Load all players into cache on startup?
+  all: true
+
+  # Load all online players if not in cache?
+  reload: true
+
+unload-players:
+
+  # unload the player from cache on quit?
+  quit: false
+
+  # clear the killstreak on quit?
+  killstreak: false
+
+save:
+
+  use: true
+
+  # How often to save? Seconds.
+  interval: 60
+
+levelup:
+
+  # Clear xp on levelup?
+  xp-clear: true
+
+  # List of players that will not get xp
+  all-excluded:
+    - uuid
+
+# You can disable events here.
+events:
+  CreatureSpawn: true
+  PlayerJoin: true
+  PlayerRespawn: true
+  BlockPlace: true
+  BlockBreak: true
+  Kills: true
+  Deaths:
+    use: true
+    only-players: true
+  KillStreaks: true
+  PlayerRewards: true
+
+# This section is used then you use /pvplevels generate <levels> as console
+generate:
+
+  # Disable command for accidentally typing the command
+  disable: false
+
+  # Commands to add per level
+  commands:
+    - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
+
+  xp:
+
+    # always add that amount
+    static: 120
+
+    # + random between min and max
+    min: 50
+    max: 400
+
+  random:
+    use: true
+    commands:
+      - give {pvplevels_player} diamond
+      - give {pvplevels_player} emerald
+      - give {pvplevels_player} gold
+      - give {pvplevels_player} iron
+      - give {pvplevels_player} coal
+
+    # random add to a level between min and max
+    min: 1
+    max: 35
+
+placeholders:
+
+  # Add PvPLevels placeholders to PlaceholderAPI?
+  PlaceholderAPI: true
+
+  # Can be obtained using placeholders pvplevels_prefix
+  prefix:
+    default:
+      permission: pvplevels.prefix.default
+      list:
+        '0': '&e[&7Default&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]'
+      none: '&e[&6Default&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]'
+    vip:
+      permission: pvplevels.group.vip
+      list:
+        '0': '&e[&7VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]'
+      none: '&e[&6VIP&e] &f[&a{pvplevels_level}&f] &e[&7{pvplevels_group}&e]'
+
+  global-booster:
+    none: '&cNone'
+    name: '&cNone'
+    time: '&cNone'
+    time-left: '&cNone'
+    time-prefix: '&cNone'
+    time-left-prefix: '&cNone'
+
+  personal-booster:
+    none: '&cNone'
+    time: '&cNone'
+    time-left: '&cNone'
+    time-prefix: '&cNone'
+    time-left-prefix: '&cNone'
+
+  # Can be obtained using placeholders pvplevels_date and pvplevels_time
+  time:
+    format: HH.mm.ss
+    zone: Europe/Copenhagen
+  date:
+    format: dd.MM.yyyy
+    zone: Europe/Copenhagen
+
+# This is the max level you can get this must not be higher than the levels in levels.yml
+# it takes the first one you have permission to
+level-max:
+  default:
+    permission: pvplevels.max.level.default
+    max: 10
+
+# Stop players from farming xp from killing the same player
+kill-session:
+
+  use: false
+
+  # Amount of times a player must kill another player to get in the kill session
+  amount: 4
+
+  # Amount of time (in seconds) a player is in the kill session
+  time: 150
+
+  commands:
+    get:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou have been put in
+        a kill session for killing {pvplevels_killed} {pvplevels_amount} times
+    abuse:
+      - kick {pvplevels_player} You cannot kill the same player so many times
+    remove:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou have been removed
+        from the kill session
+
+# This is used by /pvptop
+pvptop:
+  kills:
+    name: '&cNone'
+    value: '&cNone'
+    excluded:
+      - uuid
+  deaths:
+    name: '&cNone'
+    value: '&cNone'
+    excluded:
+      - uuid
+  xp:
+    name: '&cNone'
+    value: '&cNone'
+    excluded:
+      - uuid
+  level:
+    name: '&cNone'
+    value: '&cNone'
+    excluded:
+      - uuid
+  killstreak:
+    name: '&cNone'
+    value: '&cNone'
+    excluded:
+      - uuid
+
+# Disable xp from spawners?
+spawners:
+  xp:
+    - zombie
+    - skeleton
+
+# Placeholder pvplevels_xp_progress_style
+xp-progress-style:
+  xp:
+    symbol: \u2586
+    color: '&2'
+  none:
+    symbol: \u2588
+    color: '&c'
+  amount: 10
+
+# Can be obtained using placeholders pvplevels_group and pvplevels_group_to
+groups:
+  list:
+    default:
+      permission: pvplevels.group.default
+      list:
+        '0': Noob
+        '1': Bad
+        '2': Better
+        '3': Good
+        '4': Pro
+        '5': Super
+      none: None
+  none: None
+
+# entityName:
+#   permissionGroup:
+#     name: customEntityName
+#     min: 2
+#     max: 4
+#     permission: pvplevels.mypermission
+#     worlds:
+#       - world
+#     commands: []
+#
+# if level is not found commands is the default
+#
+#     level-commands:
+#       1:
+#       - cmd1
+#       2:
+#       - cmd2
+#     xp-lose:
+#       min: 5
+#       max: 20
+#       commands:
+#         level: []
+#         lose: []
+#
+xp:
+  player:
+    default:
+      name: '{pvplevels_player}'
+      min: 3
+      max: 8
+      permission: pvplevels.xp.player.default
+      worlds:
+        - world
+      commands:
+        - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &c{pvplevels_type}
+          &e+&6{pvplevels_xp_get} &eXP &6{pvplevels_xp_needed} &eto level &c{pvplevels_level_to}
+          {pvplevels_booster_global_prefix} {pvplevels_booster_personal_prefix}
+  zombie:
+    default:
+      name: Zombie
+      min: 2
+      max: 4
+      permission: pvplevels.xp.zombie.default
+      worlds:
+        - world
+      commands:
+        - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &c{pvplevels_type}
+          &e+&6{pvplevels_xp_get} &eXP &6{pvplevels_xp_needed} &eto level &c{pvplevels_level_to}
+          {pvplevels_booster_global_prefix} {pvplevels_booster_personal_prefix}
+      xp-lose:
+        min: 5
+        max: 20
+        commands:
+          level:
+            - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &cYou have got
+              to a lower level :( &7( &6{pvplevels_level} &7)
+          lose:
+            - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &cYou have lost
+              &6{pvplevels_xp_lost} &cXP
+  skeleton:
+    default:
+      name: Skeleton
+      min: 3
+      max: 6
+      permission: pvplevels.xp.skeleton.default
+      worlds:
+        - world
+      commands:
+        - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &c{pvplevels_type}
+          &e+&6{pvplevels_xp_get} &eXP &6{pvplevels_xp_needed} &eto level &c{pvplevels_level_to}
+          {pvplevels_booster_global_prefix} {pvplevels_booster_personal_prefix}
+  coal_ore:
+    default:
+      name: Coal Ore
+      min: 1
+      max: 2
+      permission: pvplevels.xp.coal.ore.default
+      worlds:
+        - world
+      commands:
+        - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &c{pvplevels_type}
+          &e+&6{pvplevels_xp_get} &eXP &6{pvplevels_xp_needed} &eto level &c{pvplevels_level_to}
+          {pvplevels_booster_global_prefix} {pvplevels_booster_personal_prefix}
+  iron_ore:
+    default:
+      name: Iron Ore
+      min: 1
+      max: 4
+      permission: pvplevels.xp.iron.ore.default
+      worlds:
+        - world
+      commands:
+        - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &c{pvplevels_type}
+          &e+&6{pvplevels_xp_get} &eXP &6{pvplevels_xp_needed} &eto level &c{pvplevels_level_to}
+          {pvplevels_booster_global_prefix} {pvplevels_booster_personal_prefix}
+kills:
+
+  # Worlds where you can get kills
+  worlds:
+    - world
+
+  default:
+    delay: 0
+    permission: pvplevels.kill.commands
+    worlds:
+      - world
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &e+1 kill
+deaths:
+
+  # Worlds where you can get deaths
+  worlds:
+    - world
+
+  default:
+    delay: 0
+    permission: pvplevels.death.commands
+    worlds:
+      - world
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &e+1 death
+rewards:
+  default:
+    delay: 0
+    permission: pvplevels.rewards.kills.default
+    worlds:
+      - world
+    '5':
+      commands:
+        - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou have got a reward
+          because you have 5 kills!
+join:
+  default:
+    delay: 5
+    permission: pvplevels.join.default
+    worlds:
+      - world
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &e{pvplevels_player}
+        Welcome back!
+join-first:
+  default:
+    delay: 5
+    permission: pvplevels.join.default
+    worlds:
+      - world
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &e{pvplevels_player}
+        Welcome!
+respawn:
+  default:
+    delay: 5
+    permission: pvplevels.respawn.default
+    worlds:
+      - world
+    commands:
+      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are back alive
+killstreaks:
+  default:
+    delay: 0
+    permission: pvplevels.killstreak.default
+    worlds:
+      - world
+    '5':
+      commands:
+        - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou have a killstreak
+          of 5!
+      lose-commands:
+        - pvplevels broadcast null &7[&bPvPLevels&7] &6{pvplevels_type} &eended &6{pvplevels_player}
+          &ekillstreak of &6{pvplevels_killstreak_lost}

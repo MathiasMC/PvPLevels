@@ -1,5 +1,6 @@
 package me.MathiasMC.PvPLevels;
 
+import com.google.common.io.ByteStreams;
 import me.MathiasMC.PvPLevels.commands.*;
 import me.MathiasMC.PvPLevels.data.Database;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
@@ -20,6 +21,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -38,6 +42,7 @@ public class PvPLevels extends JavaPlugin {
     public EntityManager entityManager;
     public KillSessionUtils killSessionUtils;
     public BoostersManager boostersManager;
+    public GUIFolder guiFolder;
     public Database database;
     public final ConsoleCommandSender consoleCommandSender = Bukkit.getServer().getConsoleSender();
     private final Map<String, PlayerConnect> playerConnect = new HashMap<>();
@@ -64,7 +69,7 @@ public class PvPLevels extends JavaPlugin {
         levels = new Levels(this);
         boosters = new Boosters(this);
         database = new Database(this);
-        new GUIFolder(this);
+        guiFolder = new GUIFolder(this);
         if (database.set()) {
             textUtils.info("Database ( Connected )");
             if (config.get.getBoolean("load-players.reload")) { database.loadOnline(); }
@@ -209,5 +214,13 @@ public class PvPLevels extends JavaPlugin {
         if (getServer().getVersion().contains("1.11")) { return true; }
         if (getServer().getVersion().contains("1.12")) { return true; }
         return false;
+    }
+
+    public void copy(String filename, File file) {
+        try {
+            ByteStreams.copy(PvPLevels.call.getResource(filename), new FileOutputStream(file));
+        } catch (IOException exception) {
+            textUtils.exception(exception.getStackTrace(), exception.getMessage());
+        }
     }
 }
