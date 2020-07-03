@@ -64,29 +64,31 @@ public class InventoryClick implements Listener {
                             plugin.getServer().dispatchCommand(plugin.consoleCommandSender, "pvplevels gui open profileAll.yml " + player.getName());
                         } else {
                             if (e.isShiftClick() && e.isRightClick() && player.hasPermission("pvplevels.gui.admin.delete")) {
-                                for (String lore : e.getCurrentItem().getItemMeta().getLore()) {
-                                    Matcher matcher = Pattern.compile("\\[([^]]+)\\]").matcher(lore);
-                                    while (matcher.find()) {
-                                        OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(matcher.group(1)));
-                                        if (offlinePlayer != null) {
-                                            String targetUUID = offlinePlayer.getUniqueId().toString();
-                                            if (!player.getUniqueId().toString().equalsIgnoreCase(targetUUID)) {
-                                                if (offlinePlayer.isOnline()) {
-                                                    Player target = (Player) offlinePlayer;
-                                                    target.kickPlayer("");
-                                                }
-                                                plugin.unload(targetUUID);
-                                                plugin.database.delete(targetUUID);
-                                                for (String command : plugin.language.get.getStringList("player.pvpadmin.deleted-commands")) {
-                                                    plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_target}", offlinePlayer.getName()).replace("{pvplevels_player}", player.getName()));
-                                                }
-                                            } else {
-                                                for (String message : plugin.language.get.getStringList("player.pvpadmin.you")) {
-                                                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                if (e.getCurrentItem().getItemMeta().hasLore()) {
+                                    for (String lore : e.getCurrentItem().getItemMeta().getLore()) {
+                                        Matcher matcher = Pattern.compile("\\[([^]]+)\\]").matcher(lore);
+                                        while (matcher.find()) {
+                                            OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(matcher.group(1)));
+                                            if (offlinePlayer != null) {
+                                                String targetUUID = offlinePlayer.getUniqueId().toString();
+                                                if (!player.getUniqueId().toString().equalsIgnoreCase(targetUUID)) {
+                                                    if (offlinePlayer.isOnline()) {
+                                                        Player target = (Player) offlinePlayer;
+                                                        target.kickPlayer("");
+                                                    }
+                                                    plugin.unload(targetUUID);
+                                                    plugin.database.delete(targetUUID);
+                                                    for (String command : plugin.language.get.getStringList("player.pvpadmin.deleted-commands")) {
+                                                        plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_target}", offlinePlayer.getName()).replace("{pvplevels_player}", player.getName()));
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList("player.pvpadmin.you")) {
+                                                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
                                                 }
                                             }
+                                            break;
                                         }
-                                        break;
                                     }
                                 }
                             }
