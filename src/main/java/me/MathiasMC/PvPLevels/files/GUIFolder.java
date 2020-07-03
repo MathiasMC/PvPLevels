@@ -24,17 +24,29 @@ public class GUIFolder {
             File personalboosters = new File(folder, "personalBoosters.yml");
             File profile = new File(folder, "profile.yml");
             File profileall = new File(folder, "profileAll.yml");
+            File admin = new File(folder, "admin.yml");
             try {
                 boosters.createNewFile();
                 globalboosters.createNewFile();
                 personalboosters.createNewFile();
                 profile.createNewFile();
                 profileall.createNewFile();
-                plugin.copy("gui/boosters.yml", boosters);
-                plugin.copy("gui/globalBoosters.yml", globalboosters);
-                plugin.copy("gui/personalBoosters.yml", personalboosters);
-                plugin.copy("gui/profile.yml", profile);
-                plugin.copy("gui/profileAll.yml", profileall);
+                admin.createNewFile();
+                if (!plugin.versionID()) {
+                    plugin.copy("gui/boosters.yml", boosters);
+                    plugin.copy("gui/globalBoosters.yml", globalboosters);
+                    plugin.copy("gui/personalBoosters.yml", personalboosters);
+                    plugin.copy("gui/profile.yml", profile);
+                    plugin.copy("gui/profileAll.yml", profileall);
+                    plugin.copy("gui/admin.yml", admin);
+                } else {
+                    plugin.copy("old/gui/boosters.yml", boosters);
+                    plugin.copy("old/gui/globalBoosters.yml", globalboosters);
+                    plugin.copy("old/gui/personalBoosters.yml", personalboosters);
+                    plugin.copy("old/gui/profile.yml", profile);
+                    plugin.copy("old/gui/profileAll.yml", profileall);
+                    plugin.copy("old/gui/admin.yml", admin);
+                }
             } catch (IOException exception) {
                 plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
             }

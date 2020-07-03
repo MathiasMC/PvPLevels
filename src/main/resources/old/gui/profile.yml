@@ -1,0 +1,32 @@
+settings:
+  name: '&f&lProfile Menu'
+  size: 27
+profiles:
+  NAME: '&f&lAll Profiles'
+  LORES: []
+  MATERIAL: '41:0'
+  AMOUNT: 1
+  POSITION: 11
+  OPTIONS:
+    - CLOSE
+  COMMANDS:
+    - pvplevels gui open profileAll.yml {pvplevels_player}
+profile:
+  NAME: '&f&lYour Profile'
+  LORES:
+    - '&eKills: &7> &6{pvplevels_kills}'
+    - '&eDeaths: &7> &6{pvplevels_deaths}'
+    - '&eXP: &7> &6{pvplevels_xp}'
+    - '&eLevel: &7> &6{pvplevels_level}'
+    - '&eKDR: &7> &6{pvplevels_kdr}'
+    - '&eKill Factor: &7> &6{pvplevels_kill_factor}'
+    - '&eKillStreak: &7> &6{pvplevels_killstreak}'
+    - '&eXP Required: &7> &6{pvplevels_xp_required}'
+    - '&eXP Progress: &7> &6{pvplevels_xp_progress}%'
+    - '&6{pvplevels_xp_progress_style}'
+    - '&eGroup: &7> &6{pvplevels_group} &7/ &6{pvplevels_group_to}'
+  MATERIAL: '397:3'
+  AMOUNT: 1
+  POSITION: 15
+  OPTIONS:
+    - PLAYERSKULL

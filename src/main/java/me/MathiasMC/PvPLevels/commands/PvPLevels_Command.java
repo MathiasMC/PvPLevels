@@ -393,46 +393,52 @@ public class PvPLevels_Command implements CommandExecutor {
                         if (sender.hasPermission("pvplevels.command.gui")) {
                             if (args.length > 1) {
                                 if (args[1].equalsIgnoreCase("open")) {
-                                    if (sender.hasPermission("pvplevels.command.gui.open." + args[2])) {
-                                        if (args.length == 3) {
-                                            if (path.equalsIgnoreCase("player")) {
-                                                Player player = (Player) sender;
-                                                GUI gui = plugin.guiList.get(args[2]);
-                                                if (gui != null) {
-                                                    gui.open(player);
+                                    if (args.length > 2) {
+                                        if (sender.hasPermission("pvplevels.command.gui.open." + args[2])) {
+                                            if (args.length == 3) {
+                                                if (path.equalsIgnoreCase("player")) {
+                                                    Player player = (Player) sender;
+                                                    GUI gui = plugin.guiList.get(args[2]);
+                                                    if (gui != null) {
+                                                        gui.open(player);
+                                                    } else {
+                                                        for (String message : plugin.language.get.getStringList("player.pvplevels.gui.open.found")) {
+                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_gui_file}", args[2])));
+                                                        }
+                                                    }
                                                 } else {
-                                                    for (String message : plugin.language.get.getStringList("player.pvplevels.gui.open.found")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_gui_file}", args[2])));
+                                                    for (String message : plugin.language.get.getStringList("console.pvplevels.gui.open.usage")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
+                                                }
+                                            } else if (args.length == 4) {
+                                                Player target = plugin.getServer().getPlayer(args[3]);
+                                                if (target != null) {
+                                                    GUI gui = plugin.guiList.get(args[2]);
+                                                    if (gui != null) {
+                                                        gui.open(target);
+                                                    } else {
+                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.found")) {
+                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_gui_file}", args[2])));
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.online")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                                     }
                                                 }
                                             } else {
-                                                for (String message : plugin.language.get.getStringList("console.pvplevels.gui.open.usage")) {
-                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                }
-                                            }
-                                        } else if (args.length == 4) {
-                                            Player target = plugin.getServer().getPlayer(args[3]);
-                                            if (target != null) {
-                                                GUI gui = plugin.guiList.get(args[2]);
-                                                if (gui != null) {
-                                                    gui.open(target);
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.found")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_gui_file}", args[2])));
-                                                    }
-                                                }
-                                            } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.online")) {
+                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.usage")) {
                                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                                 }
                                             }
                                         } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.usage")) {
+                                            for (String message : plugin.language.get.getStringList("player.pvplevels.gui.open.permission")) {
                                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                             }
                                         }
                                     } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.gui.open.permission")) {
+                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.usage")) {
                                             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                         }
                                     }

@@ -20,7 +20,11 @@ public class Boosters {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-                plugin.copy("boosters.yml", file);
+                if (!plugin.versionID()) {
+                    plugin.copy("boosters.yml", file);
+                } else {
+                    plugin.copy("old/boosters.yml", file);
+                }
                 plugin.textUtils.info("boosters.yml ( A change was made )");
             } catch (IOException exception) {
                 plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());

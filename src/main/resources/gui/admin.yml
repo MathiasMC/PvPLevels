@@ -1,0 +1,93 @@
+settings:
+  name: '&f&lAll Profiles &7(&cAdmin&7)'
+  size: 54
+  profile-all:
+    INDEX: 9
+    PAGE: 36
+    default-sort: level
+    NAME: '&6{pvplevels_player}'
+    LORES:
+      - '&eKills: &7> &6{pvplevels_kills}'
+      - '&eDeaths: &7> &6{pvplevels_deaths}'
+      - '&eXP: &7> &6{pvplevels_xp}'
+      - '&eLevel: &7> &6{pvplevels_level}'
+      - '&eKDR: &7> &6{pvplevels_kdr}'
+      - '&eKill Factor: &7> &6{pvplevels_kill_factor}'
+      - '&eKillStreak: &7> &6{pvplevels_killstreak}'
+      - '&eXP Required: &7> &6{pvplevels_xp_required}'
+      - '&eXP Progress: &7> &6{pvplevels_xp_progress}%'
+      - '&6{pvplevels_xp_progress_style}'
+    MATERIAL: PLAYER_HEAD
+    AMOUNT: 1
+    back:
+      NAME: '&bGo Back'
+      LORES: []
+      MATERIAL: STICK
+      AMOUNT: 1
+      POSITION: 46
+    next:
+      NAME: '&bNext Page'
+      LORES: []
+      MATERIAL: STICK
+      AMOUNT: 1
+      POSITION: 53
+sortKills:
+  NAME: '&f&lSort &7&l- &b&lKills'
+  LORES: []
+  MATERIAL: IRON_SWORD
+  AMOUNT: 1
+  POSITION: 0
+  OPTIONS:
+    - SORT_KILLS
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortDeaths:
+  NAME: '&f&lSort &7&l- &b&lDeaths'
+  LORES: []
+  MATERIAL: LAVA_BUCKET
+  AMOUNT: 1
+  POSITION: 1
+  OPTIONS:
+    - SORT_DEATHS
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortXP:
+  NAME: '&f&lSort &7&l- &b&lXP'
+  LORES: []
+  MATERIAL: EXPERIENCE_BOTTLE
+  AMOUNT: 1
+  POSITION: 3
+  OPTIONS:
+    - SORT_XP
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortLastSeen:
+  NAME: '&f&lSort &7&l- &b&lLast Seen'
+  LORES: []
+  MATERIAL: CLOCK
+  AMOUNT: 1
+  POSITION: 5
+  OPTIONS:
+    - SORT_LASTSEEN
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortLevel:
+  NAME: '&f&lSort &7&l- &b&lLevel'
+  LORES: []
+  MATERIAL: DRAGON_EGG
+  AMOUNT: 1
+  POSITION: 7
+  OPTIONS:
+    - SORT_LEVEL
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortKillStreak:
+  NAME: '&f&lSort &7&l- &b&lKillStreak'
+  LORES: []
+  MATERIAL: BOW
+  AMOUNT: 1
+  POSITION: 8
+  OPTIONS:
+    - SORT_KILLSTREAK
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
