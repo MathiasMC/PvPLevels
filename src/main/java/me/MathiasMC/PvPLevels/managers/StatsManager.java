@@ -163,6 +163,7 @@ public class StatsManager {
             if (type.equalsIgnoreCase("xp") && !plugin.config.get.getStringList("pvptop.xp.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).xp()); }
             if (type.equalsIgnoreCase("level") && !plugin.config.get.getStringList("pvptop.level.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).level()); }
             if (type.equalsIgnoreCase("killstreak") && !plugin.config.get.getStringList("pvptop.killstreak.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).killstreak()); }
+            if (type.equalsIgnoreCase("lastseen")) { unsorted.put(uuid, plugin.get(uuid).getTime().getTime()); }
         }
         LinkedHashMap<String, Long> sorted = new LinkedHashMap<>();
         unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));

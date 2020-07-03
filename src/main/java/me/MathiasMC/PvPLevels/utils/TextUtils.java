@@ -2,8 +2,6 @@ package me.MathiasMC.PvPLevels.utils;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.FileConfigurationOptions;
 
 import java.util.logging.Logger;
 
@@ -45,11 +43,5 @@ public class TextUtils {
         info(prefix + " version: " + plugin.getDescription().getVersion());
         info("Please report this error to me on spigot");
         info("(!) " + prefix + " (!)");
-    }
-
-    public void fileHeader(FileConfiguration fileConfiguration) {
-        FileConfigurationOptions options = fileConfiguration.options();
-        options.header("                                        #\n               PvPLevels                #\n                  by                    #\n               MathiasMC                #\n Any ideas for the plugin or need help? #\n          contact me on spigot          #\n                                        #");
-        options.copyHeader(true);
     }
 }

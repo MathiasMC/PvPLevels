@@ -16,3 +16,5 @@ commands:
     description: See boosters
   pvpprofile:
     description: See profile
+  pvpadmin:
+    description: See admin

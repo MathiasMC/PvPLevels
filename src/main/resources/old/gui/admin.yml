@@ -4,7 +4,7 @@ settings:
   profile-all:
     INDEX: 9
     PAGE: 36
-    default-sort: level
+    default-sort: lastseen
     NAME: '&6{pvplevels_player}'
     LORES:
       - '&eKills: &7> &6{pvplevels_kills}'
@@ -17,6 +17,8 @@ settings:
       - '&eXP Required: &7> &6{pvplevels_xp_required}'
       - '&eXP Progress: &7> &6{pvplevels_xp_progress}%'
       - '&6{pvplevels_xp_progress_style}'
+      - '&eID: [{pvplevels_uuid}]'
+      - '&eShift + RMB to delete &7(&ccannot undo this&7)'
     MATERIAL: '397:3'
     AMOUNT: 1
     back:

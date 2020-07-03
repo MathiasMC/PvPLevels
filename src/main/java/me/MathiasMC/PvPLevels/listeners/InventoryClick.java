@@ -3,6 +3,8 @@ package me.MathiasMC.PvPLevels.listeners;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.gui.GUI;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,6 +14,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InventoryClick implements Listener {
 
@@ -57,6 +62,34 @@ public class InventoryClick implements Listener {
                         } else if (e.getSlot() == fileConfiguration.getInt("settings.profile-all.back.POSITION")) {
                             plugin.guiPageID.put(player.getUniqueId().toString(), plugin.guiPageID.get(player.getUniqueId().toString()) - 1);
                             plugin.getServer().dispatchCommand(plugin.consoleCommandSender, "pvplevels gui open profileAll.yml " + player.getName());
+                        } else {
+                            if (e.isShiftClick() && e.isRightClick() && player.hasPermission("pvplevels.gui.admin.delete")) {
+                                for (String lore : e.getCurrentItem().getItemMeta().getLore()) {
+                                    Matcher matcher = Pattern.compile("\\[([^]]+)\\]").matcher(lore);
+                                    while (matcher.find()) {
+                                        OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(matcher.group(1)));
+                                        if (offlinePlayer != null) {
+                                            String targetUUID = offlinePlayer.getUniqueId().toString();
+                                            if (!player.getUniqueId().toString().equalsIgnoreCase(targetUUID)) {
+                                                if (offlinePlayer.isOnline()) {
+                                                    Player target = (Player) offlinePlayer;
+                                                    target.kickPlayer("");
+                                                }
+                                                plugin.unload(targetUUID);
+                                                plugin.database.delete(targetUUID);
+                                                for (String command : plugin.language.get.getStringList("player.pvpadmin.deleted-commands")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_target}", offlinePlayer.getName()).replace("{pvplevels_player}", player.getName()));
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList("player.pvpadmin.you")) {
+                                                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                     for (String keyItem : fileConfiguration.getConfigurationSection("").getKeys(false)) {
@@ -68,6 +101,7 @@ public class InventoryClick implements Listener {
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_XP")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "xp"); }
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_LEVEL")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "level"); }
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLSTREAK")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "killstreak"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_LASTSEEN")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "lastseen"); }
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("CLOSE")) { player.closeInventory(); }
                                 }
                                 if (fileConfiguration.contains(keyItem + ".COMMANDS")) {

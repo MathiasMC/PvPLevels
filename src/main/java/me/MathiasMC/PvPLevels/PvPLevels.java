@@ -89,6 +89,7 @@ public class PvPLevels extends JavaPlugin {
             getCommand("pvptop").setExecutor(new PvPTop_Command(this));
             getCommand("pvpboosters").setExecutor(new PvPBoosters_Command(this));
             getCommand("pvpprofile").setExecutor(new PvPProfile_Command(this));
+            getCommand("pvpadmin").setExecutor(new PvPAdmin_Command(this));
             placeholders();
             if (config.get.getBoolean("update-check")) {
                 new UpdateUtils(this, 20807).getVersion(version -> {
@@ -189,6 +190,7 @@ public class PvPLevels extends JavaPlugin {
         PlayerConnect playerConnect = get(uuid);
         message = message
                 .replace("{pvplevels_player}", name)
+                .replace("{pvplevels_uuid}", uuid)
                 .replace("{pvplevels_kills}", String.valueOf(playerConnect.kills()))
                 .replace("{pvplevels_deaths}", String.valueOf(playerConnect.deaths()))
                 .replace("{pvplevels_xp}", String.valueOf(playerConnect.xp()))
