@@ -17,6 +17,7 @@ settings:
       - '&eXP Required: &7> &6{pvplevels_xp_required}'
       - '&eXP Progress: &7> &6{pvplevels_xp_progress}%'
       - '&6{pvplevels_xp_progress_style}'
+      - '&eLast Seen: &7> &6{pvplevels_date} {pvplevels_time}'
       - '&eID: [{pvplevels_uuid}]'
       - '&eShift + RMB to delete &7(&ccannot undo this&7)'
     MATERIAL: '397:3'
