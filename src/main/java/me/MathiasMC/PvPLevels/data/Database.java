@@ -66,7 +66,6 @@ public class Database {
                 return false;
             }
             if (plugin.config.get.contains("mysql.alter") && plugin.config.get.getBoolean("mysql.alter")) {
-                connection.createStatement().execute("ALTER TABLE `players` ADD COLUMN `killstreak` bigint(255);");
                 connection.createStatement().execute("ALTER TABLE `players` ADD COLUMN `coins` bigint(255);");
                 connection.createStatement().execute("ALTER TABLE `players` RENAME TO `players_temp`;");
                 connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `coins` bigint(255), `lastseen` DATETIME);");
