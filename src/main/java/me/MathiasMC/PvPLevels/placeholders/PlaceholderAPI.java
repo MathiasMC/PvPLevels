@@ -57,6 +57,9 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(identifier.equals("killstreak")){
             return String.valueOf(plugin.get(player.getUniqueId().toString()).killstreak());
         }
+        if (identifier.equals("coins")) {
+            return String.valueOf(plugin.get(player.getUniqueId().toString()).coins());
+        }
         if(identifier.equals("kdr")){
             return plugin.statsManager.kdr(player.getUniqueId().toString());
         }

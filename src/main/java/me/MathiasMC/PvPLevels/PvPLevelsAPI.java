@@ -49,6 +49,14 @@ public class PvPLevelsAPI {
         PvPLevels.call.get(uuid).killstreak(set);
     }
 
+    public Long coins(String uuid) {
+        return PvPLevels.call.get(uuid).coins();
+    }
+
+    public void coins(String uuid, Long set) {
+        PvPLevels.call.get(uuid).coins(set);
+    }
+
     public String kdr(String uuid) {
         return PvPLevels.call.statsManager.kdr(uuid);
     }

@@ -1,6 +1,7 @@
 package me.MathiasMC.PvPLevels.gui;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -38,6 +39,21 @@ public class GUI implements InventoryHolder {
     }
 
     public void open(Player player) {
+        if (fileConfiguration.contains("settings.require")) {
+            if (fileConfiguration.contains("settings.require.level")) {
+                PlayerConnect playerConnect = plugin.get(player.getUniqueId().toString());
+                if (playerConnect.level() < fileConfiguration.getLong("settings.require.level.amount")) {
+                    for (String command : fileConfiguration.getStringList("settings.require.level.required")) {
+                        plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));
+                    }
+                    return;
+                }
+            }
+        }
+        loadGUI(player);
+    }
+
+    private void loadGUI(Player player) {
         inventory = plugin.getServer().createInventory(this, fileConfiguration.getInt("settings.size"), ChatColor.translateAlternateColorCodes('&', fileConfiguration.getString("settings.name")));
         BukkitRunnable r = new BukkitRunnable() {
             public void run() {

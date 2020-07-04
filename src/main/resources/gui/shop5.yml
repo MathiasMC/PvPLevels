@@ -1,0 +1,31 @@
+settings:
+  name: '&f&lShop &7(&cLevel 5&7)'
+  size: 54
+  require:
+    level:
+      amount: 5
+      required:
+        - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &cYou are not level 5'
+back:
+  NAME: '&6&lBack to shops'
+  LORES: []
+  MATERIAL: BOOK
+  AMOUNT: 1
+  POSITION: 45
+  OPTIONS:
+    - GLOW
+  COMMANDS:
+    - 'pvplevels gui open shop.yml {pvplevels_player}'
+dirt:
+  NAME: '&6&lDirt'
+  LORES:
+    - '&6Cost &a10'
+  MATERIAL: DIRT
+  AMOUNT: 1
+  POSITION: 10
+  SHOP:
+    COST: 10
+    ENOUGH:
+      - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &cYou dont have enough coins to buy that!'
+    COMMANDS:
+      - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eBuy dirt'

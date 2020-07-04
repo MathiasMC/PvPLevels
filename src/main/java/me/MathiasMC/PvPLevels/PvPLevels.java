@@ -90,6 +90,7 @@ public class PvPLevels extends JavaPlugin {
             getCommand("pvpboosters").setExecutor(new PvPBoosters_Command(this));
             getCommand("pvpprofile").setExecutor(new PvPProfile_Command(this));
             getCommand("pvpadmin").setExecutor(new PvPAdmin_Command(this));
+            getCommand("pvpshop").setExecutor(new PvPShop_Command(this));
             placeholders();
             if (config.get.getBoolean("update-check")) {
                 new UpdateUtils(this, 20807).getVersion(version -> {
@@ -204,6 +205,7 @@ public class PvPLevels extends JavaPlugin {
                 .replace("{pvplevels_group}", group)
                 .replace("{pvplevels_group_to}", group_to)
                 .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()))
+                .replace("{pvplevels_coins}", String.valueOf(playerConnect.coins()))
                 .replace("{pvplevels_time}", statsManager.time(uuid))
                 .replace("{pvplevels_date}", statsManager.date(uuid));
         return message;

@@ -480,6 +480,155 @@ public class PvPLevels_Command implements CommandExecutor {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                             }
                         }
+                    } else if (args[0].equalsIgnoreCase("coins")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.command.coins")) {
+                            if (args.length > 2) {
+                                if (args[1].equalsIgnoreCase("set")) {
+                                    if (sender.hasPermission("pvplevels.command.coins.set")) {
+                                        if (args.length == 4) {
+                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            if (target != null) {
+                                                if (plugin.isInt(args[3])) {
+                                                    long set = Long.parseLong(args[3]);
+                                                    if (set >= 0) {
+                                                        PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                                        playerConnect.coins(set);
+                                                        if (sender instanceof Player) {
+                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.set.set")) {
+                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", String.valueOf(set)).replace("{pvplevels_player}", target.getName())));
+                                                            }
+                                                        } else {
+                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.set")) {
+                                                                target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", String.valueOf(set))));
+                                                            }
+                                                        }
+                                                    } else {
+                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.0")) {
+                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.number")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.online")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("player.pvplevels.coins.set.permission")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                } else if (args[1].equalsIgnoreCase("add")) {
+                                    if (sender.hasPermission("pvplevels.command.coins.add")) {
+                                        if (args.length == 4) {
+                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            if (target != null) {
+                                                if (plugin.isInt(args[3])) {
+                                                    PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                                    long set = playerConnect.coins() + Long.parseLong(args[3]);
+                                                    if (set >= 0) {
+                                                        playerConnect.coins(set);
+                                                        if (sender instanceof Player) {
+                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.add.added")) {
+                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3]).replace("{pvplevels_player}", target.getName())));
+                                                            }
+                                                        } else {
+                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.added")) {
+                                                                target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3])));
+                                                            }
+                                                        }
+                                                    } else {
+                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.0")) {
+                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.number")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.online")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("player.pvplevels.coins.add.permission")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                } else if (args[1].equalsIgnoreCase("remove")) {
+                                    if (sender.hasPermission("pvplevels.command.coins.remove")) {
+                                        if (args.length == 4) {
+                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            if (target != null) {
+                                                if (plugin.isInt(args[3])) {
+                                                    PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                                    long set = playerConnect.coins() - Long.parseLong(args[3]);
+                                                    if (set >= 0) {
+                                                        playerConnect.coins(set);
+                                                    } else {
+                                                        playerConnect.coins(0L);
+                                                    }
+                                                    if (sender instanceof Player) {
+                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.remove.removed")) {
+                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3]).replace("{pvplevels_player}", target.getName())));
+                                                        }
+                                                    } else {
+                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.removed")) {
+                                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3])));
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.number")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.online")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("player.pvplevels.coins.remove.permission")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            } else {
+                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("player.pvplevels.coins.permission")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
                     }
                     if (unknown) {
                         for (String message : plugin.language.get.getStringList(path + ".pvplevels.command.unknown")) {
@@ -616,9 +765,15 @@ public class PvPLevels_Command implements CommandExecutor {
             }
         }
         if (killsCheck && deathsCheck && xpAddCheck && xpRemoveCheck && xpSetCheck && levelCheck) {
-            for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + "." + colum))
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message
-                        .replace("{pvplevels_player}", args[2]).replace("{pvplevels_" + args[0] + "}", args[3])));
+            if (sender instanceof Player) {
+                for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + "." + colum))
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message
+                            .replace("{pvplevels_player}", args[2]).replace("{pvplevels_" + args[0] + "}", args[3])));
+            } else {
+                for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + "." + colum))
+                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message
+                            .replace("{pvplevels_player}", args[2]).replace("{pvplevels_" + args[0] + "}", args[3])));
+            }
         } else if (!killsCheck) {
             for (String message : plugin.language.get.getStringList(path + ".pvplevels.set.kills-cannot")) {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));

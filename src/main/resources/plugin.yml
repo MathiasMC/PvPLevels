@@ -1,5 +1,5 @@
 main: me.MathiasMC.PvPLevels.PvPLevels
-version: 1.3.1
+version: 1.3.2
 name: PvPLevels
 author: MathiasMC
 website: spigotmc.org/resources/pvplevels.20807
@@ -18,3 +18,5 @@ commands:
     description: See profile
   pvpadmin:
     description: See admin
+  pvpshop:
+    description: See shop

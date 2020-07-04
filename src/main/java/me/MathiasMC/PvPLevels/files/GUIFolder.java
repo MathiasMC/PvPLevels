@@ -25,6 +25,9 @@ public class GUIFolder {
             File profile = new File(folder, "profile.yml");
             File profileall = new File(folder, "profileAll.yml");
             File admin = new File(folder, "admin.yml");
+            File shop = new File(folder, "shop.yml");
+            File shop5 = new File(folder, "shop5.yml");
+            File shop10 = new File(folder, "shop10.yml");
             try {
                 boosters.createNewFile();
                 globalboosters.createNewFile();
@@ -32,6 +35,9 @@ public class GUIFolder {
                 profile.createNewFile();
                 profileall.createNewFile();
                 admin.createNewFile();
+                shop.createNewFile();
+                shop5.createNewFile();
+                shop10.createNewFile();
                 if (!plugin.versionID()) {
                     plugin.copy("gui/boosters.yml", boosters);
                     plugin.copy("gui/globalBoosters.yml", globalboosters);
@@ -39,6 +45,9 @@ public class GUIFolder {
                     plugin.copy("gui/profile.yml", profile);
                     plugin.copy("gui/profileAll.yml", profileall);
                     plugin.copy("gui/admin.yml", admin);
+                    plugin.copy("gui/shop.yml", shop);
+                    plugin.copy("gui/shop5.yml", shop5);
+                    plugin.copy("gui/shop10.yml", shop10);
                 } else {
                     plugin.copy("old/gui/boosters.yml", boosters);
                     plugin.copy("old/gui/globalBoosters.yml", globalboosters);
@@ -46,6 +55,9 @@ public class GUIFolder {
                     plugin.copy("old/gui/profile.yml", profile);
                     plugin.copy("old/gui/profileAll.yml", profileall);
                     plugin.copy("old/gui/admin.yml", admin);
+                    plugin.copy("old/gui/shop.yml", shop);
+                    plugin.copy("old/gui/shop5.yml", shop5);
+                    plugin.copy("old/gui/shop10.yml", shop10);
                 }
             } catch (IOException exception) {
                 plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());

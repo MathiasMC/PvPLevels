@@ -114,6 +114,21 @@ public class InventoryClick implements Listener {
                                         plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));
                                     }
                                 }
+                                if (fileConfiguration.contains(keyItem + ".SHOP")) {
+                                    PlayerConnect playerConnect = plugin.get(player.getUniqueId().toString());
+                                    Long cost = fileConfiguration.getLong(keyItem + ".SHOP.COST");
+                                    Long back = playerConnect.coins() - cost;
+                                    if (back >= 0L) {
+                                        playerConnect.coins(back);
+                                        for (String command : fileConfiguration.getStringList(keyItem + ".SHOP.COMMANDS")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()));
+                                        }
+                                    } else {
+                                        for (String message : fileConfiguration.getStringList(keyItem + ".SHOP.ENOUGH")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleCommandSender, message.replace("{pvplevels_player}", player.getName()));
+                                        }
+                                    }
+                                }
                                 break;
                             }
                         }

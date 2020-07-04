@@ -19,6 +19,8 @@ public class PlayerConnect {
 
     private Long killstreak;
 
+    private Long coins;
+
     private Double personalBooster;
 
     private int personalBoosterTime = 0;
@@ -37,7 +39,8 @@ public class PlayerConnect {
         xp = Long.parseLong(data[2]);
         level = Long.parseLong(data[3]);
         killstreak = Long.parseLong(data[4]);
-        time = Timestamp.valueOf(data[5]);
+        coins = Long.parseLong(data[5]);
+        time = Timestamp.valueOf(data[6]);
         loadTimer();
     }
 
@@ -59,6 +62,10 @@ public class PlayerConnect {
 
     public Long killstreak() {
         return killstreak;
+    }
+
+    public Long coins() {
+        return coins;
     }
 
     public void kills(Long set) {
@@ -89,8 +96,12 @@ public class PlayerConnect {
         killstreak = set;
     }
 
+    public void coins(Long set) {
+        coins = set;
+    }
+
     public void save() {
-        PvPLevels.call.database.setValues(playeruuid, kills, deaths, xp, level, killstreak, time);
+        PvPLevels.call.database.setValues(playeruuid, kills, deaths, xp, level, killstreak, coins, time);
     }
 
     public Double getPersonalBooster() {
