@@ -7,12 +7,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class StatsManager {
 

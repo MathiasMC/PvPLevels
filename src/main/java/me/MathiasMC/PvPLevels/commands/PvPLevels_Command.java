@@ -10,6 +10,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,6 +169,178 @@ public class PvPLevels_Command implements CommandExecutor {
                             }
                         } else {
                             for (String message : plugin.language.get.getStringList("player.pvplevels.save.permission")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("item")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.command.item")) {
+                            if (args.length <= 1) {
+                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.usage")) {
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                }
+                            } else {
+                                if (args[1].equalsIgnoreCase("add")) {
+                                    if (sender.hasPermission("pvplevels.command.item.add")) {
+                                        if (args.length >= 5) {
+                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            if (target != null) {
+                                                if (plugin.isInt(args[4])) {
+                                                    if (Integer.parseInt(args[4]) > 0) {
+                                                        ItemStack itemStack = plugin.getID(args[3].toUpperCase(), Integer.parseInt(args[4]));
+                                                        if (itemStack != null) {
+                                                            if (args.length > 5) {
+                                                                StringBuilder sb = new StringBuilder();
+                                                                for (int i = 5; i < args.length; i++) {
+                                                                    sb.append(args[i]).append(" ");
+                                                                }
+                                                                String text = sb.toString().trim();
+                                                                ItemMeta itemMeta = itemStack.getItemMeta();
+                                                                if (text.contains("\\n")) {
+                                                                    String[] split = text.split(Pattern.quote("\\n"));
+                                                                    itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[0])));
+                                                                    if (split.length > 1) {
+                                                                        List<String> lores = new ArrayList<>();
+                                                                        for (int i = 1; i < split.length; i++) {
+                                                                            lores.add(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[i])));
+                                                                        }
+                                                                        itemMeta.setLore(lores);
+                                                                    }
+                                                                } else {
+                                                                    itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, text)));
+                                                                }
+                                                                itemStack.setItemMeta(itemMeta);
+                                                            }
+                                                            target.getInventory().addItem(itemStack);
+                                                            if (path.equalsIgnoreCase("player")) {
+                                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.add.added")) {
+                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName())));
+                                                                }
+                                                            } else {
+                                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.add.added")) {
+                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName())));
+                                                                }
+                                                            }
+                                                        } else {
+                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.found")) {
+                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                            }
+                                                        }
+                                                    } else {
+                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.0")) {
+                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.number")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.online")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.add.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("player.pvplevels.item.add.permission")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                } else if (args[1].equalsIgnoreCase("set")) {
+                                    if (sender.hasPermission("pvplevels.command.item.set")) {
+                                        if (args.length >= 7) {
+                                            if (plugin.isInt(args[2]) && Integer.parseInt(args[2]) >= 0) {
+                                                if (args[3].equalsIgnoreCase("true") || args[3].equalsIgnoreCase("false")) {
+                                                    Player target = PvPLevels.call.getServer().getPlayer(args[4]);
+                                                    if (target != null) {
+                                                        if (plugin.isInt(args[6]) && Integer.parseInt(args[6]) > 0) {
+                                                            ItemStack itemStack = plugin.getID(args[5].toUpperCase(), Integer.parseInt(args[6]));
+                                                            if (itemStack != null) {
+                                                                if (args.length > 7) {
+                                                                    StringBuilder sb = new StringBuilder();
+                                                                    for (int i = 7; i < args.length; i++) {
+                                                                        sb.append(args[i]).append(" ");
+                                                                    }
+                                                                    String text = sb.toString().trim();
+                                                                    ItemMeta itemMeta = itemStack.getItemMeta();
+                                                                    if (text.contains("\\n")) {
+                                                                        String[] split = text.split(Pattern.quote("\\n"));
+                                                                        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[0])));
+                                                                        if (split.length > 1) {
+                                                                            List<String> lores = new ArrayList<>();
+                                                                            for (int i = 1; i < split.length; i++) {
+                                                                                lores.add(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[i])));
+                                                                            }
+                                                                            itemMeta.setLore(lores);
+                                                                        }
+                                                                    } else {
+                                                                        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, text)));
+                                                                    }
+                                                                    itemStack.setItemMeta(itemMeta);
+                                                                }
+                                                                Inventory inventory = target.getInventory();
+                                                                if (args[3].equalsIgnoreCase("true")) {
+                                                                    inventory.setItem(Integer.parseInt(args[2]), itemStack);
+                                                                } else if (inventory.getItem(Integer.parseInt(args[2])) == null) {
+                                                                    inventory.setItem(Integer.parseInt(args[2]), itemStack);
+                                                                }
+                                                                if (path.equalsIgnoreCase("player")) {
+                                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.set")) {
+                                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName()).replace("{pvplevels_slot}", args[2])));
+                                                                    }
+                                                                } else {
+                                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.set")) {
+                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName()).replace("{pvplevels_slot}", args[2])));
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.found")) {
+                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                                }
+                                                            }
+                                                        } else {
+                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.0")) {
+                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                            }
+                                                        }
+                                                    } else {
+                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.online")) {
+                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                        }
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.boolean")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.number")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("player.pvplevels.item.set.permission")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("player.pvplevels.item.permission")) {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                             }
                         }

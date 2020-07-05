@@ -3,10 +3,8 @@ package me.MathiasMC.PvPLevels.gui;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -88,9 +86,9 @@ public class GUI implements InventoryHolder {
                 plugin.guiPageSort.put(player.getUniqueId().toString(), fileConfiguration.getString("settings.profile-all.default-sort"));
             }
             List<String> map = new ArrayList<String>(plugin.statsManager.getTopMap(plugin.guiPageSort.get(player.getUniqueId().toString())).keySet());
-            for (int i = 0; i < map.size(); i++) {
-                OfflinePlayer offlinePlayer = PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(map.get(i)));
-                ItemStack itemStack = getID(fileConfiguration.getString("settings.profile-all.MATERIAL"), fileConfiguration.getInt("settings.profile-all.AMOUNT"));
+            for (String s : map) {
+                OfflinePlayer offlinePlayer = PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(s));
+                ItemStack itemStack = plugin.getID(fileConfiguration.getString("settings.profile-all.MATERIAL"), fileConfiguration.getInt("settings.profile-all.AMOUNT"));
                 SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
                 skullMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.OfflinePlaceholderReplace(offlinePlayer, fileConfiguration.getString("settings.profile-all.NAME"))));
                 ArrayList<String> list = new ArrayList<>();
@@ -164,7 +162,7 @@ public class GUI implements InventoryHolder {
     }
 
     private ItemStack getItem(final String material, final int amount, final String name, final List<String> lore, final Player player, final String key, FileConfiguration fileConfiguration, String type, int time) {
-        ItemStack itemStack = getID(material, amount);
+        ItemStack itemStack = plugin.getID(material, amount);
         if (fileConfiguration.contains(key + ".OPTIONS") && fileConfiguration.getStringList(key + ".OPTIONS").contains("PLAYERSKULL")) {
             setItemMeta(itemStack, player, name, lore, key, type, time);
             SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
@@ -194,27 +192,5 @@ public class GUI implements InventoryHolder {
         }
         itemMeta.setLore(list);
         itemStack.setItemMeta(itemMeta);
-    }
-
-    private ItemStack getID(String bb, int amount) {
-        if (plugin.versionID()) {
-            try {
-                String[] parts = bb.split(":");
-                int matId = Integer.parseInt(parts[0]);
-                if (parts.length == 2) {
-                    short data = Short.parseShort(parts[1]);
-                    return new ItemStack(Material.getMaterial(matId), amount, data);
-                }
-                return new ItemStack(Material.getMaterial(matId));
-            } catch (Exception e) {
-                return null;
-            }
-        } else {
-            try {
-                return new ItemStack(Material.getMaterial(bb), amount);
-            } catch (Exception e) {
-                return null;
-            }
-        }
     }
 }

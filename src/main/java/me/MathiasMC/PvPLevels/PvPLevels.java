@@ -16,9 +16,11 @@ import me.MathiasMC.PvPLevels.utils.TextUtils;
 import me.MathiasMC.PvPLevels.utils.UpdateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -218,6 +220,28 @@ public class PvPLevels extends JavaPlugin {
         if (getServer().getVersion().contains("1.11")) { return true; }
         if (getServer().getVersion().contains("1.12")) { return true; }
         return false;
+    }
+
+    public ItemStack getID(String bb, int amount) {
+        if (versionID()) {
+            try {
+                String[] parts = bb.split(":");
+                int matId = Integer.parseInt(parts[0]);
+                if (parts.length == 2) {
+                    short data = Short.parseShort(parts[1]);
+                    return new ItemStack(Material.getMaterial(matId), amount, data);
+                }
+                return new ItemStack(Material.getMaterial(matId));
+            } catch (Exception e) {
+                return null;
+            }
+        } else {
+            try {
+                return new ItemStack(Material.getMaterial(bb), amount);
+            } catch (Exception e) {
+                return null;
+            }
+        }
     }
 
     public void copy(String filename, File file) {

@@ -1,10 +1,14 @@
 package me.MathiasMC.PvPLevels.managers;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
+import java.util.*;
 
 public class SystemManager {
 
@@ -66,5 +70,53 @@ public class SystemManager {
             }
             if (plugin.config.get.getBoolean("debug.save")) { plugin.textUtils.debug("Saved cached data to database"); }
         }, interval * 1200,interval * 1200);
+    }
+
+    public boolean hasItem(Player player, String path) {
+        if (!plugin.config.get.contains(path + ".item")) { return true; }
+        PlayerInventory inventory = player.getInventory();
+        ItemStack itemStack;
+        try {
+            itemStack = inventory.getItemInMainHand();
+        } catch (NoSuchMethodError error) {
+            itemStack = inventory.getItemInHand();
+        }
+        if (itemStack == null) { return false; }
+        String itemStackName = itemStack.getType().name();
+        if (plugin.config.get.contains(path + ".item.items")) {
+            for (String next : plugin.config.get.getConfigurationSection(path + ".item.items").getKeys(false)) {
+                if (next.equalsIgnoreCase(itemStackName.toLowerCase())) {
+                    if (itemStack.hasItemMeta()) {
+                        ItemMeta itemMeta = itemStack.getItemMeta();
+                        boolean check = true;
+                        String displayName = plugin.PlaceholderReplace(player, ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString(path + ".item.items." + next + ".name")));
+                        if (itemMeta.hasDisplayName()) {
+                            if (!itemMeta.getDisplayName().equalsIgnoreCase(displayName)) {
+                                check = false;
+                            }
+                        } else if (!displayName.isEmpty()) {
+                            check = false;
+                        }
+                        List<String> lores = plugin.config.get.getStringList(path + ".item.items." + next + ".lores");
+                        if (itemMeta.hasLore()) {
+                            List<String> list = new ArrayList<>();
+                            for (String lore : lores) {
+                                list.add(plugin.PlaceholderReplace(player, ChatColor.translateAlternateColorCodes('&', lore)));
+                            }
+                            if (!itemMeta.getLore().equals(list)) {
+                                check = false;
+                            }
+                        } else if (!lores.isEmpty()) {
+                            check = false;
+                        }
+                        if (check) {
+                            return true;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return false;
     }
 }

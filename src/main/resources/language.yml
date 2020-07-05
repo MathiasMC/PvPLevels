@@ -25,6 +25,8 @@ player:
         - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
       message:
         - '&c&m---------------------------------------------'
+        - '&7&l> &f/pvplevels item set <slot> <true, false override> <player> <item> <amount> <name\nlore\nlore2>'
+        - '&7&l> &f/pvplevels item add <player> <item> <amount> <name\nlore\nlore2>'
         - '&7&l> &f/pvplevels set/add/remove kills/deaths/xp/level <player> <amount>'
         - '&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0>
         <time>'
@@ -238,6 +240,37 @@ player:
         - '&7[&bPvPLevels&7] &cNot a number!'
       '0':
         - '&7[&bPvPLevels&7] &cThe amount must be over 0!'
+    item:
+      permission:
+        - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+      add:
+        permission:
+          - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+        usage:
+          - '&7[&bPvPLevels&7] &cUsage: /pvplevels item add <player> <item> <amount>
+              <name\nlore\nlore2>'
+        added:
+          - '&7[&bPvPLevels&7] &eAdded item to {pvplevels_player}'
+      set:
+        permission:
+          - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+        usage:
+          - '&7[&bPvPLevels&7] &cUsage: /pvplevels item set <slot> <true, false override>
+              <player> <item> <amount> <name\nlore\nlore2>'
+        set:
+          - '&7[&bPvPLevels&7] &eAdded item to {pvplevels_player} slot {pvplevels_slot}'
+        boolean:
+          - '&7[&bPvPLevels&7] &cYou can only use true or false!'
+      usage:
+        - '&7[&bPvPLevels&7] &cUsage: /pvplevels item add/set'
+      online:
+        - '&7[&bPvPLevels&7] &cThe player is not online!'
+      number:
+        - '&7[&bPvPLevels&7] &cNot a number!'
+      '0':
+        - '&7[&bPvPLevels&7] &cThe amount must be over 0!'
+      found:
+        - '&7[&bPvPLevels&7] &cThat item cannot be found!'
   pvpstats:
     usage:
       - '&7[&bPvPLevels&7] &cUsage: /pvpstats <player>'
@@ -391,6 +424,8 @@ console:
     help:
       message:
         - '&c&m---------------------------------------------'
+        - '&7&l> &f/pvplevels item set <slot> <true, false override> <player> <item> <amount> <name\nlore\nlore2>'
+        - '&7&l> &f/pvplevels item add <player> <item> <amount> <name\nlore\nlore2>'
         - '&7&l> &f/pvplevels set/add/remove kills/deaths/xp/level <player> <amount>'
         - '&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0>
         <time>'
@@ -567,6 +602,31 @@ console:
         - '&7[&bPvPLevels&7] &cNot a number!'
       '0':
         - '&7[&bPvPLevels&7] &cThe amount must be over 0!'
+    item:
+      usage:
+        - '&7[&bPvPLevels&7] &cUsage: /pvplevels item add/set'
+      add:
+        usage:
+          - '&7[&bPvPLevels&7] &cUsage: /pvplevels item add <player> <item> <amount>
+              <name\nlore\nlore2>'
+        added:
+          - '&7[&bPvPLevels&7] &eYou have got an item!'
+      set:
+        usage:
+          - '&7[&bPvPLevels&7] &cUsage: /pvplevels item set <slot> <true, false override>
+              <player> <item> <amount> <name\nlore\nlore2>'
+        set:
+          - '&7[&bPvPLevels&7] &eYou have got an item in your slot {pvplevels_slot}'
+        boolean:
+          - '&7[&bPvPLevels&7] &cYou can only use true or false!'
+      online:
+        - '&7[&bPvPLevels&7] &cThe player is not online!'
+      number:
+        - '&7[&bPvPLevels&7] &cNot a number!'
+      '0':
+        - '&7[&bPvPLevels&7] &cThe amount must be over 0!'
+      found:
+        - '&7[&bPvPLevels&7] &cThat item cannot be found!'
   pvpstats:
     usage:
       - '&7[&bPvPLevels&7] &cUsage: /pvpstats <player>'

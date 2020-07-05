@@ -195,6 +195,144 @@ public class Language {
             get.set("console.pvpshop.commands", list);
             change = true;
         }
+        if (!get.contains("player.pvplevels.item.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.item.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.add.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.item.add.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.set.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.item.set.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels item add/set");
+            get.set("player.pvplevels.item.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.add.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels item add <player> <item> <amount> <name\\nlore\\nlore2>");
+            get.set("player.pvplevels.item.add.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.set.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels item set <slot> <true, false override> <player> <item> <amount> <name\\nlore\\nlore2>");
+            get.set("player.pvplevels.item.set.usage", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels item add/set");
+            get.set("console.pvplevels.item.usage", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.add.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels item add <player> <item> <amount> <name\\nlore\\nlore2>");
+            get.set("console.pvplevels.item.add.usage", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.set.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels item set <slot> <true, false override> <player> <item> <amount> <name\\nlore\\nlore2>");
+            get.set("console.pvplevels.item.set.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("player.pvplevels.item.online", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.online")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe player is not online!");
+            get.set("console.pvplevels.item.online", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.number")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cNot a number!");
+            get.set("player.pvplevels.item.number", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.number")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cNot a number!");
+            get.set("console.pvplevels.item.number", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.0")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe amount must be over 0!");
+            get.set("player.pvplevels.item.0", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.0")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe amount must be over 0!");
+            get.set("console.pvplevels.item.0", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.found")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThat item cannot be found!");
+            get.set("player.pvplevels.item.found", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.found")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThat item cannot be found!");
+            get.set("console.pvplevels.item.found", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.add.added")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &eAdded item to {pvplevels_player}");
+            get.set("player.pvplevels.item.add.added", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.add.added")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &eYou have got an item!");
+            get.set("console.pvplevels.item.add.added", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.set.set")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &eAdded item to {pvplevels_player} slot {pvplevels_slot}");
+            get.set("player.pvplevels.item.set.set", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.set.set")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &eYou have got an item in your slot {pvplevels_slot}");
+            get.set("console.pvplevels.item.set.set", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.item.set.boolean")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou can only use true or false!");
+            get.set("player.pvplevels.item.set.boolean", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.item.set.boolean")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou can only use true or false!");
+            get.set("console.pvplevels.item.set.boolean", list);
+            change = true;
+        }
         if (change) {
             try {
                 get.save(file);

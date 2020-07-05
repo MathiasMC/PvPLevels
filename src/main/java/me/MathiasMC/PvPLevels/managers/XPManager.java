@@ -18,7 +18,9 @@ public class XPManager {
             String group = plugin.systemManager.getGroup(killer, plugin.config.get, "xp." + entityType, true);
             if (group != null) {
                 if (xpUP) {
-                    getXP(playerConnect, killer, entityType, entityName, group);
+                    if (plugin.systemManager.hasItem(killer, "xp." + entityType + "." + group)) {
+                        getXP(playerConnect, killer, entityType, entityName, group);
+                    }
                 } else {
                     loseXP(playerConnect, killer, entityType, group);
                 }

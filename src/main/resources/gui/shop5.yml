@@ -28,4 +28,5 @@ dirt:
     ENOUGH:
       - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &cYou dont have enough coins to buy that!'
     COMMANDS:
-      - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eBuy dirt'
+      - 'pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eBought 1 dirt'
+      - 'pvplevels item add {pvplevels_player} dirt 1'
