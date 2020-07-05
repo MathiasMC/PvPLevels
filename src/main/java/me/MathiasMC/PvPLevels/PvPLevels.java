@@ -51,8 +51,9 @@ public class PvPLevels extends JavaPlugin {
     public final ArrayList<Location> blocksList = new ArrayList<>();
     public final HashSet<String> spawners = new HashSet<>();
     public final HashMap<String, GUI> guiList = new HashMap<>();
-    public HashMap<String, Integer> guiPageID = new HashMap<>();
-    public HashMap<String, String> guiPageSort = new HashMap<>();
+    public final HashMap<String, Integer> guiPageID = new HashMap<>();
+    public final HashMap<String, String> guiPageSort = new HashMap<>();
+    public final Map<String, String> lastDamagers = new HashMap<>();
 
     public void onEnable() {
         call = this;
@@ -77,6 +78,8 @@ public class PvPLevels extends JavaPlugin {
             if (config.get.getBoolean("load-players.reload")) { database.loadOnline(); }
             if (config.get.getBoolean("load-players.all")) { database.loadALL(); }
             getServer().getPluginManager().registerEvents(new EntityDeath(this), this);
+            getServer().getPluginManager().registerEvents(new EntityDamageByEntity(this), this);
+            getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
             getServer().getPluginManager().registerEvents(new PlayerLogin(this), this);
             getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
             getServer().getPluginManager().registerEvents(new InventoryClick(this), this);
@@ -93,7 +96,7 @@ public class PvPLevels extends JavaPlugin {
             getCommand("pvpprofile").setExecutor(new PvPProfile_Command(this));
             getCommand("pvpadmin").setExecutor(new PvPAdmin_Command(this));
             getCommand("pvpshop").setExecutor(new PvPShop_Command(this));
-            placeholders();
+            if (config.get.getBoolean("placeholders.PlaceholderAPI")) { placeholders(); }
             if (config.get.getBoolean("update-check")) {
                 new UpdateUtils(this, 20807).getVersion(version -> {
                     if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
