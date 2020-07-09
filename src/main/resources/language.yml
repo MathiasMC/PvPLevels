@@ -444,6 +444,18 @@ player:
       - pvplevels gui open admin.yml {pvplevels_player}
     you:
       - '&7[&bPvPLevels&7] &cYou cannot delete your own profile!'
+  pvpshop:
+    usage:
+      - '&7[&bPvPLevels&7] &cUsage: /pvpshop <player>'
+    online:
+      - '&7[&bPvPLevels&7] &cThe player is not online!'
+    permission:
+      - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    target:
+      permission:
+        - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    commands:
+      - pvplevels gui open shop.yml {pvplevels_player}
 console:
   pvplevels:
     command:
@@ -756,3 +768,10 @@ console:
       - '&7[&bPvPLevels&7] &cThe player is not online!'
     commands:
       - pvplevels gui open admin.yml {pvplevels_player}
+  pvpshop:
+    usage:
+      - '&7[&bPvPLevels&7] &cUsage: /pvpshop <player>'
+    online:
+      - '&7[&bPvPLevels&7] &cThe player is not online!'
+    commands:
+      - pvplevels gui open shop.yml {pvplevels_player}

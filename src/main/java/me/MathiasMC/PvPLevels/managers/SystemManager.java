@@ -65,7 +65,7 @@ public class SystemManager {
                         commandPath = path + "." + group + "." + value + "." + key;
                     }
                     for (String commands : fileConfiguration.getStringList(commandPath)) {
-                        PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(player, commands));
+                        plugin.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(player, commands));
                     }
                 }, fileConfiguration.getLong(path + "." + group + ".delay"));
         }
