@@ -45,6 +45,8 @@ player:
         - '&7&l> &f/pvplevels broadcast <null/permission> <text>'
         - '&7&l> &f/pvplevels reload'
         - '&7&l> &f/pvplevels save'
+        - '&7&l> &f/pvplevels zone set <typeName> <zoneName>'
+        - '&7&l> &f/pvplevels wand'
         - '&c&m---------------------------------------------'
     reload:
       permission:
@@ -271,6 +273,40 @@ player:
         - '&7[&bPvPLevels&7] &cThe amount must be over 0!'
       found:
         - '&7[&bPvPLevels&7] &cThat item cannot be found!'
+    wand:
+      add:
+        - '&7[&bPvPLevels&7] &aAdded &bPvPLevels Wand'
+      permission:
+        - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+      set:
+        permission:
+          - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+        '1':
+          - '&7[&bPvPLevels&7] &aPos 1 set to &f{pvplevels_x} {pvplevels_y} {pvplevels_z}'
+        '2':
+          - '&7[&bPvPLevels&7] &aPos 2 set to &f{pvplevels_x} {pvplevels_y} {pvplevels_z}'
+        clear:
+          - '&7[&bPvPLevels&7] &aCleared all pos'
+        same:
+          - '&7[&bPvPLevels&7] &cYou cannot select the same point!'
+    zone:
+      permission:
+        - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+      usage:
+        - '&7[&bPvPLevels&7] &cUsage: /pvplevels zone set'
+      set:
+        permission:
+          - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+        usage:
+          - '&7[&bPvPLevels&7] &cUsage: /pvplevels zone set <typeName> <zoneName>'
+        type:
+          - '&7[&bPvPLevels&7] &cThe type is not found in config.yml!'
+        name:
+          - '&7[&bPvPLevels&7] &cCannot add zone with the same name!'
+        select:
+          - '&7[&bPvPLevels&7] &cYou need to select 2 points with /pvplevels wand'
+        set:
+          - '&7[&bPvPLevels&7] &aCreated zone &6{pvplevels_zone} &afor &6{pvplevels_type}'
   pvpstats:
     usage:
       - '&7[&bPvPLevels&7] &cUsage: /pvpstats <player>'
@@ -445,6 +481,8 @@ console:
         - '&7&l> &f/pvplevels broadcast <null/permission> <text>'
         - '&7&l> &f/pvplevels reload'
         - '&7&l> &f/pvplevels save'
+        - '&7&l> &f/pvplevels zone set <typeName> <zoneName>'
+        - '&7&l> &f/pvplevels wand'
         - '&c&m---------------------------------------------'
     reload:
       reloaded:
@@ -627,6 +665,10 @@ console:
         - '&7[&bPvPLevels&7] &cThe amount must be over 0!'
       found:
         - '&7[&bPvPLevels&7] &cThat item cannot be found!'
+    wand:
+      - '&7[&bPvPLevels&7] &cOnly the player can use this command'
+    zone:
+      - '&7[&bPvPLevels&7] &cOnly the player can use this command'
   pvpstats:
     usage:
       - '&7[&bPvPLevels&7] &cUsage: /pvpstats <player>'

@@ -2,6 +2,7 @@ package me.MathiasMC.PvPLevels.managers;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +42,15 @@ public class SystemManager {
             return worlds.contains(player.getWorld().getName());
         }
         return true;
+    }
+
+    public boolean isInLocation(Location block, Location start, Location end) {
+        Location loc1 = new Location(block.getWorld(), Math.min(start.getBlockX(), end.getBlockX()), Math.min(start.getBlockY(), end.getBlockY()), Math.min(start.getBlockZ(), end.getBlockZ()));
+        Location loc2 = new Location(block.getWorld(), Math.max(start.getBlockX(), end.getBlockX()), Math.max(start.getBlockY(), end.getBlockY()), Math.max(start.getBlockZ(), end.getBlockZ()));
+        if (block.getBlockX() >= loc1.getBlockX() && block.getBlockX() <= loc2.getBlockX() && block.getBlockY() >= loc1.getBlockY() && block.getBlockY() <= loc2.getBlockY() && block.getBlockZ() >= loc1.getBlockZ() && block.getBlockZ() <= loc2.getBlockZ()) {
+            return true;
+        }
+        return false;
     }
 
     public void executeCommands(Player player, FileConfiguration fileConfiguration, String path, String key, Long value) {

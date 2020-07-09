@@ -2,6 +2,8 @@ package me.MathiasMC.PvPLevels.managers;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -19,6 +21,20 @@ public class XPManager {
             if (group != null) {
                 if (xpUP) {
                     if (plugin.systemManager.hasItem(killer, "xp." + entityType + "." + group)) {
+                        if (plugin.zones.get.contains("zones." + entityType) && plugin.zones.get.getConfigurationSection("zones") != null && !plugin.zones.get.getConfigurationSection("zones").getKeys(false).isEmpty()) {
+                            boolean isInLocation = false;
+                            for (String zone : plugin.zones.get.getConfigurationSection("zones." + entityType).getKeys(false)) {
+                                String[] loc1 = plugin.zones.get.getString("zones." + entityType + "." + zone + ".start").split(" ");
+                                String[] loc2 = plugin.zones.get.getString("zones." + entityType + "." + zone + ".end").split(" ");
+                                World world = plugin.getServer().getWorld(plugin.zones.get.getString("zones." + entityType + "." + zone + ".world"));
+                                if (plugin.systemManager.isInLocation(killer.getLocation(), new Location(world, Integer.parseInt(loc1[0]), Integer.parseInt(loc1[1]), Integer.parseInt(loc1[2])), new Location(world, Integer.parseInt(loc2[0]), Integer.parseInt(loc2[1]), Integer.parseInt(loc2[2])))) {
+                                    isInLocation = true;
+                                }
+                            }
+                            if (!isInLocation) {
+                                return;
+                            }
+                        }
                         getXP(playerConnect, killer, entityType, entityName, group);
                     }
                 } else {

@@ -333,6 +333,108 @@ public class Language {
             get.set("console.pvplevels.item.set.boolean", list);
             change = true;
         }
+        if (!get.contains("player.pvplevels.wand.add")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &aAdded &bPvPLevels Wand");
+            get.set("player.pvplevels.wand.add", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.wand.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.wand.permission", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.wand")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cOnly the player can use this command");
+            get.set("console.pvplevels.wand", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.wand.set.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.wand.set.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.wand.set.1")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &aPos 1 set to &f{pvplevels_x} {pvplevels_y} {pvplevels_z}");
+            get.set("player.pvplevels.wand.set.1", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.wand.set.2")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &aPos 2 set to &f{pvplevels_x} {pvplevels_y} {pvplevels_z}");
+            get.set("player.pvplevels.wand.set.2", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.wand.set.clear")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &aCleared all pos");
+            get.set("player.pvplevels.wand.set.clear", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.wand.set.same")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou cannot select the same point!");
+            get.set("player.pvplevels.wand.set.same", list);
+            change = true;
+        }
+        if (!get.contains("console.pvplevels.zone")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cOnly the player can use this command");
+            get.set("console.pvplevels.zone", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.zone.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.set.permission")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou dont have access to use this command!");
+            get.set("player.pvplevels.zone.set.permission", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels zone set");
+            get.set("player.pvplevels.zone.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.set.usage")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cUsage: /pvplevels zone set <typeName> <zoneName>");
+            get.set("player.pvplevels.zone.set.usage", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.set.type")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cThe type is not found in config.yml!");
+            get.set("player.pvplevels.zone.set.type", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.set.name")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cCannot add zone with the same name!");
+            get.set("player.pvplevels.zone.set.name", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.set.select")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &cYou need to select 2 points with /pvplevels wand");
+            get.set("player.pvplevels.zone.set.select", list);
+            change = true;
+        }
+        if (!get.contains("player.pvplevels.zone.set.set")) {
+            ArrayList<String> list = new ArrayList<>();
+            list.add("&7[&bPvPLevels&7] &aCreated zone &6{pvplevels_zone} &afor &6{pvplevels_type}");
+            get.set("player.pvplevels.zone.set.set", list);
+            change = true;
+        }
         if (change) {
             try {
                 get.save(file);

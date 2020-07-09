@@ -14,13 +14,13 @@ import me.MathiasMC.PvPLevels.utils.KillSessionUtils;
 import me.MathiasMC.PvPLevels.utils.Metrics;
 import me.MathiasMC.PvPLevels.utils.TextUtils;
 import me.MathiasMC.PvPLevels.utils.UpdateUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -37,6 +37,7 @@ public class PvPLevels extends JavaPlugin {
     public Language language;
     public Levels levels;
     public Boosters boosters;
+    public Zones zones;
     public TextUtils textUtils;
     public XPManager xpManager;
     public StatsManager statsManager;
@@ -54,6 +55,9 @@ public class PvPLevels extends JavaPlugin {
     public final HashMap<String, Integer> guiPageID = new HashMap<>();
     public final HashMap<String, String> guiPageSort = new HashMap<>();
     public final Map<String, String> lastDamagers = new HashMap<>();
+    public final HashMap<String, Location> wandPos1 = new HashMap<>();
+    public final HashMap<String, Location> wandPos2 = new HashMap<>();
+    public ItemStack wand;
 
     public void onEnable() {
         call = this;
@@ -71,6 +75,7 @@ public class PvPLevels extends JavaPlugin {
         language = new Language(this);
         levels = new Levels(this);
         boosters = new Boosters(this);
+        zones = new Zones(this);
         database = new Database(this);
         guiFolder = new GUIFolder(this);
         if (database.set()) {
@@ -110,6 +115,7 @@ public class PvPLevels extends JavaPlugin {
             Metrics metrics = new Metrics(this, pluginId);
             metrics.addCustomChart(new Metrics.SimplePie("levels", () -> String.valueOf(levels.get.getConfigurationSection("levels").getKeys(false).size())));
             if (config.get.getBoolean("mysql.purge.use")) { new Purge(this); }
+            this.wand = getWand();
         } else {
             textUtils.error("Disabling plugin cannot connect to database");
             getServer().getPluginManager().disablePlugin(this);
@@ -252,5 +258,18 @@ public class PvPLevels extends JavaPlugin {
         } catch (IOException exception) {
             textUtils.exception(exception.getStackTrace(), exception.getMessage());
         }
+    }
+
+    public ItemStack getWand() {
+        ItemStack itemStack = new ItemStack(Material.STICK);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&bPvPLevels Wand"));
+        ArrayList<String> list = new ArrayList<>();
+        list.add(ChatColor.translateAlternateColorCodes('&', "&6This tool is used to select points"));
+        itemMeta.setLore(list);
+        itemStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 0);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
     }
 }
