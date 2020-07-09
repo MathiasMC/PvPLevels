@@ -82,7 +82,7 @@ public class PvPTop_Command implements CommandExecutor {
                     }
                 } else if (args.length == 2) {
                     if (type.equalsIgnoreCase("console")) {
-                        Player target = PvPLevels.call.getServer().getPlayer(args[1]);
+                        Player target = plugin.getServer().getPlayer(args[1]);
                         if (target != null) {
                             if (args[0].equalsIgnoreCase("kills")) {
                                 message(target, "console.pvptop.kills.message");

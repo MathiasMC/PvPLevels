@@ -79,7 +79,6 @@ public class PvPLevels extends JavaPlugin {
             if (config.get.getBoolean("load-players.all")) { database.loadALL(); }
             getServer().getPluginManager().registerEvents(new EntityDeath(this), this);
             getServer().getPluginManager().registerEvents(new EntityDamageByEntity(this), this);
-            getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
             getServer().getPluginManager().registerEvents(new PlayerLogin(this), this);
             getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
             getServer().getPluginManager().registerEvents(new InventoryClick(this), this);
@@ -100,9 +99,9 @@ public class PvPLevels extends JavaPlugin {
             if (config.get.getBoolean("update-check")) {
                 new UpdateUtils(this, 20807).getVersion(version -> {
                     if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                        textUtils.info("You are using the latest version of PvPLevels (" + PvPLevels.call.getDescription().getVersion() + ")");
+                        textUtils.info("You are using the latest version of PvPLevels (" + getDescription().getVersion() + ")");
                     } else {
-                        textUtils.warning("Version: " + version + " has been released! you are currently using version: " + PvPLevels.call.getDescription().getVersion());
+                        textUtils.warning("Version: " + version + " has been released! you are currently using version: " + getDescription().getVersion());
                     }
                 });
             }
@@ -249,7 +248,7 @@ public class PvPLevels extends JavaPlugin {
 
     public void copy(String filename, File file) {
         try {
-            ByteStreams.copy(PvPLevels.call.getResource(filename), new FileOutputStream(file));
+            ByteStreams.copy(getResource(filename), new FileOutputStream(file));
         } catch (IOException exception) {
             textUtils.exception(exception.getStackTrace(), exception.getMessage());
         }

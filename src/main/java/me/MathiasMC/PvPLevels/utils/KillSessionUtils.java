@@ -65,7 +65,7 @@ public class KillSessionUtils {
                             killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, Integer.valueOf(split[0]) + "=" + (time - 1));
                         }
                         if (time == 0) {
-                            PvPLevels.call.getServer().getScheduler().cancelTask(Integer.parseInt(split[0]));
+                            plugin.getServer().getScheduler().cancelTask(Integer.parseInt(split[0]));
                             killsessiontime.remove(killed.getUniqueId().toString() + "=" + attacker);
                             killsession.remove(attacker);
                             sendMessage(killer, killed, "remove");

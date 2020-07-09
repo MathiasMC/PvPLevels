@@ -87,7 +87,7 @@ public class GUI implements InventoryHolder {
             }
             List<String> map = new ArrayList<String>(plugin.statsManager.getTopMap(plugin.guiPageSort.get(player.getUniqueId().toString())).keySet());
             for (String s : map) {
-                OfflinePlayer offlinePlayer = PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(s));
+                OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(s));
                 ItemStack itemStack = plugin.getID(fileConfiguration.getString("settings.profile-all.MATERIAL"), fileConfiguration.getInt("settings.profile-all.AMOUNT"));
                 SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
                 skullMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.OfflinePlaceholderReplace(offlinePlayer, fileConfiguration.getString("settings.profile-all.NAME"))));
@@ -185,10 +185,10 @@ public class GUI implements InventoryHolder {
             itemMeta = itemStack.getItemMeta();
             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
-        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', PvPLevels.call.PlaceholderReplace(player, name.replace("{pvplevels_booster_type}", type).replace("{pvplevels_booster_time}", plugin.boostersManager.timeLeft(time)))));
+        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(player, name.replace("{pvplevels_booster_type}", type).replace("{pvplevels_booster_time}", plugin.boostersManager.timeLeft(time)))));
         ArrayList<String> list = new ArrayList<>();
         for (String lores : lore) {
-            list.add(ChatColor.translateAlternateColorCodes('&', PvPLevels.call.PlaceholderReplace(player, lores.replace("{pvplevels_booster_type}", type).replace("{pvplevels_booster_time}", plugin.boostersManager.timeLeft(time)))));
+            list.add(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(player, lores.replace("{pvplevels_booster_type}", type).replace("{pvplevels_booster_time}", plugin.boostersManager.timeLeft(time)))));
         }
         itemMeta.setLore(list);
         itemStack.setItemMeta(itemMeta);

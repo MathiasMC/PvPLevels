@@ -12,10 +12,7 @@ public class Config {
     public FileConfiguration get;
     private final File file;
 
-    private final PvPLevels plugin;
-
     public Config(final PvPLevels plugin) {
-        this.plugin = plugin;
         file = new File(plugin.getDataFolder(), "config.yml");
         if (!file.exists()) {
             try {

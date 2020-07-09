@@ -26,22 +26,24 @@ public class EntityManager {
                 PlayerConnect playerConnect = plugin.get(killedUUID);
                 if (plugin.systemManager.world(killed, plugin.config.get, "deaths")) {
                     if (plugin.config.get.getBoolean("events.Deaths.only-players")) {
-                        if (killer != null) {
-                            death(killed, playerConnect);
-                        }
+                        death(killed, playerConnect);
                     } else {
                         death(killed, playerConnect);
                     }
                 }
                 String entityKiller = plugin.entityManager.getEntityKiller(killed);
                 plugin.xpManager.check(playerConnect, entityKiller, entity.getName(), killed, false);
-                if (plugin.config.get.getBoolean("events.KillStreaks")) {
-                    if (entityKiller.equalsIgnoreCase("player")) {
-                        entityKiller = killer.getName();
-                    } else {
-                        entityKiller = "Death";
+                if (entityKiller != null) {
+                    if (plugin.config.get.getBoolean("events.KillStreaks")) {
+                        if (entityKiller.equalsIgnoreCase("player")) {
+                            if (killer != null) {
+                                entityKiller = killer.getName();
+                            }
+                        } else {
+                            entityKiller = "Death";
+                        }
+                        plugin.statsManager.clearKillStreak(playerConnect, killed, entityKiller);
                     }
-                    plugin.statsManager.clearKillStreak(playerConnect, killed, entityKiller);
                 }
             }
         }
@@ -95,7 +97,7 @@ public class EntityManager {
 
     public String getEntityKiller(Player killed) {
         EntityDamageEvent entityDamageEvent = killed.getLastDamageCause();
-        String entityType = "";
+        String entityType = null;
         if (!plugin.config.get.getConfigurationSection("xp").getKeys(false).contains("all")) {
             if (entityDamageEvent instanceof EntityDamageByEntityEvent) {
                 Entity entity = ((EntityDamageByEntityEvent)entityDamageEvent).getDamager();
@@ -103,7 +105,9 @@ public class EntityManager {
                 if (entity.getCustomName() != null)
                     entityType = ChatColor.stripColor(entity.getCustomName().toLowerCase());
             } else {
-                entityType = entityDamageEvent.getCause().toString().toLowerCase();
+                if (entityDamageEvent != null) {
+                    entityType = entityDamageEvent.getCause().toString().toLowerCase();
+                }
             }
         } else {
             entityType = "all";

@@ -35,7 +35,7 @@ public class PvPStats_Command implements CommandExecutor {
                         }
                     }
                 } else if (args.length == 1) {
-                    Player target = PvPLevels.call.getServer().getPlayer(args[0]);
+                    Player target = plugin.getServer().getPlayer(args[0]);
                     if (type.equalsIgnoreCase("player")) {
                         if (sender.hasPermission("pvplevels.command.pvpstats.target")) {
                             if (target != null) {

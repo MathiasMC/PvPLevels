@@ -111,17 +111,17 @@ public class BoostersManager {
 
     public void globalStarted() {
         for (String command : plugin.boosters.get.getStringList("global-settings.start")) {
-            PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", offlinePlayer.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(globalBoost)).replace("{pvplevels_booster_global_time}", timeLeft(globalSeconds)));
+            plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", offlinePlayer.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(globalBoost)).replace("{pvplevels_booster_global_time}", timeLeft(globalSeconds)));
         }
     }
 
     public void globalEnded() {
         for (String command : plugin.boosters.get.getStringList("global-settings.stop.ended")) {
-            PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", offlinePlayer.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(globalBoost)));
+            plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", offlinePlayer.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(globalBoost)));
         }
         if (globalQueueSize() == 0) {
             for (String command : plugin.boosters.get.getStringList("global-settings.stop.queue")) {
-                PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", offlinePlayer.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(globalBoost)));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", offlinePlayer.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(globalBoost)));
             }
         }
     }

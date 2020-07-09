@@ -117,7 +117,7 @@ public class StatsManager {
         if (key) {
             map = new ArrayList<String>(getTopMap(type).keySet());
             if (map.size() > number) {
-                return PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(map.get(number))).getName();
+                return plugin.getServer().getOfflinePlayer(UUID.fromString(map.get(number))).getName();
             } else {
                 return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("pvptop." + type + ".name"));
             }
@@ -145,7 +145,7 @@ public class StatsManager {
                 }
                 if (!list.isEmpty()) {
                     for (String commands : plugin.config.get.getStringList("killstreaks." + group + "." +  + list.get(list.size() - 1) + ".lose-commands")) {
-                        PvPLevels.call.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(player, commands.replace("{pvplevels_killstreak_lost}", String.valueOf(killstreak)).replace("{pvplevels_type}", killer)));
+                        plugin.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(player, commands.replace("{pvplevels_killstreak_lost}", String.valueOf(killstreak)).replace("{pvplevels_type}", killer)));
                     }
                 }
             }

@@ -103,7 +103,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                 }
                             } else {
-                                Player target = PvPLevels.call.getServer().getPlayer(args[1]);
+                                Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
                                     StringBuilder sb = new StringBuilder();
                                     for (int i = 2; i < args.length; i++) {
@@ -136,7 +136,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                 }
                             } else {
-                                Player target = PvPLevels.call.getServer().getPlayer(args[1]);
+                                Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
                                     StringBuilder sb = new StringBuilder();
                                     for (int i = 2; i < args.length; i++) {
@@ -183,7 +183,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 if (args[1].equalsIgnoreCase("add")) {
                                     if (sender.hasPermission("pvplevels.command.item.add")) {
                                         if (args.length >= 5) {
-                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            Player target = plugin.getServer().getPlayer(args[2]);
                                             if (target != null) {
                                                 if (plugin.isInt(args[4])) {
                                                     if (Integer.parseInt(args[4]) > 0) {
@@ -256,7 +256,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                         if (args.length >= 7) {
                                             if (plugin.isInt(args[2]) && Integer.parseInt(args[2]) >= 0) {
                                                 if (args[3].equalsIgnoreCase("true") || args[3].equalsIgnoreCase("false")) {
-                                                    Player target = PvPLevels.call.getServer().getPlayer(args[4]);
+                                                    Player target = plugin.getServer().getPlayer(args[4]);
                                                     if (target != null) {
                                                         if (plugin.isInt(args[6]) && Integer.parseInt(args[6]) > 0) {
                                                             ItemStack itemStack = plugin.getID(args[5].toUpperCase(), Integer.parseInt(args[6]));
@@ -348,7 +348,7 @@ public class PvPLevels_Command implements CommandExecutor {
                         unknown = false;
                         if (sender.hasPermission("pvplevels.command." + args[0])) {
                             if (args.length == 4) {
-                                Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                Player target = plugin.getServer().getPlayer(args[2]);
                                 if (target != null) {
                                     if (plugin.isInt(args[3]) && !args[3].contains("-")) {
                                         if (args[1].equalsIgnoreCase("kills")) {
@@ -464,7 +464,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 if (args[1].equalsIgnoreCase("give")) {
                                     if (sender.hasPermission("pvplevels.command.boosters.give")) {
                                         if (args.length == 6) {
-                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            Player target = plugin.getServer().getPlayer(args[2]);
                                             if (target != null) {
                                                 if (args[3].equalsIgnoreCase("global")) {
                                                     if (plugin.isDouble(args[4])) {
@@ -662,7 +662,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 if (args[1].equalsIgnoreCase("set")) {
                                     if (sender.hasPermission("pvplevels.command.coins.set")) {
                                         if (args.length == 4) {
-                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            Player target = plugin.getServer().getPlayer(args[2]);
                                             if (target != null) {
                                                 if (plugin.isInt(args[3])) {
                                                     long set = Long.parseLong(args[3]);
@@ -706,7 +706,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 } else if (args[1].equalsIgnoreCase("add")) {
                                     if (sender.hasPermission("pvplevels.command.coins.add")) {
                                         if (args.length == 4) {
-                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            Player target = plugin.getServer().getPlayer(args[2]);
                                             if (target != null) {
                                                 if (plugin.isInt(args[3])) {
                                                     PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
@@ -750,7 +750,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 } else if (args[1].equalsIgnoreCase("remove")) {
                                     if (sender.hasPermission("pvplevels.command.coins.remove")) {
                                         if (args.length == 4) {
-                                            Player target = PvPLevels.call.getServer().getPlayer(args[2]);
+                                            Player target = plugin.getServer().getPlayer(args[2]);
                                             if (target != null) {
                                                 if (plugin.isInt(args[3])) {
                                                     PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
@@ -824,7 +824,7 @@ public class PvPLevels_Command implements CommandExecutor {
         if (sender.hasPermission("pvplevels.command." + type)) {
             if (args.length == 4) {
                 if (plugin.config.get.contains("xp." + args[2])) {
-                    Player target = PvPLevels.call.getServer().getPlayer(args[3]);
+                    Player target = plugin.getServer().getPlayer(args[3]);
                     if (target != null) {
                         if (type.equalsIgnoreCase("get")) {
                             plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], "", target, true);
@@ -986,9 +986,9 @@ public class PvPLevels_Command implements CommandExecutor {
 
     private void broadcast(String text, String[] args) {
         if (args[1].equalsIgnoreCase("null")) {
-            PvPLevels.call.getServer().broadcastMessage(text);
+            plugin.getServer().broadcastMessage(text);
         } else {
-            PvPLevels.call.getServer().broadcast(text, args[1]);
+            plugin.getServer().broadcast(text, args[1]);
         }
     }
 }

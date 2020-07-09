@@ -18,7 +18,7 @@ public class BlockBreak implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent e) {
         Location location = e.getBlock().getLocation();
         Player player = e.getPlayer();

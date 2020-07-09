@@ -14,7 +14,7 @@ public class PlayerLogin implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onLogin(PlayerLoginEvent e) {
         String uuid = e.getPlayer().getUniqueId().toString();
         plugin.database.insert(uuid);

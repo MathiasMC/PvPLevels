@@ -49,7 +49,7 @@ public class SystemManager {
             if (value > 0 && !fileConfiguration.contains(path + "." + group + "." + value)) {
                 return;
             }
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(PvPLevels.call, () -> {
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     String commandPath = path + "." + group + "." + key;
                     if (value > 0) {
                         commandPath = path + "." + group + "." + value + "." + key;
