@@ -3,6 +3,7 @@ package me.MathiasMC.PvPLevels.placeholders;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
 
@@ -89,6 +90,42 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         }
         if(identifier.equals("date")){
             return String.valueOf(plugin.statsManager.date(player.getUniqueId().toString()));
+        }
+        if (identifier.equals("helmet_remaining_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getHelmet())[0]);
+        }
+        if (identifier.equals("helmet_max_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getHelmet())[1]);
+        }
+        if (identifier.equals("chestplate_remaining_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getChestplate())[0]);
+        }
+        if (identifier.equals("chestplate_max_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getChestplate())[1]);
+        }
+        if (identifier.equals("leggings_remaining_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getLeggings())[0]);
+        }
+        if (identifier.equals("leggings_max_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getLeggings())[1]);
+        }
+        if (identifier.equals("boots_remaining_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getBoots())[0]);
+        }
+        if (identifier.equals("boots_max_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getBoots())[1]);
+        }
+        if (identifier.equals("item_in_mainhand_remaining_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[0]);
+        }
+        if (identifier.equals("item_in_mainhand_max_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[1]);
+        }
+        if (identifier.equals("item_in_offhand_remaining_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[0]);
+        }
+        if (identifier.equals("item_in_offhand_max_durability")) {
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[1]);
         }
         if(identifier.equals("global_booster")){
             return plugin.boostersManager.getGlobalPlaceholder();

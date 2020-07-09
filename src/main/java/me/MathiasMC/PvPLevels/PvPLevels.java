@@ -45,6 +45,7 @@ public class PvPLevels extends JavaPlugin {
     public EntityManager entityManager;
     public KillSessionUtils killSessionUtils;
     public BoostersManager boostersManager;
+    public PlaceholderManager placeholderManager;
     public GUIFolder guiFolder;
     public Database database;
     public final ConsoleCommandSender consoleCommandSender = Bukkit.getServer().getConsoleSender();
@@ -71,6 +72,7 @@ public class PvPLevels extends JavaPlugin {
         entityManager = new EntityManager(this);
         killSessionUtils = new KillSessionUtils(this);
         boostersManager = new BoostersManager(this);
+        placeholderManager = new PlaceholderManager(this);
         config = new Config(this);
         language = new Language(this);
         levels = new Levels(this);
