@@ -182,7 +182,13 @@ public class PvPLevels extends JavaPlugin {
     }
 
     public String PlaceholderReplace(Player player, String message) {
-        message = replacePlaceholders(message, player.getUniqueId().toString(), player.getName(), statsManager.group(player), statsManager.group_to(player));
+        String group = "";
+        String group_to = "";
+        if (list().contains(player.getUniqueId().toString())) {
+            group = statsManager.group(player);
+            group_to = statsManager.group_to(player);
+        }
+        message = replacePlaceholders(message, player.getUniqueId().toString(), player.getName(), group, group_to);
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, message);
         }
@@ -198,26 +204,29 @@ public class PvPLevels extends JavaPlugin {
     }
 
     private String replacePlaceholders(String message, String uuid, String name, String group, String group_to) {
-        PlayerConnect playerConnect = get(uuid);
+        if (list().contains(uuid)) {
+            PlayerConnect playerConnect = get(uuid);
+            message = message
+                    .replace("{pvplevels_kills}", String.valueOf(playerConnect.kills()))
+                    .replace("{pvplevels_deaths}", String.valueOf(playerConnect.deaths()))
+                    .replace("{pvplevels_xp}", String.valueOf(playerConnect.xp()))
+                    .replace("{pvplevels_xp_required}", String.valueOf(statsManager.xp_required(uuid)))
+                    .replace("{pvplevels_xp_progress}", String.valueOf(statsManager.xp_progress(uuid)))
+                    .replace("{pvplevels_xp_progress_style}", String.valueOf(statsManager.xp_progress_style(uuid)))
+                    .replace("{pvplevels_level}", String.valueOf(playerConnect.level()))
+                    .replace("{pvplevels_level_to}", String.valueOf(playerConnect.level() + 1))
+                    .replace("{pvplevels_kdr}", statsManager.kdr(uuid))
+                    .replace("{pvplevels_kill_factor}", statsManager.kill_factor(uuid))
+                    .replace("{pvplevels_group}", group)
+                    .replace("{pvplevels_group_to}", group_to)
+                    .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()))
+                    .replace("{pvplevels_coins}", String.valueOf(playerConnect.coins()))
+                    .replace("{pvplevels_time}", statsManager.time(uuid))
+                    .replace("{pvplevels_date}", statsManager.date(uuid));
+        }
         message = message
                 .replace("{pvplevels_player}", name)
-                .replace("{pvplevels_uuid}", uuid)
-                .replace("{pvplevels_kills}", String.valueOf(playerConnect.kills()))
-                .replace("{pvplevels_deaths}", String.valueOf(playerConnect.deaths()))
-                .replace("{pvplevels_xp}", String.valueOf(playerConnect.xp()))
-                .replace("{pvplevels_xp_required}", String.valueOf(statsManager.xp_required(uuid)))
-                .replace("{pvplevels_xp_progress}", String.valueOf(statsManager.xp_progress(uuid)))
-                .replace("{pvplevels_xp_progress_style}", String.valueOf(statsManager.xp_progress_style(uuid)))
-                .replace("{pvplevels_level}", String.valueOf(playerConnect.level()))
-                .replace("{pvplevels_level_to}", String.valueOf(playerConnect.level() + 1))
-                .replace("{pvplevels_kdr}", statsManager.kdr(uuid))
-                .replace("{pvplevels_kill_factor}", statsManager.kill_factor(uuid))
-                .replace("{pvplevels_group}", group)
-                .replace("{pvplevels_group_to}", group_to)
-                .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()))
-                .replace("{pvplevels_coins}", String.valueOf(playerConnect.coins()))
-                .replace("{pvplevels_time}", statsManager.time(uuid))
-                .replace("{pvplevels_date}", statsManager.date(uuid));
+                .replace("{pvplevels_uuid}", uuid);
         return message;
     }
 
