@@ -24,12 +24,13 @@ public class EntityDeath implements Listener {
         if (entity == null) {
             return;
         }
-        if (plugin.lastDamagers.containsKey(entity.getUniqueId().toString())) {
-            Player target = plugin.getServer().getPlayer(UUID.fromString(plugin.lastDamagers.get(entity.getUniqueId().toString())));
+        String uuid = entity.getUniqueId().toString();
+        if (plugin.lastDamagers.containsKey(uuid)) {
+            Player target = plugin.getServer().getPlayer(UUID.fromString(plugin.lastDamagers.get(uuid)));
             if (target != null && target.isOnline()) {
                 plugin.entityManager.getXP(e.getEntity(), target);
             }
-            plugin.lastDamagers.remove(entity.getUniqueId().toString());
+            plugin.lastDamagers.remove(uuid);
             return;
         }
         plugin.entityManager.getXP(entity, entity.getKiller());
