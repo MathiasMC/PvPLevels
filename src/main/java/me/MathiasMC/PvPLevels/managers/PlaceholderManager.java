@@ -35,10 +35,14 @@ public class PlaceholderManager {
         return false;
     }
 
-    public ItemStack getHandItemStack(final Player player) {
+    public ItemStack getHandItemStack(final Player player, final boolean main) {
         ItemStack itemStack;
         try {
-            itemStack = player.getInventory().getItemInMainHand();
+            if (main) {
+                itemStack = player.getInventory().getItemInMainHand();
+            } else {
+                itemStack = player.getInventory().getItemInOffHand();
+            }
         } catch (NoSuchMethodError error) {
             itemStack = player.getInventory().getItemInHand();
         }

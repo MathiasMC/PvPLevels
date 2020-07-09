@@ -116,16 +116,16 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getBoots())[1]);
         }
         if (identifier.equals("item_in_mainhand_remaining_durability")) {
-            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[0]);
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player, true))[0]);
         }
         if (identifier.equals("item_in_mainhand_max_durability")) {
-            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[1]);
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player, true))[1]);
         }
         if (identifier.equals("item_in_offhand_remaining_durability")) {
-            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[0]);
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player, false))[0]);
         }
         if (identifier.equals("item_in_offhand_max_durability")) {
-            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player))[1]);
+            return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player, false))[1]);
         }
         if(identifier.equals("global_booster")){
             return plugin.boostersManager.getGlobalPlaceholder();
