@@ -85,7 +85,10 @@ public class GUI implements InventoryHolder {
             if (!plugin.guiPageSort.containsKey(player.getUniqueId().toString())) {
                 plugin.guiPageSort.put(player.getUniqueId().toString(), fileConfiguration.getString("settings.profile-all.default-sort"));
             }
-            List<String> map = new ArrayList<String>(plugin.statsManager.getTopMap(plugin.guiPageSort.get(player.getUniqueId().toString())).keySet());
+            if (!plugin.guiPageSortReverse.containsKey(player.getUniqueId().toString())) {
+                plugin.guiPageSortReverse.put(player.getUniqueId().toString(), fileConfiguration.getBoolean("settings.profile-all.default-reverse"));
+            }
+            List<String> map = new ArrayList<String>(plugin.statsManager.getTopMap(plugin.guiPageSort.get(player.getUniqueId().toString()), plugin.guiPageSortReverse.get(player.getUniqueId().toString())).keySet());
             for (String s : map) {
                 OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(s));
                 ItemStack itemStack = plugin.getID(fileConfiguration.getString("settings.profile-all.MATERIAL"), fileConfiguration.getInt("settings.profile-all.AMOUNT"));

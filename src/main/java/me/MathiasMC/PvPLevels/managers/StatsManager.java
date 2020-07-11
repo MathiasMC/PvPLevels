@@ -42,9 +42,14 @@ public class StatsManager {
         return String.valueOf(0L);
     }
 
-    public Long xp_required(String uuid) {
+    public Long xp_required(String uuid, boolean next) {
         PlayerConnect playerConnect = plugin.get(uuid);
-        Long level = playerConnect.level();
+        Long level;
+        if (!next) {
+            level = playerConnect.level();
+        } else {
+            level = playerConnect.level() + 1;
+        }
         if (plugin.levels.get.getConfigurationSection("levels").getKeys(false).size() > level) {
             return plugin.levels.get.getLong("levels." + (level + 1) + ".xp");
         }
@@ -112,17 +117,17 @@ public class StatsManager {
         return prefix_name;
     }
 
-    public String getTopValue(String type, int number, boolean key) {
+    public String getTopValue(String type, int number, boolean key, boolean reverse) {
         List<String> map;
         if (key) {
-            map = new ArrayList<String>(getTopMap(type).keySet());
+            map = new ArrayList<String>(getTopMap(type, reverse).keySet());
             if (map.size() > number) {
                 return plugin.getServer().getOfflinePlayer(UUID.fromString(map.get(number))).getName();
             } else {
                 return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("pvptop." + type + ".name"));
             }
         }
-        map = new ArrayList<String>(getTopMap(type).values());
+        map = new ArrayList<String>(getTopMap(type, reverse).values());
         if (map.size() > number) {
             return String.valueOf(map.get(number));
         } else {
@@ -153,7 +158,7 @@ public class StatsManager {
         }
     }
 
-    public LinkedHashMap getTopMap(String type) {
+    public LinkedHashMap getTopMap(String type, boolean reverse) {
         Map<String, Long> unsorted = new HashMap<>();
         Map<String, Double> unsortedDouble = new HashMap<>();
         for (String uuid : plugin.list()) {
@@ -162,18 +167,27 @@ public class StatsManager {
             if (type.equalsIgnoreCase("xp") && !plugin.config.get.getStringList("pvptop.xp.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).xp()); }
             if (type.equalsIgnoreCase("level") && !plugin.config.get.getStringList("pvptop.level.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).level()); }
             if (type.equalsIgnoreCase("killstreak") && !plugin.config.get.getStringList("pvptop.killstreak.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).killstreak()); }
+            if (type.equalsIgnoreCase("killstreak_top") && !plugin.config.get.getStringList("pvptop.killstreak_top.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).killstreak_top()); }
             if (type.equalsIgnoreCase("lastseen")) { unsorted.put(uuid, plugin.get(uuid).getTime().getTime()); }
             if (type.equalsIgnoreCase("kdr")) { unsortedDouble.put(uuid, Double.parseDouble(plugin.statsManager.kdr(uuid))); }
             if (type.equalsIgnoreCase("killfactor")) { unsortedDouble.put(uuid, Double.parseDouble(plugin.statsManager.kill_factor(uuid))); }
-            if (type.equalsIgnoreCase("xprequired")) { unsorted.put(uuid, plugin.statsManager.xp_required(uuid)); }
+            if (type.equalsIgnoreCase("xprequired")) { unsorted.put(uuid, plugin.statsManager.xp_required(uuid, false)); }
         }
         if (type.equalsIgnoreCase("kdr") || type.equalsIgnoreCase("killfactor")) {
             LinkedHashMap<String, Double> sortedDouble = new LinkedHashMap<>();
-            unsortedDouble.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sortedDouble.put(x.getKey(), x.getValue()));
+            if (reverse) {
+                unsortedDouble.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sortedDouble.put(x.getKey(), x.getValue()));
+            } else {
+                unsortedDouble.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.naturalOrder())).forEachOrdered(x -> sortedDouble.put(x.getKey(), x.getValue()));
+            }
             return sortedDouble;
         } else {
             LinkedHashMap<String, Long> sorted = new LinkedHashMap<>();
-            unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
+            if (reverse) {
+                unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
+            } else {
+                unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.naturalOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
+            }
             return sorted;
         }
     }

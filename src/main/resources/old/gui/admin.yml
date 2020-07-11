@@ -5,6 +5,7 @@ settings:
     INDEX: 9
     PAGE: 36
     default-sort: lastseen
+    default-reverse: true
     NAME: '&6{pvplevels_player}'
     LORES:
       - '&eKills: &7> &6{pvplevels_kills}'
@@ -123,5 +124,15 @@ sortXPRequired:
   POSITION: 8
   OPTIONS:
     - SORT_XPREQUIRED
+  COMMANDS:
+    - pvplevels gui open admin.yml {pvplevels_player}
+sortReverse:
+  NAME: '&f&lSort &7&l- &b&lReverse order'
+  LORES: []
+  MATERIAL: '340:0'
+  AMOUNT: 1
+  POSITION: 49
+  OPTIONS:
+    - SORT_REVERSE
   COMMANDS:
     - pvplevels gui open admin.yml {pvplevels_player}

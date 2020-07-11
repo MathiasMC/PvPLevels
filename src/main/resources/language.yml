@@ -28,8 +28,7 @@ player:
         - '&7&l> &f/pvplevels item set <slot> <true, false override> <player> <item> <amount> <name\nlore\nlore2>'
         - '&7&l> &f/pvplevels item add <player> <item> <amount> <name\nlore\nlore2>'
         - '&7&l> &f/pvplevels set/add/remove kills/deaths/xp/level <player> <amount>'
-        - '&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0>
-        <time>'
+        - '&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0> <time>'
         - '&7&l> &f/pvplevels coins set/add/remove <player> <amount>'
         - '&7&l> &f/pvplevels gui open <fileName> <player>'
         - '&7&l> &f/pvplevels player get <xpType> <player>'
@@ -39,7 +38,7 @@ player:
         - '&7&l> &f/pvpprofile'
         - '&7&l> &f/pvpadmin'
         - '&7&l> &f/pvpshop'
-        - '&7&l> &f/pvptop kills/deaths/xp/level'
+        - '&7&l> &f/pvptop kills/deaths/xp/level/killstreak/killstreak_top'
         - '&7&l> &f/pvpstats <player>'
         - '&7&l> &f/pvplevels message <player> <text>'
         - '&7&l> &f/pvplevels broadcast <null/permission> <text>'
@@ -324,6 +323,7 @@ player:
         - '&7&l> &eKDR: &6{pvplevels_kdr}'
         - '&7&l> &eKill Factor: &6{pvplevels_kill_factor}'
         - '&7&l> &eKillStreak: &6{pvplevels_killstreak}'
+        - '&7&l> &eTop KillStreak: &6{pvplevels_killstreak_top}'
         - '&7&l> &eCoins: &6{pvplevels_coins}'
         - '&7&l> &eRequired XP: &6{pvplevels_xp_required}'
         - '&7&l> &eProgress: {pvplevels_xp_progress_style} &6{pvplevels_xp_progress}%'
@@ -345,6 +345,7 @@ player:
         - '&7&l> &eKDR: &6{pvplevels_kdr}'
         - '&7&l> &eKill Factor: &6{pvplevels_kill_factor}'
         - '&7&l> &eKillStreak: &6{pvplevels_killstreak}'
+        - '&7&l> &eTop KillStreak: &6{pvplevels_killstreak_top}'
         - '&7&l> &eCoins: &6{pvplevels_coins}'
         - '&7&l> &eRequired XP: &6{pvplevels_xp_required}'
         - '&7&l> &eProgress: {pvplevels_xp_progress_style} &6{pvplevels_xp_progress}%'
@@ -399,8 +400,32 @@ player:
         - '&c&m---------------------------------------------'
       permission:
         - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    killstreak:
+      message:
+        - '&c&m---------------------------------------------'
+        - '&7[&b&lCurrent Top KillStreak&7]'
+        - '&7[&a1&7] &e%pvplevels_top_1_killstreak_name% &6 > &b%pvplevels_top_1_killstreak%'
+        - '&7[&a2&7] &e%pvplevels_top_2_killstreak_name% &6 > &b%pvplevels_top_2_killstreak%'
+        - '&7[&a3&7] &e%pvplevels_top_3_killstreak_name% &6 > &b%pvplevels_top_3_killstreak%'
+        - '&7[&a4&7] &e%pvplevels_top_4_killstreak_name% &6 > &b%pvplevels_top_4_killstreak%'
+        - '&7[&a5&7] &e%pvplevels_top_5_killstreak_name% &6 > &b%pvplevels_top_5_killstreak%'
+        - '&c&m---------------------------------------------'
+      permission:
+        - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    killstreak_top:
+      message:
+        - '&c&m---------------------------------------------'
+        - '&7[&b&lAll Time Top KillStreak&7]'
+        - '&7[&a1&7] &e%pvplevels_top_1_killstreak_top_name% &6 > &b%pvplevels_top_1_killstreak_top%'
+        - '&7[&a2&7] &e%pvplevels_top_2_killstreak_top_name% &6 > &b%pvplevels_top_2_killstreak_top%'
+        - '&7[&a3&7] &e%pvplevels_top_3_killstreak_top_name% &6 > &b%pvplevels_top_3_killstreak_top%'
+        - '&7[&a4&7] &e%pvplevels_top_4_killstreak_top_name% &6 > &b%pvplevels_top_4_killstreak_top%'
+        - '&7[&a5&7] &e%pvplevels_top_5_killstreak_top_name% &6 > &b%pvplevels_top_5_killstreak_top%'
+        - '&c&m---------------------------------------------'
+      permission:
+        - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvptop kills/deaths/xp/level'
+      - '&7[&bPvPLevels&7] &cUsage: /pvptop kills/deaths/xp/level/killstreak/killstreak_top'
     permission:
       - '&7[&bPvPLevels&7] &cYou dont have access to use this command!'
   pvpboosters:
@@ -475,8 +500,7 @@ console:
         - '&7&l> &f/pvplevels item set <slot> <true, false override> <player> <item> <amount> <name\nlore\nlore2>'
         - '&7&l> &f/pvplevels item add <player> <item> <amount> <name\nlore\nlore2>'
         - '&7&l> &f/pvplevels set/add/remove kills/deaths/xp/level <player> <amount>'
-        - '&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0>
-        <time>'
+        - '&7&l> &f/pvplevels boosters give <player> <global-personal> <booster 0.0> <time>'
         - '&7&l> &f/pvplevels coins set/add/remove <player> <amount>'
         - '&7&l> &f/pvplevels gui open <fileName> <player>'
         - '&7&l> &f/pvplevels player get <xpType> <player>'
@@ -486,7 +510,7 @@ console:
         - '&7&l> &f/pvpprofile'
         - '&7&l> &f/pvpadmin'
         - '&7&l> &f/pvpshop'
-        - '&7&l> &f/pvptop kills/deaths/xp/level <player>'
+        - '&7&l> &f/pvptop kills/deaths/xp/level/killstreak/killstreak_top <player>'
         - '&7&l> &f/pvpstats <player>'
         - '&7&l> &f/pvplevels generate <levels>'
         - '&7&l> &f/pvplevels message <player> <text>'
@@ -697,6 +721,7 @@ console:
       - '&7&l> &eKDR: &6{pvplevels_kdr}'
       - '&7&l> &eKill Factor: &6{pvplevels_kill_factor}'
       - '&7&l> &eKillStreak: &6{pvplevels_killstreak}'
+      - '&7&l> &eTop KillStreak: &6{pvplevels_killstreak_top}'
       - '&7&l> &eCoins: &6{pvplevels_coins}'
       - '&7&l> &eRequired XP: &6{pvplevels_xp_required}'
       - '&7&l> &eProgress: {pvplevels_xp_progress_style} &6{pvplevels_xp_progress}%'
@@ -743,8 +768,28 @@ console:
         - '&7[&a4&7] &e%pvplevels_top_4_level_name% &6 > &b%pvplevels_top_4_level%'
         - '&7[&a5&7] &e%pvplevels_top_5_level_name% &6 > &b%pvplevels_top_5_level%'
         - '&c&m---------------------------------------------'
+    killstreak:
+      message:
+        - '&c&m---------------------------------------------'
+        - '&7[&b&lCurrent Top KillStreak&7]'
+        - '&7[&a1&7] &e%pvplevels_top_1_killstreak_name% &6 > &b%pvplevels_top_1_killstreak%'
+        - '&7[&a2&7] &e%pvplevels_top_2_killstreak_name% &6 > &b%pvplevels_top_2_killstreak%'
+        - '&7[&a3&7] &e%pvplevels_top_3_killstreak_name% &6 > &b%pvplevels_top_3_killstreak%'
+        - '&7[&a4&7] &e%pvplevels_top_4_killstreak_name% &6 > &b%pvplevels_top_4_killstreak%'
+        - '&7[&a5&7] &e%pvplevels_top_5_killstreak_name% &6 > &b%pvplevels_top_5_killstreak%'
+        - '&c&m---------------------------------------------'
+    killstreak_top:
+      message:
+        - '&c&m---------------------------------------------'
+        - '&7[&b&lAll Time Top KillStreak&7]'
+        - '&7[&a1&7] &e%pvplevels_top_1_killstreak_top_name% &6 > &b%pvplevels_top_1_killstreak_top%'
+        - '&7[&a2&7] &e%pvplevels_top_2_killstreak_top_name% &6 > &b%pvplevels_top_2_killstreak_top%'
+        - '&7[&a3&7] &e%pvplevels_top_3_killstreak_top_name% &6 > &b%pvplevels_top_3_killstreak_top%'
+        - '&7[&a4&7] &e%pvplevels_top_4_killstreak_top_name% &6 > &b%pvplevels_top_4_killstreak_top%'
+        - '&7[&a5&7] &e%pvplevels_top_5_killstreak_top_name% &6 > &b%pvplevels_top_5_killstreak_top%'
+        - '&c&m---------------------------------------------'
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvptop kills/deaths/xp/level <player>'
+      - '&7[&bPvPLevels&7] &cUsage: /pvptop kills/deaths/xp/level/killstreak/killstreak_top <player>'
     online:
       - '&7[&bPvPLevels&7] &cThe player is not online!'
   pvpboosters:

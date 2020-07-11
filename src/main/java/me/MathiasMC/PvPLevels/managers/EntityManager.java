@@ -63,7 +63,11 @@ public class EntityManager {
                         }
                     }
                     if (plugin.config.get.getBoolean("events.KillStreaks")) {
-                        playerConnect.killstreak(playerConnect.killstreak() + 1L);
+                        long currentKillStreak = playerConnect.killstreak() + 1L;
+                        playerConnect.killstreak(currentKillStreak);
+                        if (currentKillStreak > playerConnect.killstreak_top()) {
+                            playerConnect.killstreak_top(currentKillStreak);
+                        }
                         plugin.systemManager.executeCommands(killer, plugin.config.get, "killstreaks", "commands", playerConnect.killstreak());
                     }
                     if (plugin.config.get.getBoolean("events.PlayerRewards")) {

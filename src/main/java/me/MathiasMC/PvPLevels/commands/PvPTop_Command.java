@@ -70,6 +70,22 @@ public class PvPTop_Command implements CommandExecutor {
                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                 }
                             }
+                        } else if (args[0].equalsIgnoreCase("killstreak")) {
+                            if (sender.hasPermission("pvplevels.command.pvptop.killstreak")) {
+                                message(player, "player.pvptop.killstreak.message");
+                            } else {
+                                for (String message : plugin.language.get.getStringList("player.pvptop.killstreak.permission")) {
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                }
+                            }
+                        } else if (args[0].equalsIgnoreCase("killstreak_top")) {
+                            if (sender.hasPermission("pvplevels.command.pvptop.killstreak_top")) {
+                                message(player, "player.pvptop.killstreak_top.message");
+                            } else {
+                                for (String message : plugin.language.get.getStringList("player.pvptop.killstreak_top.permission")) {
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                }
+                            }
                         } else {
                             for (String message : plugin.language.get.getStringList("player.pvptop.usage")) {
                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
@@ -92,6 +108,10 @@ public class PvPTop_Command implements CommandExecutor {
                                 message(target, "console.pvptop.xp.message");
                             } else if (args[0].equalsIgnoreCase("level")) {
                                 message(target, "console.pvptop.level.message");
+                            } else if (args[0].equalsIgnoreCase("killstreak")) {
+                                message(target, "console.pvptop.killstreak.message");
+                            } else if (args[0].equalsIgnoreCase("killstreak_top")) {
+                                message(target, "console.pvptop.killstreak_top.message");
                             } else {
                                 for (String message : plugin.language.get.getStringList("console.pvptop.usage")) {
                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));

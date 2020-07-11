@@ -189,7 +189,7 @@ kill-session:
       - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou have been removed
         from the kill session
 
-# This is used by /pvptop
+# This is used by /pvptop, top 10 placeholders
 pvptop:
   kills:
     name: '&cNone'
@@ -212,6 +212,11 @@ pvptop:
     excluded:
       - uuid
   killstreak:
+    name: '&cNone'
+    value: '&cNone'
+    excluded:
+      - uuid
+  killstreak_top:
     name: '&cNone'
     value: '&cNone'
     excluded:

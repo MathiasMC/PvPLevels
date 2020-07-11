@@ -49,6 +49,14 @@ public class PvPLevelsAPI {
         PvPLevels.call.get(uuid).killstreak(set);
     }
 
+    public Long killstreak_top(String uuid) {
+        return PvPLevels.call.get(uuid).killstreak_top();
+    }
+
+    public void killstreak_top(String uuid, Long set) {
+        PvPLevels.call.get(uuid).killstreak_top(set);
+    }
+
     public Long coins(String uuid) {
         return PvPLevels.call.get(uuid).coins();
     }
@@ -69,8 +77,8 @@ public class PvPLevelsAPI {
         return PvPLevels.call.statsManager.xp_progress(uuid);
     }
 
-    public Long xp_required(String uuid) {
-        return PvPLevels.call.statsManager.xp_required(uuid);
+    public Long xp_required(String uuid, boolean next) {
+        return PvPLevels.call.statsManager.xp_required(uuid, next);
     }
 
     public String xp_progress_style(String uuid) {
@@ -93,12 +101,12 @@ public class PvPLevelsAPI {
         return PvPLevels.call.list();
     }
 
-    public String getTopValue(String type, int number, boolean key) {
-        return PvPLevels.call.statsManager.getTopValue(type, number, key);
+    public String getTopValue(String type, int number, boolean key, boolean reverse) {
+        return PvPLevels.call.statsManager.getTopValue(type, number, key, reverse);
     }
 
-    public LinkedHashMap getTopMap(String type) {
-        return PvPLevels.call.statsManager.getTopMap(type);
+    public LinkedHashMap getTopMap(String type, boolean reverse) {
+        return PvPLevels.call.statsManager.getTopMap(type, reverse);
     }
 
     public Double getPersonalBooster(String uuid) {

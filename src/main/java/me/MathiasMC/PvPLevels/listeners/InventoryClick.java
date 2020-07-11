@@ -108,6 +108,15 @@ public class InventoryClick implements Listener {
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KDR")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "kdr"); }
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLFACTOR")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "killfactor"); }
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_XPREQUIRED")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "xprequired"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_REVERSE")) {
+                                        if (plugin.guiPageSortReverse.containsKey(player.getUniqueId().toString())) {
+                                            if (plugin.guiPageSortReverse.get(player.getUniqueId().toString()).equals(true)) {
+                                                plugin.guiPageSortReverse.put(player.getUniqueId().toString(), false);
+                                            } else {
+                                                plugin.guiPageSortReverse.put(player.getUniqueId().toString(), true);
+                                            }
+                                        }
+                                    }
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("CLOSE")) { player.closeInventory(); }
                                 }
                                 if (fileConfiguration.contains(keyItem + ".COMMANDS")) {

@@ -55,6 +55,7 @@ public class PvPLevels extends JavaPlugin {
     public final HashMap<String, GUI> guiList = new HashMap<>();
     public final HashMap<String, Integer> guiPageID = new HashMap<>();
     public final HashMap<String, String> guiPageSort = new HashMap<>();
+    public final HashMap<String, Boolean> guiPageSortReverse = new HashMap<>();
     public final Map<String, String> lastDamagers = new HashMap<>();
     public final HashMap<String, Location> wandPos1 = new HashMap<>();
     public final HashMap<String, Location> wandPos2 = new HashMap<>();
@@ -212,7 +213,8 @@ public class PvPLevels extends JavaPlugin {
                     .replace("{pvplevels_kills}", String.valueOf(playerConnect.kills()))
                     .replace("{pvplevels_deaths}", String.valueOf(playerConnect.deaths()))
                     .replace("{pvplevels_xp}", String.valueOf(playerConnect.xp()))
-                    .replace("{pvplevels_xp_required}", String.valueOf(statsManager.xp_required(uuid)))
+                    .replace("{pvplevels_xp_required}", String.valueOf(statsManager.xp_required(uuid, false)))
+                    .replace("{pvplevels_xp_required_next}", String.valueOf(statsManager.xp_required(uuid, true)))
                     .replace("{pvplevels_xp_progress}", String.valueOf(statsManager.xp_progress(uuid)))
                     .replace("{pvplevels_xp_progress_style}", String.valueOf(statsManager.xp_progress_style(uuid)))
                     .replace("{pvplevels_level}", String.valueOf(playerConnect.level()))
@@ -222,6 +224,7 @@ public class PvPLevels extends JavaPlugin {
                     .replace("{pvplevels_group}", group)
                     .replace("{pvplevels_group_to}", group_to)
                     .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()))
+                    .replace("{pvplevels_killstreak_top}", String.valueOf(playerConnect.killstreak_top()))
                     .replace("{pvplevels_coins}", String.valueOf(playerConnect.coins()))
                     .replace("{pvplevels_time}", statsManager.time(uuid))
                     .replace("{pvplevels_date}", statsManager.date(uuid));
