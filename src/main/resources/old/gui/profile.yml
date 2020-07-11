@@ -21,6 +21,7 @@ profile:
     - '&eKDR: &7> &6{pvplevels_kdr}'
     - '&eKill Factor: &7> &6{pvplevels_kill_factor}'
     - '&eKillStreak: &7> &6{pvplevels_killstreak}'
+    - '&eTop KillStreak: &7> &6{pvplevels_killstreak_top}'
     - '&eCoins: &7> &6{pvplevels_coins}'
     - '&eXP Required: &7> &6{pvplevels_xp_required}'
     - '&eXP Progress: &7> &6{pvplevels_xp_progress}%'

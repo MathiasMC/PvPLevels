@@ -983,9 +983,9 @@ public class PvPLevels_Command implements CommandExecutor {
                         plugin.xpManager.loseLevel(playerConnect, playerConnect.level() - 1, target, null);
                     }
                 } else {
-                    Long lowerLevel = playerConnect.level() - 1;
+                    long lowerLevel = playerConnect.level() - 1;
                     if (plugin.levels.get.contains("levels." + lowerLevel + ".xp")) {
-                        Long all = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp") - Long.parseLong(args[3]);
+                        long all = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp") - Long.parseLong(args[3]);
                         if (all >= 0) {
                             playerConnect.xp(all);
                         } else {

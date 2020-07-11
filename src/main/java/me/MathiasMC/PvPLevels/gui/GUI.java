@@ -66,7 +66,12 @@ public class GUI implements InventoryHolder {
     private void index(Player player) {
         for (String key : fileConfiguration.getConfigurationSection("").getKeys(false)) {
             if (!key.equalsIgnoreCase("settings")) {
-                inventory.setItem(fileConfiguration.getInt(key + ".POSITION"), getItem(fileConfiguration.getString(key + ".MATERIAL"), fileConfiguration.getInt(key + ".AMOUNT"), fileConfiguration.getString(key + ".NAME"), fileConfiguration.getStringList(key + ".LORES"), player, key, fileConfiguration, "", 0));
+                inventory.setItem(fileConfiguration.getInt(key + ".POSITION"),
+                        getItem(fileConfiguration.getString(key + ".MATERIAL"),
+                                fileConfiguration.getInt(key + ".AMOUNT"),
+                                fileConfiguration.getString(key + ".NAME"),
+                                fileConfiguration.getStringList(key + ".LORES"),
+                                player, key, fileConfiguration, "", 0));
             }
         }
         if (fileConfiguration.contains("settings.global-boosters")) {
@@ -74,21 +79,26 @@ public class GUI implements InventoryHolder {
         } else if (fileConfiguration.contains("settings.personal-boosters")) {
             boostersGUI(player, "personal-settings", "personal-boosters", "personal");
         } else if (fileConfiguration.contains("settings.profile-all")) {
+            String uuid = player.getUniqueId().toString();
             ArrayList<ItemStack> profiles = new ArrayList<>();
             ArrayList<Integer> perPage = new ArrayList<>();
-            if (!plugin.guiPageID.containsKey(player.getUniqueId().toString())) {
-                plugin.guiPageID.put(player.getUniqueId().toString(), 1);
+
+            if (!plugin.guiPageID.containsKey(uuid)) { plugin.guiPageID.put(uuid, 1); }
+
+            if (plugin.guiPageID.get(uuid) > 1) {
+                inventory.setItem(fileConfiguration.getInt("settings.profile-all.back.POSITION"),
+                        getItem(fileConfiguration.getString("settings.profile-all.back.MATERIAL"),
+                                fileConfiguration.getInt("settings.profile-all.back.AMOUNT"),
+                                fileConfiguration.getString("settings.profile-all.back.NAME"),
+                                fileConfiguration.getStringList("settings.profile-all.back.LORES"),
+                                player, "settings.profile-all.back", fileConfiguration, "", 0));
             }
-            if (plugin.guiPageID.get(player.getUniqueId().toString()) > 1) {
-                inventory.setItem(fileConfiguration.getInt("settings.profile-all.back.POSITION"), getItem(fileConfiguration.getString("settings.profile-all.back.MATERIAL"), fileConfiguration.getInt("settings.profile-all.back.AMOUNT"), fileConfiguration.getString("settings.profile-all.back.NAME"), fileConfiguration.getStringList("settings.profile-all.back.LORES"), player, "settings.profile-all.back", fileConfiguration, "", 0));
-            }
-            if (!plugin.guiPageSort.containsKey(player.getUniqueId().toString())) {
-                plugin.guiPageSort.put(player.getUniqueId().toString(), fileConfiguration.getString("settings.profile-all.default-sort"));
-            }
-            if (!plugin.guiPageSortReverse.containsKey(player.getUniqueId().toString())) {
-                plugin.guiPageSortReverse.put(player.getUniqueId().toString(), fileConfiguration.getBoolean("settings.profile-all.default-reverse"));
-            }
-            List<String> map = new ArrayList<String>(plugin.statsManager.getTopMap(plugin.guiPageSort.get(player.getUniqueId().toString()), plugin.guiPageSortReverse.get(player.getUniqueId().toString())).keySet());
+
+            if (!plugin.guiPageSort.containsKey(uuid)) { plugin.guiPageSort.put(uuid, fileConfiguration.getString("settings.profile-all.default-sort")); }
+
+            if (!plugin.guiPageSortReverse.containsKey(uuid)) { plugin.guiPageSortReverse.put(uuid, fileConfiguration.getBoolean("settings.profile-all.default-reverse")); }
+
+            List<String> map = new ArrayList<String>(plugin.statsManager.getTopMap(plugin.guiPageSort.get(uuid), plugin.guiPageSortReverse.get(uuid)).keySet());
             for (String s : map) {
                 OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(s));
                 ItemStack itemStack = plugin.getID(fileConfiguration.getString("settings.profile-all.MATERIAL"), fileConfiguration.getInt("settings.profile-all.AMOUNT"));
@@ -103,9 +113,14 @@ public class GUI implements InventoryHolder {
                 itemStack.setItemMeta(skullMeta);
                 profiles.add(itemStack);
             }
-            ArrayList<Integer> ac = calulatePosition(plugin.guiPageID.get(player.getUniqueId().toString()), fileConfiguration.getInt("settings.profile-all.PAGE"), fileConfiguration.getInt("settings.profile-all.INDEX"), profiles, perPage);
+            ArrayList<Integer> ac = calulatePosition(plugin.guiPageID.get(uuid), fileConfiguration.getInt("settings.profile-all.PAGE"), fileConfiguration.getInt("settings.profile-all.INDEX"), profiles, perPage);
             if (ac.size() >= fileConfiguration.getInt("settings.profile-all.PAGE")) {
-                inventory.setItem(fileConfiguration.getInt("settings.profile-all.next.POSITION"), getItem(fileConfiguration.getString("settings.profile-all.next.MATERIAL"), fileConfiguration.getInt("settings.profile-all.next.AMOUNT"), fileConfiguration.getString("settings.profile-all.next.NAME"), fileConfiguration.getStringList("settings.profile-all.next.LORES"), player, "settings.profile-all.next", fileConfiguration, "", 0));
+                inventory.setItem(fileConfiguration.getInt("settings.profile-all.next.POSITION"),
+                        getItem(fileConfiguration.getString("settings.profile-all.next.MATERIAL"),
+                        fileConfiguration.getInt("settings.profile-all.next.AMOUNT"),
+                        fileConfiguration.getString("settings.profile-all.next.NAME"),
+                        fileConfiguration.getStringList("settings.profile-all.next.LORES"),
+                        player, "settings.profile-all.next", fileConfiguration, "", 0));
             }
         }
     }
@@ -135,20 +150,29 @@ public class GUI implements InventoryHolder {
     }
 
     private void boostersGUI(Player player, String path, String settings, String key) {
-        List<String> list = plugin.boosters.get.getStringList("players." + player.getUniqueId().toString() + "." + key);
+        String uuid = player.getUniqueId().toString();
+        List<String> list = plugin.boosters.get.getStringList("players." + uuid + "." + key);
         if (!list.isEmpty()) {
             ArrayList<ItemStack> boosters = new ArrayList<>();
             for (String booster : list) {
                 String[] split = booster.split(" ");
                 if (plugin.boosters.get.contains(path + ".gui." + booster.split(" ")[0])) {
-                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui." + split[0] + ".MATERIAL"), plugin.boosters.get.getInt(path + ".gui." + split[0] + ".AMOUNT"), plugin.boosters.get.getString(path + ".gui." + split[0] + ".NAME"), plugin.boosters.get.getStringList(path + ".gui." + split[0] + ".LORES"), player, path + ".gui." + split[0], plugin.boosters.get, split[0], Integer.parseInt(split[1])));
+                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui." + split[0] + ".MATERIAL"),
+                            plugin.boosters.get.getInt(path + ".gui." + split[0] + ".AMOUNT"),
+                            plugin.boosters.get.getString(path + ".gui." + split[0] + ".NAME"),
+                            plugin.boosters.get.getStringList(path + ".gui." + split[0] + ".LORES"),
+                            player, path + ".gui." + split[0], plugin.boosters.get, split[0], Integer.parseInt(split[1])));
                 } else {
-                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui.none.MATERIAL"), plugin.boosters.get.getInt(path + ".gui.none.AMOUNT"), plugin.boosters.get.getString(path + ".gui.none.NAME"), plugin.boosters.get.getStringList(path + ".gui.none.LORES"), player, path + ".gui.none", plugin.boosters.get, split[0], Integer.parseInt(split[1])));
+                    boosters.add(getItem(plugin.boosters.get.getString(path + ".gui.none.MATERIAL"),
+                            plugin.boosters.get.getInt(path + ".gui.none.AMOUNT"),
+                            plugin.boosters.get.getString(path + ".gui.none.NAME"),
+                            plugin.boosters.get.getStringList(path + ".gui.none.LORES"),
+                            player, path + ".gui.none", plugin.boosters.get, split[0], Integer.parseInt(split[1])));
                 }
             }
             ArrayList<Integer> perPage = new ArrayList<>();
             ArrayList<Integer> ac = calulatePosition(1, fileConfiguration.getInt("settings." + settings + ".PAGE"), fileConfiguration.getInt("settings." + settings + ".INDEX"), boosters, perPage);
-            List<String> ad = plugin.boosters.get.getStringList("players." + player.getUniqueId().toString() + "." + key);
+            List<String> ad = plugin.boosters.get.getStringList("players." + uuid + "." + key);
             List<String> newList = new ArrayList<>();
             int iii;
             for (iii = 0; iii < ad.size(); iii++) {
@@ -158,7 +182,7 @@ public class GUI implements InventoryHolder {
                 newList.set(perPage.get(iii), ad.get(iii).split(" ")[0] + " " + ad.get(iii).split(" ")[1] + " " + ac.get(iii));
             }
             if (!ad.equals(newList)) {
-                plugin.boosters.get.set("players." + player.getUniqueId().toString() + "." + key, newList);
+                plugin.boosters.get.set("players." + uuid + "." + key, newList);
                 plugin.boosters.save();
             }
         }
@@ -172,11 +196,17 @@ public class GUI implements InventoryHolder {
             skullMeta.setOwner(player.getName());
             itemStack.setItemMeta(skullMeta);
             return itemStack;
-    } else if (itemStack != null) {
+        } else if (itemStack != null) {
             setItemMeta(itemStack, player, name, lore, key, type, time);
             return itemStack;
         } else {
-            plugin.textUtils.error("Cannot find gui item");
+            plugin.textUtils.error(" ");
+            plugin.textUtils.error("GUI name: " + name);
+            plugin.textUtils.error(" ");
+            plugin.textUtils.error("Cannot find the gui item: " + material);
+            plugin.textUtils.error(" ");
+            plugin.textUtils.error("Group: " + key);
+            plugin.textUtils.error(" ");
             return null;
         }
     }

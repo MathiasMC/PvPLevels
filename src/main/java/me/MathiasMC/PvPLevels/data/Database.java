@@ -65,20 +65,7 @@ public class Database {
             if (connection == null || connection.isClosed()) {
                 return false;
             }
-            if (plugin.config.get.contains("mysql.alter") && plugin.config.get.getBoolean("mysql.alter")) {
-                connection.createStatement().execute("ALTER TABLE `players` ADD COLUMN `killstreak_top` bigint(255);");
-                connection.createStatement().execute("ALTER TABLE `players` RENAME TO `players_temp`;");
-                connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `killstreak_top` bigint(255), `coins` bigint(255), `lastseen` DATETIME);");
-                connection.createStatement().execute("INSERT INTO `players` (uuid, kills, deaths, xp, level, killstreak, killstreak_top, coins, lastseen) SELECT uuid, kills, deaths, xp, level, killstreak, killstreak_top, coins, lastseen FROM players_temp");
-                connection.createStatement().execute("DROP TABLE `players_temp`;");
-                plugin.textUtils.warning(" ");
-                plugin.textUtils.warning(" ");
-                plugin.textUtils.warning("Altered database with new data (Restart the server and DELETE ALTER FROM config.yml!)");
-                plugin.textUtils.warning(" ");
-                plugin.textUtils.warning(" ");
-            } else {
-                connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `killstreak_top` bigint(255), `coins` bigint(255), `lastseen` DATETIME);");
-            }
+            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `killstreak_top` bigint(255), `coins` bigint(255), `lastseen` DATETIME);");
             if (debug_database) { plugin.textUtils.debug("[Database] Creating table if not exists"); }
         }
         return true;

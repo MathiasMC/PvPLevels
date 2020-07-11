@@ -67,7 +67,7 @@ public class InventoryClick implements Listener {
                             if (e.isShiftClick() && e.isRightClick() && player.hasPermission("pvplevels.gui.admin.delete")) {
                                 if (e.getCurrentItem().getItemMeta().hasLore()) {
                                     for (String lore : e.getCurrentItem().getItemMeta().getLore()) {
-                                        Matcher matcher = Pattern.compile("\\[([^]]+)\\]").matcher(lore);
+                                        Matcher matcher = Pattern.compile("\\[([^]]+)]").matcher(lore);
                                         while (matcher.find()) {
                                             OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(matcher.group(1)));
                                             if (offlinePlayer != null) {
@@ -99,24 +99,17 @@ public class InventoryClick implements Listener {
                         if (!keyItem.equalsIgnoreCase("settings")) {
                             if (e.getSlot() == fileConfiguration.getInt(keyItem + ".POSITION")) {
                                 if (fileConfiguration.contains(keyItem + ".OPTIONS")) {
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLS")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "kills"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_DEATHS")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "deaths"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_XP")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "xp"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_LEVEL")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "level"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLSTREAK")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "killstreak"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_LASTSEEN")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "lastseen"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KDR")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "kdr"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLFACTOR")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "killfactor"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_XPREQUIRED")) { plugin.guiPageSort.put(player.getUniqueId().toString(), "xprequired"); }
-                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_REVERSE")) {
-                                        if (plugin.guiPageSortReverse.containsKey(player.getUniqueId().toString())) {
-                                            if (plugin.guiPageSortReverse.get(player.getUniqueId().toString()).equals(true)) {
-                                                plugin.guiPageSortReverse.put(player.getUniqueId().toString(), false);
-                                            } else {
-                                                plugin.guiPageSortReverse.put(player.getUniqueId().toString(), true);
-                                            }
-                                        }
-                                    }
+                                    String uuid = player.getUniqueId().toString();
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLS")) { plugin.guiPageSort.put(uuid, "kills"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_DEATHS")) { plugin.guiPageSort.put(uuid, "deaths"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_XP")) { plugin.guiPageSort.put(uuid, "xp"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_LEVEL")) { plugin.guiPageSort.put(uuid, "level"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLSTREAK")) { plugin.guiPageSort.put(uuid, "killstreak"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_LASTSEEN")) { plugin.guiPageSort.put(uuid, "lastseen"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KDR")) { plugin.guiPageSort.put(uuid, "kdr"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_KILLFACTOR")) { plugin.guiPageSort.put(uuid, "killfactor"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_XPREQUIRED")) { plugin.guiPageSort.put(uuid, "xprequired"); }
+                                    if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("SORT_REVERSE")) { plugin.guiPageSortReverse.put(uuid, !plugin.guiPageSortReverse.get(uuid)); }
                                     if (fileConfiguration.getStringList(keyItem + ".OPTIONS").contains("CLOSE")) { player.closeInventory(); }
                                 }
                                 if (fileConfiguration.contains(keyItem + ".COMMANDS")) {
@@ -126,8 +119,7 @@ public class InventoryClick implements Listener {
                                 }
                                 if (fileConfiguration.contains(keyItem + ".SHOP")) {
                                     PlayerConnect playerConnect = plugin.get(player.getUniqueId().toString());
-                                    Long cost = fileConfiguration.getLong(keyItem + ".SHOP.COST");
-                                    Long back = playerConnect.coins() - cost;
+                                    long back = playerConnect.coins() - fileConfiguration.getLong(keyItem + ".SHOP.COST");
                                     if (back >= 0L) {
                                         playerConnect.coins(back);
                                         for (String command : fileConfiguration.getStringList(keyItem + ".SHOP.COMMANDS")) {
@@ -169,34 +161,45 @@ public class InventoryClick implements Listener {
 
 
     private void global(Player player, String line, List<String> list) {
-        int maxQueue = plugin.boostersManager.isInQueueSize(player.getUniqueId().toString());
+        String uuid = player.getUniqueId().toString();
+        int maxQueue = plugin.boostersManager.isInQueueSize(uuid);
         if (maxQueue < plugin.boosters.get.getInt("global-settings.max-queue")) {
             List<String> queue = plugin.boosters.get.getStringList("global-queue");
-            queue.add(player.getUniqueId().toString() + " " + line.split(" ")[0] + " " + line.split(" ")[1]);
+            queue.add(uuid + " " + line.split(" ")[0] + " " + line.split(" ")[1]);
             plugin.boosters.get.set("global-queue", queue);
             for (String command : plugin.boosters.get.getStringList("global-settings.queue.add")) {
-                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))).replace("{pvplevels_booster_global_queue}", String.valueOf(plugin.boostersManager.queueNumber(player.getUniqueId().toString()))));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command
+                        .replace("{pvplevels_player}", player.getName())
+                        .replace("{pvplevels_booster_global_type}", String.valueOf(line.split(" ")[0]))
+                        .replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1])))
+                        .replace("{pvplevels_booster_global_queue}", String.valueOf(plugin.boostersManager.queueNumber(uuid))));
             }
             list.remove(line);
-            plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".global", list);
+            plugin.boosters.get.set("players." + uuid + ".global", list);
             plugin.boosters.save();
         } else {
             for (String command : plugin.boosters.get.getStringList("global-settings.queue.max")) {
-                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_global_max}", String.valueOf(maxQueue)));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command
+                        .replace("{pvplevels_player}", player.getName())
+                        .replace("{pvplevels_booster_global_max}", String.valueOf(maxQueue)));
             }
         }
     }
 
     private void personal(Player player, String line, List<String> list) {
-        PlayerConnect playerConnect = plugin.get(player.getUniqueId().toString());
-        if (playerConnect.getPersonalBooster() == null && !plugin.boosters.get.contains("players." + player.getUniqueId().toString() + ".personal-active")) {
+        String uuid = player.getUniqueId().toString();
+        PlayerConnect playerConnect = plugin.get(uuid);
+        if (playerConnect.getPersonalBooster() == null && !plugin.boosters.get.contains("players." + uuid + ".personal-active")) {
             playerConnect.timer(Integer.parseInt(line.split(" ")[1]), Double.valueOf(line.split(" ")[0]));
-            plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".personal-active", line.split(" ")[0] + " " + line.split(" ")[1]);
+            plugin.boosters.get.set("players." + uuid + ".personal-active", line.split(" ")[0] + " " + line.split(" ")[1]);
             for (String command : plugin.boosters.get.getStringList("personal-settings.start")) {
-                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", player.getName()).replace("{pvplevels_booster_personal_type}", String.valueOf(line.split(" ")[0])).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))));
+                plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command
+                        .replace("{pvplevels_player}", player.getName())
+                        .replace("{pvplevels_booster_personal_type}", String.valueOf(line.split(" ")[0]))
+                        .replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(line.split(" ")[1]))));
             }
             list.remove(line);
-            plugin.boosters.get.set("players." + player.getUniqueId().toString() + ".personal", list);
+            plugin.boosters.get.set("players." + uuid + ".personal", list);
             plugin.boosters.save();
         } else {
             for (String command : plugin.boosters.get.getStringList("personal-settings.active")) {
