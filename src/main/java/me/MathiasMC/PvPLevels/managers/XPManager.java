@@ -2,9 +2,11 @@ package me.MathiasMC.PvPLevels.managers;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 public class XPManager {
@@ -15,7 +17,7 @@ public class XPManager {
         this.plugin = plugin;
     }
 
-    public void check(PlayerConnect playerConnect, String entityType, String entityName, Player killer, boolean xpUP) {
+    public void check(PlayerConnect playerConnect, String entityType, Entity entity, Player killer, boolean xpUP) {
         if (plugin.config.get.contains("xp." + entityType)) {
             String group = plugin.systemManager.getGroup(killer, plugin.config.get, "xp." + entityType, true);
             if (group != null) {
@@ -35,7 +37,20 @@ public class XPManager {
                                 return;
                             }
                         }
-                        getXP(playerConnect, killer, entityType, entityName, group);
+                        String customName = "";
+                        if (plugin.config.get.contains("xp." + entityType + "." + group + ".customName")) {
+                            if (entity != null) {
+                                if (entity.getCustomName() == null) {
+                                    customName = entity.getName();
+                                } else {
+                                    customName = entity.getCustomName();
+                                }
+                            }
+                            if (!plugin.PlaceholderReplace(killer, ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("xp." + entityType + "." + group + ".customName"))).equalsIgnoreCase(customName)) {
+                                return;
+                            }
+                        }
+                        getXP(playerConnect, killer, entityType, customName, group);
                     }
                 } else {
                     loseXP(playerConnect, killer, entityType, group);
@@ -44,7 +59,7 @@ public class XPManager {
         }
     }
 
-    public void getXP(PlayerConnect playerConnect, Player killer, String entityType, String entityName, String group) {
+    public void getXP(PlayerConnect playerConnect, Player killer, String entityType, String customName, String group) {
         int add = plugin.random(plugin.config.get.getInt("xp." + entityType + "." + group + ".min"), plugin.config.get.getInt("xp." + entityType + "." + group + ".max"));
         long xp = playerConnect.xp() + add;
         long globalBooster = 0L;
@@ -67,13 +82,13 @@ public class XPManager {
         }
         playerConnect.xp(xp);
         if (!getLevel(playerConnect, killer)) {
-            String customName = plugin.config.get.getString("xp." + entityType + "." + group + ".name").replace("{pvplevels_player}", entityName);
+            String entityName = plugin.config.get.getString("xp." + entityType + "." + group + ".name").replace("{pvplevels_player}", customName);
             Long need = plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp") - xp;
             if (plugin.config.get.contains("xp." + entityType + "." + group + ".level-commands." + playerConnect.level())) {
-                sendCommands(killer, "xp." + entityType + "." + group + ".level-commands." + playerConnect.level(), plugin.config.get, customName, add, need, 0, globalBooster, personalBooster, entityType);
+                sendCommands(killer, "xp." + entityType + "." + group + ".level-commands." + playerConnect.level(), plugin.config.get, entityName, add, need, 0, globalBooster, personalBooster, entityType);
                 return;
             }
-            sendCommands(killer, "xp." + entityType + "." + group + ".commands", plugin.config.get, customName, add, need, 0, globalBooster, personalBooster, entityType);
+            sendCommands(killer, "xp." + entityType + "." + group + ".commands", plugin.config.get, entityName, add, need, 0, globalBooster, personalBooster, entityType);
         }
     }
 

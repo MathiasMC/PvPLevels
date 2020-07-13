@@ -62,7 +62,6 @@ public class GUI implements InventoryHolder {
         player.openInventory(inventory);
     }
 
-
     private void index(Player player) {
         for (String key : fileConfiguration.getConfigurationSection("").getKeys(false)) {
             if (!key.equalsIgnoreCase("settings")) {

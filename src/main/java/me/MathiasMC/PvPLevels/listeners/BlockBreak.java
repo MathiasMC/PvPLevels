@@ -30,7 +30,7 @@ public class BlockBreak implements Listener {
                 final Material material = e.getBlock().getType();
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     if (e.getBlock().getLocation().getBlock().getType().equals(Material.AIR)) {
-                        plugin.xpManager.check(playerConnect, material.name().toLowerCase(), "", e.getPlayer(), true);
+                        plugin.xpManager.check(playerConnect, material.name().toLowerCase(), null, e.getPlayer(), true);
                     }
                 }, 2L);
             } else {

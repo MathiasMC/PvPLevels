@@ -914,10 +914,10 @@ public class PvPLevels_Command implements CommandExecutor {
                     Player target = plugin.getServer().getPlayer(args[3]);
                     if (target != null) {
                         if (type.equalsIgnoreCase("get")) {
-                            plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], "", target, true);
+                            plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], null, target, true);
                             return;
                         }
-                        plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], "", target, false);
+                        plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], null, target, false);
                     } else {
                         for (String message : plugin.language.get.getStringList(path + ".pvplevels.player." + type + ".online")) {
                             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));

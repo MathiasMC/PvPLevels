@@ -3,12 +3,9 @@ package me.MathiasMC.PvPLevels.managers;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import java.util.Set;
 
 public class EntityManager {
 
@@ -26,13 +23,15 @@ public class EntityManager {
                 PlayerConnect playerConnect = plugin.get(killedUUID);
                 if (plugin.systemManager.world(killed, plugin.config.get, "deaths")) {
                     if (plugin.config.get.getBoolean("events.Deaths.only-players")) {
-                        death(killed, playerConnect);
+                        if (killer != null) {
+                            death(killed, playerConnect);
+                        }
                     } else {
                         death(killed, playerConnect);
                     }
                 }
                 String entityKiller = plugin.entityManager.getEntityKiller(killed);
-                plugin.xpManager.check(playerConnect, entityKiller, entity.getName(), killed, false);
+                plugin.xpManager.check(playerConnect, entityKiller, entity, killed, false);
                 if (entityKiller != null) {
                     if (plugin.config.get.getBoolean("events.KillStreaks")) {
                         if (entityKiller.equalsIgnoreCase("player")) {
@@ -53,7 +52,7 @@ public class EntityManager {
             PlayerConnect playerConnect = plugin.get(killer.getUniqueId().toString());
             if (entityName != null && !plugin.killSessionUtils.check(entity, killer) && !plugin.spawners.contains(entityUUID)) {
                 if (!plugin.xpManager.isMaxLevel(killer, playerConnect)) {
-                    plugin.xpManager.check(playerConnect, entityName, entity.getName(), killer, true);
+                    plugin.xpManager.check(playerConnect, entityName, entity, killer, true);
                 }
                 if (entity instanceof Player) {
                     if (plugin.systemManager.world(killer, plugin.config.get, "kills")) {
@@ -86,15 +85,8 @@ public class EntityManager {
 
     public String getEntityName(Entity entity) {
         String entityType = entity.getType().toString().toLowerCase();
-        String entityTypeCustom = null;
-        if (entity.getCustomName() != null)
-            entityTypeCustom = ChatColor.stripColor(entity.getCustomName().toLowerCase());
-        Set<String> set = plugin.config.get.getConfigurationSection("xp").getKeys(false);
-        if (set.contains(entityType) || set.contains(entityTypeCustom)) {
-            String entityTypeFixed = entityType;
-            if (entityTypeCustom != null)
-                entityTypeFixed = entityTypeCustom;
-            return entityTypeFixed;
+        if (plugin.config.get.getConfigurationSection("xp").getKeys(false).contains(entityType)) {
+            return entityType;
         }
         return null;
     }
@@ -106,8 +98,9 @@ public class EntityManager {
             if (entityDamageEvent instanceof EntityDamageByEntityEvent) {
                 Entity entity = ((EntityDamageByEntityEvent)entityDamageEvent).getDamager();
                 entityType = entity.getType().toString().toLowerCase();
-                if (entity.getCustomName() != null)
+                if (entity.getCustomName() != null) {
                     entityType = ChatColor.stripColor(entity.getCustomName().toLowerCase());
+                }
             } else {
                 if (entityDamageEvent != null) {
                     entityType = entityDamageEvent.getCause().toString().toLowerCase();
