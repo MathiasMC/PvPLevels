@@ -9,6 +9,8 @@ public class PlayerConnect {
 
     private final String playeruuid;
 
+    private String name;
+
     private Long kills;
 
     private Long deaths;
@@ -36,15 +38,20 @@ public class PlayerConnect {
     public PlayerConnect(String uuid) {
         playeruuid = uuid;
         String[] data = PvPLevels.call.database.getValues(uuid);
-        kills = Long.parseLong(data[0]);
-        deaths = Long.parseLong(data[1]);
-        xp = Long.parseLong(data[2]);
-        level = Long.parseLong(data[3]);
-        killstreak = Long.parseLong(data[4]);
-        killstreak_top = Long.parseLong(data[5]);
-        coins = Long.parseLong(data[6]);
-        time = Timestamp.valueOf(data[7]);
+        name = data[0];
+        kills = Long.parseLong(data[1]);
+        deaths = Long.parseLong(data[2]);
+        xp = Long.parseLong(data[3]);
+        level = Long.parseLong(data[4]);
+        killstreak = Long.parseLong(data[5]);
+        killstreak_top = Long.parseLong(data[6]);
+        coins = Long.parseLong(data[7]);
+        time = Timestamp.valueOf(data[8]);
         loadTimer();
+    }
+
+    public String name() {
+        return name;
     }
 
     public Long kills() {
@@ -73,6 +80,10 @@ public class PlayerConnect {
 
     public Long coins() {
         return coins;
+    }
+
+    public void name(String set) {
+        name = set;
     }
 
     public void kills(Long set) {
@@ -112,7 +123,7 @@ public class PlayerConnect {
     }
 
     public void save() {
-        PvPLevels.call.database.setValues(playeruuid, kills, deaths, xp, level, killstreak, killstreak_top, coins, time);
+        PvPLevels.call.database.setValues(playeruuid, name, kills, deaths, xp, level, killstreak, killstreak_top, coins, time);
     }
 
     public Double getPersonalBooster() {

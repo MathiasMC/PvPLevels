@@ -122,7 +122,7 @@ public class StatsManager {
         if (key) {
             map = new ArrayList<String>(getTopMap(type, reverse).keySet());
             if (map.size() > number) {
-                return plugin.getServer().getOfflinePlayer(UUID.fromString(map.get(number))).getName();
+                return plugin.get(map.get(number)).name();
             } else {
                 return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("pvptop." + type + ".name"));
             }
