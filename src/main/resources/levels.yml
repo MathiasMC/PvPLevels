@@ -5,74 +5,74 @@
 #  Any ideas for the plugin or need help? #
 #           contact me on spigot          #
 #                                         #
-levels:
+default:
+  # executor for get xp and lose xp
+  execute: default
+  '0':
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Bad'
+    execute: default
+    # Dont touch xp must be 0 for start level (if start-level is 1 you can remove this section)
+    xp: 0
   '1':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 650
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Bad'
+    execute: default
+    # If start-level is 1 xp must be 0
+    xp: 45
   '2':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 1200
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Bad'
+    execute: default
+    xp: 90
   '3':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 1500
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Better'
+    execute: default
+    xp: 150
   '4':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 1800
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Better'
+    execute: default
+    xp: 240
   '5':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 2300
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Better'
+    execute: default
+    xp: 275
   '6':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 2600
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Good'
+    execute: default
+    xp: 320
   '7':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 2800
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Good'
+    execute: default
+    xp: 390
   '8':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 3600
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Good'
+    execute: default
+    xp: 430
   '9':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 4500
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Pro'
+    execute: default
+    xp: 500
   '10':
-    commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou are now level {pvplevels_level_to}
-    lose-commands:
-      - pvplevels message {pvplevels_player} &7[&bPvPLevels&7] &eYou lost a level you
-        are now {pvplevels_level}
-    xp: 5600
+    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    suffix: ''
+    group: 'Super'
+    execute: default-last
+    xp: 600

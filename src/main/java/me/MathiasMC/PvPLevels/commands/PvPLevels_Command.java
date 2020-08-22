@@ -2,22 +2,23 @@ package me.MathiasMC.PvPLevels.commands;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
-import me.MathiasMC.PvPLevels.gui.GUI;
+import me.MathiasMC.PvPLevels.gui.AdminGUI;
+import me.MathiasMC.PvPLevels.gui.ProfilesGUI;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class PvPLevels_Command implements CommandExecutor {
 
@@ -30,141 +31,224 @@ public class PvPLevels_Command implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("pvplevels")) {
-            if (sender.hasPermission("pvplevels.command")) {
-                boolean unknown = true;
-                String path;
-                if (sender instanceof Player) {
-                    path = "player";
-                } else {
-                    path = "console";
-                }
+            boolean unknown = true;
+            String type;
+            if (sender instanceof Player) {
+                type = "player";
+            } else {
+                type = "console";
+            }
+            if (sender.hasPermission("pvplevels")) {
                 if (args.length == 0) {
-                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.command.message")) {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_version}", PvPLevels.call.getDescription().getVersion())));
+                    if (type.equalsIgnoreCase("player")) {
+                        for (String message : plugin.language.get.getStringList("command.message")) {
+                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{version}", plugin.getDescription().getVersion())));
+                        }
+                    } else {
+                        for (String message : plugin.language.get.getStringList("console.command.message")) {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{version}", plugin.getDescription().getVersion())));
+                        }
                     }
                 } else {
                     if (args[0].equalsIgnoreCase("help")) {
                         unknown = false;
-                        if (sender.hasPermission("pvplevels.command.help")) {
-                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.help.message")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                        if (sender.hasPermission("pvplevels.player.help")) {
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("help.message")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            } else {
+                                for (String message : plugin.language.get.getStringList("console.help.message")) {
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                }
                             }
                         } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.help.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("help.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
                             }
                         }
                     } else if (args[0].equalsIgnoreCase("reload")) {
                         unknown = false;
-                        if (sender.hasPermission("pvplevels.command.reload")) {
+                        if (sender.hasPermission("pvplevels.admin.reload")) {
                             plugin.config.load();
                             plugin.language.load();
                             plugin.levels.load();
-                            plugin.boosters.load();
+                            plugin.execute.load();
                             plugin.guiFolder.load();
-                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.reload.reloaded")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.reload.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("wand")) {
-                        unknown = false;
-                        if (path.equalsIgnoreCase("player")) {
-                            if (sender.hasPermission("pvplevels.command.wand")) {
-                                Player player = (Player) sender;
-                                player.getInventory().addItem(plugin.wand);
-                                for (String message : plugin.language.get.getStringList("player.pvplevels.wand.add")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            } else {
-                                for (String message : plugin.language.get.getStringList("player.pvplevels.wand.permission")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("console.pvplevels.wand")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("zone")) {
-                        unknown = false;
-                        if (path.equalsIgnoreCase("player")) {
-                            if (sender.hasPermission("pvplevels.command.zone")) {
-                                if (args.length > 1) {
-                                    if (args[1].equalsIgnoreCase("set")) {
-                                        if (sender.hasPermission("pvplevels.command.zone.set")) {
-                                            if (args.length == 4) {
-                                                Player player = (Player) sender;
-                                                String uuid = player.getUniqueId().toString();
-                                                if (plugin.config.get.contains("xp." + args[2])) {
-                                                    if (!plugin.zones.get.contains("zones." + args[2] + "." + args[3])) {
-                                                        if (plugin.wandPos1.containsKey(uuid) && plugin.wandPos2.containsKey(uuid)) {
-                                                            Location loc1 = plugin.wandPos1.get(uuid);
-                                                            Location loc2 = plugin.wandPos2.get(uuid);
-                                                            plugin.zones.get.set("zones." + args[2] + "." + args[3] + ".start", loc1.getBlockX() + " " + loc1.getBlockY() + " " + loc1.getBlockZ());
-                                                            plugin.zones.get.set("zones." + args[2] + "." + args[3] + ".end", loc2.getBlockX() + " " + loc2.getBlockY() + " " + loc2.getBlockZ());
-                                                            plugin.zones.get.set("zones." + args[2] + "." + args[3] + ".world", player.getWorld().getName());
-                                                            plugin.zones.save();
-                                                            for (String message : plugin.language.get.getStringList("player.pvplevels.zone.set.set")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_zone}", args[3]).replace("{pvplevels_type}", args[2])));
-                                                            }
-                                                        } else {
-                                                            for (String message : plugin.language.get.getStringList("player.pvplevels.zone.set.select")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                            }
-                                                        }
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList("player.pvplevels.zone.set.name")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList("player.pvplevels.zone.set.type")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                    }
-                                                }
-                                            } else {
-                                                for (String message : plugin.language.get.getStringList("player.pvplevels.zone.set.usage")) {
-                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                }
-                                            }
-                                        } else {
-                                            for (String message : plugin.language.get.getStringList("player.pvplevels.zone.set.permission")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                            }
-                                        }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.zone.usage")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
+                            if (plugin.isLevelsValid()) {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("reload.all")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
                                     }
                                 } else {
-                                    for (String message : plugin.language.get.getStringList("player.pvplevels.zone.usage")) {
+                                    for (String message : plugin.language.get.getStringList("console.reload.all")) {
                                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                     }
                                 }
                             } else {
-                                for (String message : plugin.language.get.getStringList("player.pvplevels.zone.permission")) {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("reload.validator")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.reload.validator")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("reload.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("admin")) {
+                        unknown = false;
+                        if (type.equalsIgnoreCase("player")) {
+                            if (sender.hasPermission("pvplevels.admin.admin")) {
+                                final Player player = (Player) sender;
+                                new AdminGUI(plugin.getPlayerMenu(player)).open();
+                            } else {
+                                for (String message : plugin.language.get.getStringList("admin.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("console.only-player")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("profiles")) {
+                        unknown = false;
+                        if (type.equalsIgnoreCase("player")) {
+                            if (sender.hasPermission("pvplevels.player.profiles")) {
+                                final Player player = (Player) sender;
+                                new ProfilesGUI(plugin.getPlayerMenu(player)).open();
+                            } else {
+                                for (String message : plugin.language.get.getStringList("profiles.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("console.only-player")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("top")) {
+                        unknown = false;
+                        if (type.equalsIgnoreCase("player")) {
+                            final Player player = (Player) sender;
+                            if (sender.hasPermission("pvplevels.player.top")) {
+                                if (args.length == 2) {
+                                    if (args[1].equalsIgnoreCase("kills")) {
+                                        for (String message : plugin.language.get.getStringList("top.kills")) {
+                                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(player, message)));
+                                        }
+                                    } else if (args[1].equalsIgnoreCase("deaths")) {
+                                        for (String message : plugin.language.get.getStringList("top.deaths")) {
+                                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(player, message)));
+                                        }
+                                    } else if (args[1].equalsIgnoreCase("xp")) {
+                                        for (String message : plugin.language.get.getStringList("top.xp")) {
+                                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(player, message)));
+                                        }
+                                    } else if (args[1].equalsIgnoreCase("level")) {
+                                        for (String message : plugin.language.get.getStringList("top.level")) {
+                                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(player, message)));
+                                        }
+                                    } else if (args[1].equalsIgnoreCase("killstreak")) {
+                                        for (String message : plugin.language.get.getStringList("top.killstreak")) {
+                                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(player, message)));
+                                        }
+                                    } else if (args[1].equalsIgnoreCase("killstreak_top")) {
+                                        for (String message : plugin.language.get.getStringList("top.killstreak_top")) {
+                                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(player, message)));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("top.usage")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("top.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                }
+                            } else {
+                                for (String message : plugin.language.get.getStringList("top.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("console.only-player")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("stats")) {
+                        unknown = false;
+                        if (type.equalsIgnoreCase("player")) {
+                            if (sender.hasPermission("pvplevels.player.top")) {
+                                final Player player = (Player) sender;
+                                if (args.length == 1) {
+                                    for (String message : plugin.language.get.getStringList("stats.message")) {
+                                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(player, message)));
+                                    }
+                                } else {
+                                    final Player target = plugin.getServer().getPlayer(args[1]);
+                                    if (target != null) {
+                                        for (String message : plugin.language.get.getStringList("stats.target")) {
+                                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(target, message)));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("stats.online")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    }
+                                }
+                            } else {
+                                for (String message : plugin.language.get.getStringList("stats.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("console.only-player")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("save")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.admin.save")) {
+                            for (String uuid : plugin.list()) {
+                                plugin.get(uuid).save();
+                            }
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("save.message")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            } else {
+                                for (String message : plugin.language.get.getStringList("console.save.message")) {
                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                 }
                             }
                         } else {
-                            for (String message : plugin.language.get.getStringList("console.pvplevels.zone")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("save.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
                             }
                         }
                     } else if (args[0].equalsIgnoreCase("broadcast")) {
                         unknown = false;
-                        if (sender.hasPermission("pvplevels.command.broadcast")) {
+                        if (sender.hasPermission("pvplevels.admin.broadcast")) {
                             if (args.length > 2) {
-                                StringBuilder sb = new StringBuilder();
+                                final StringBuilder sb = new StringBuilder();
                                 for (int i = 2; i < args.length; i++) {
                                     sb.append(args[i]).append(" ");
                                 }
-                                String text = sb.toString().trim();
+                                final String text = sb.toString().trim();
                                 if (!text.contains("\\n")) {
                                     broadcast(ChatColor.translateAlternateColorCodes('&', text), args);
                                 } else {
@@ -173,24 +257,38 @@ public class PvPLevels_Command implements CommandExecutor {
                                     }
                                 }
                             } else {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.broadcast.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("broadcast.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.broadcast.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
                                 }
                             }
                         } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.broadcast.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("broadcast.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message));
+                                }
                             }
                         }
                     } else if (args[0].equalsIgnoreCase("message")) {
                         unknown = false;
-                        if (sender.hasPermission("pvplevels.command.message")) {
+                        if (sender.hasPermission("pvplevels.admin.message")) {
                             if (args.length <= 2) {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.message.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("message.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.message.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
                                 }
                             } else {
-                                Player target = plugin.getServer().getPlayer(args[1]);
+                                final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
                                     StringBuilder sb = new StringBuilder();
                                     for (int i = 2; i < args.length; i++) {
@@ -198,877 +296,638 @@ public class PvPLevels_Command implements CommandExecutor {
                                     }
                                     String text = sb.toString().trim();
                                     if (!text.contains("\\n")) {
-                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, text)));
+                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
                                     } else {
                                         for (String message : text.split(Pattern.quote("\\n"))) {
-                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, message)));
+                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                         }
                                     }
                                 } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.message.online")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.language.get.getStringList("message.online")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("console.message.online")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
                                     }
                                 }
                             }
                         } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.message.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("message.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
                             }
                         }
                     } else if (args[0].equalsIgnoreCase("actionbar")) {
                         unknown = false;
-                        if (sender.hasPermission("pvplevels.command.actionbar")) {
-                            if (args.length <= 2) {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.actionbar.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            } else {
-                                Player target = plugin.getServer().getPlayer(args[1]);
+                        if (sender.hasPermission("pvplevels.admin.actionbar")) {
+                            if (args.length > 3) {
+                                final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
-                                    StringBuilder sb = new StringBuilder();
-                                    for (int i = 2; i < args.length; i++) {
-                                        sb.append(args[i]).append(" ");
-                                    }
-                                    try {
-                                        target.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, sb.toString().trim()))));
-                                    } catch (NoSuchMethodError exception) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&bPvPLevels&7] &cThis command is not supported in this spigot version"));
-                                    }
-                                } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.actionbar.online")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                    }
-                                }
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.actionbar.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("save")) {
-                        unknown = false;
-                        if (sender.hasPermission("pvplevels.command.save")) {
-                            for (String uuid : plugin.list()) {
-                                plugin.get(uuid).save();
-                            }
-                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.save.saved")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.save.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("item")) {
-                        unknown = false;
-                        if (sender.hasPermission("pvplevels.command.item")) {
-                            if (args.length <= 1) {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            } else {
-                                if (args[1].equalsIgnoreCase("add")) {
-                                    if (sender.hasPermission("pvplevels.command.item.add")) {
-                                        if (args.length >= 5) {
-                                            Player target = plugin.getServer().getPlayer(args[2]);
-                                            if (target != null) {
-                                                if (plugin.isInt(args[4])) {
-                                                    if (Integer.parseInt(args[4]) > 0) {
-                                                        ItemStack itemStack = plugin.getID(args[3].toUpperCase(), Integer.parseInt(args[4]));
-                                                        if (itemStack != null) {
-                                                            if (args.length > 5) {
-                                                                StringBuilder sb = new StringBuilder();
-                                                                for (int i = 5; i < args.length; i++) {
-                                                                    sb.append(args[i]).append(" ");
-                                                                }
-                                                                String text = sb.toString().trim();
-                                                                ItemMeta itemMeta = itemStack.getItemMeta();
-                                                                if (text.contains("\\n")) {
-                                                                    String[] split = text.split(Pattern.quote("\\n"));
-                                                                    itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[0])));
-                                                                    if (split.length > 1) {
-                                                                        List<String> lores = new ArrayList<>();
-                                                                        for (int i = 1; i < split.length; i++) {
-                                                                            lores.add(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[i])));
-                                                                        }
-                                                                        itemMeta.setLore(lores);
-                                                                    }
-                                                                } else {
-                                                                    itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, text)));
-                                                                }
-                                                                itemStack.setItemMeta(itemMeta);
-                                                            }
-                                                            target.getInventory().addItem(itemStack);
-                                                            if (path.equalsIgnoreCase("player")) {
-                                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.add.added")) {
-                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName())));
-                                                                }
-                                                            } else {
-                                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.add.added")) {
-                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName())));
-                                                                }
-                                                            }
-                                                        } else {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.found")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                            }
-                                                        }
+                                    if (plugin.isInt(args[2])) {
+                                        final StringBuilder sb = new StringBuilder();
+                                        for (int i = 3; i < args.length; i++) {
+                                            sb.append(args[i]).append(" ");
+                                        }
+                                        try {
+                                            int seconds = Integer.parseInt(args[2]);
+                                            new BukkitRunnable() {
+                                                int time = 0;
+
+                                                @Override
+                                                public void run() {
+                                                    if (time >= seconds) {
+                                                        this.cancel();
                                                     } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.0")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.number")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                        time++;
+                                                        target.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plugin.replacePlaceholders(target, sb.toString().trim()))));
                                                     }
                                                 }
-                                            } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.online")) {
-                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                }
+                                            }.runTaskTimer(plugin, 0, 20);
+                                        } catch (NoSuchMethodError exception) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThis command is not supported in this version."));
+                                        }
+                                    } else {
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("actionbar.number")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
                                             }
                                         } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.add.usage")) {
+                                            for (String message : plugin.language.get.getStringList("console.actionbar.number")) {
                                                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                             }
                                         }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.item.add.permission")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
-                                    }
-                                } else if (args[1].equalsIgnoreCase("set")) {
-                                    if (sender.hasPermission("pvplevels.command.item.set")) {
-                                        if (args.length >= 7) {
-                                            if (plugin.isInt(args[2]) && Integer.parseInt(args[2]) >= 0) {
-                                                if (args[3].equalsIgnoreCase("true") || args[3].equalsIgnoreCase("false")) {
-                                                    Player target = plugin.getServer().getPlayer(args[4]);
-                                                    if (target != null) {
-                                                        if (plugin.isInt(args[6]) && Integer.parseInt(args[6]) > 0) {
-                                                            ItemStack itemStack = plugin.getID(args[5].toUpperCase(), Integer.parseInt(args[6]));
-                                                            if (itemStack != null) {
-                                                                if (args.length > 7) {
-                                                                    StringBuilder sb = new StringBuilder();
-                                                                    for (int i = 7; i < args.length; i++) {
-                                                                        sb.append(args[i]).append(" ");
-                                                                    }
-                                                                    String text = sb.toString().trim();
-                                                                    ItemMeta itemMeta = itemStack.getItemMeta();
-                                                                    if (text.contains("\\n")) {
-                                                                        String[] split = text.split(Pattern.quote("\\n"));
-                                                                        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[0])));
-                                                                        if (split.length > 1) {
-                                                                            List<String> lores = new ArrayList<>();
-                                                                            for (int i = 1; i < split.length; i++) {
-                                                                                lores.add(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, split[i])));
-                                                                            }
-                                                                            itemMeta.setLore(lores);
-                                                                        }
-                                                                    } else {
-                                                                        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(target, text)));
-                                                                    }
-                                                                    itemStack.setItemMeta(itemMeta);
-                                                                }
-                                                                Inventory inventory = target.getInventory();
-                                                                if (args[3].equalsIgnoreCase("true")) {
-                                                                    inventory.setItem(Integer.parseInt(args[2]), itemStack);
-                                                                } else if (inventory.getItem(Integer.parseInt(args[2])) == null) {
-                                                                    inventory.setItem(Integer.parseInt(args[2]), itemStack);
-                                                                }
-                                                                if (path.equalsIgnoreCase("player")) {
-                                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.set")) {
-                                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName()).replace("{pvplevels_slot}", args[2])));
-                                                                    }
-                                                                } else {
-                                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.set")) {
-                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player}", target.getName()).replace("{pvplevels_slot}", args[2])));
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.found")) {
-                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                                }
-                                                            }
-                                                        } else {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.0")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                            }
-                                                        }
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.online")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.boolean")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                    }
-                                                }
-                                            } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.number")) {
-                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                }
-                                            }
-                                        } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.set.usage")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                            }
-                                        }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.item.set.permission")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
                                     }
                                 } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.item.usage")) {
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.language.get.getStringList("actionbar.online")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("console.actionbar.online")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("actionbar.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.actionbar.usage")) {
                                         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                     }
                                 }
                             }
                         } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.item.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("actionbar.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
                             }
                         }
-                    } else if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove")) {
+                    } else if (args[0].equalsIgnoreCase("group")) {
                         unknown = false;
-                        if (sender.hasPermission("pvplevels.command." + args[0])) {
-                            if (args.length == 4) {
-                                Player target = plugin.getServer().getPlayer(args[2]);
-                                if (target != null) {
-                                    if (plugin.isInt(args[3]) && !args[3].contains("-")) {
-                                        if (args[1].equalsIgnoreCase("kills")) {
-                                            if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "kills", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set", path);
-                                            } else if (args[0].equalsIgnoreCase("add")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "kills", playerConnect.kills() + Long.parseLong(args[3]), playerConnect, args, "add", path);
-                                            } else if (args[0].equalsIgnoreCase("remove")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "kills", playerConnect.kills() - Long.parseLong(args[3]), playerConnect, args, "remove", path);
-                                            }
-                                        } else if (args[1].equalsIgnoreCase("deaths")) {
-                                            if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "deaths", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set", path);
-                                            } else if (args[0].equalsIgnoreCase("add")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "deaths", playerConnect.deaths() + Long.parseLong(args[3]), playerConnect, args, "add", path);
-                                            } else if (args[0].equalsIgnoreCase("remove")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "deaths", playerConnect.deaths() - Long.parseLong(args[3]), playerConnect, args, "remove", path);
-                                            }
-                                        } else if (args[1].equalsIgnoreCase("xp")) {
-                                            if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "xp", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set", path);
-                                            } else if (args[0].equalsIgnoreCase("add")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "xp", playerConnect.xp() + Long.parseLong(args[3]), playerConnect, args, "add", path);
-                                            } else if (args[0].equalsIgnoreCase("remove")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "xp", playerConnect.xp() - Long.parseLong(args[3]), playerConnect, args, "remove", path);
-                                            }
-                                        } else if (args[1].equalsIgnoreCase("level")) {
-                                            if (args[0].equalsIgnoreCase("set")) {
-                                                setValue(sender, target, "level", Long.valueOf(args[3]), plugin.get(target.getUniqueId().toString()), args, "set", path);
-                                            } else if (args[0].equalsIgnoreCase("add")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "level", playerConnect.level() + Long.parseLong(args[3]), playerConnect, args, "add", path);
-                                            } else if (args[0].equalsIgnoreCase("remove")) {
-                                                PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                setValue(sender, target, "level", playerConnect.level() - Long.parseLong(args[3]), playerConnect, args, "remove", path);
-                                            }
-                                        } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + ".usage")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                            }
-                                        }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + ".number")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
-                                    }
-                                } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + ".online")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                    }
-                                }
-                            } else {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + ".usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels." + args[0] + ".permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("generate")) {
-                        if (path.equalsIgnoreCase("console")) {
-                            unknown = false;
-                            if (!plugin.config.get.getBoolean("generate.disable")) {
-                                if (args.length == 2) {
-                                    if (plugin.isInt(args[1]) && !args[1].contains("-")) {
-                                        ArrayList<Integer> xpList = new ArrayList<>();
-                                        xpList.add(plugin.config.get.getInt("generate.xp.static") + plugin.random(plugin.config.get.getInt("generate.xp.min"), plugin.config.get.getInt("generate.xp.max")));
-                                        for (int i = 0; i < Integer.parseInt(args[1]) - 1; i++) {
-                                            xpList.add(xpList.get(i) + (plugin.config.get.getInt("generate.xp.static") + plugin.random(plugin.config.get.getInt("generate.xp.min"), plugin.config.get.getInt("generate.xp.max"))));
-                                        }
-                                        for (int i = 1; i <= xpList.size(); i++) {
-                                            List<String> list = plugin.config.get.getStringList("generate.commands");
-                                            if (plugin.config.get.getBoolean("generate.random.use")) {
-                                                if (plugin.levels.get.contains("levels." + plugin.random(plugin.config.get.getInt("generate.random.min"), plugin.config.get.getInt("generate.random.max")))) {
-                                                    list.add(plugin.config.get.getStringList("generate.random.commands").get(plugin.random(0, plugin.config.get.getStringList("generate.random.commands").size() - 1)));
-                                                }
-                                            }
-                                            plugin.levels.get.set("levels." + i + ".commands", list);
-                                            plugin.levels.get.set("levels." + i + ".xp", xpList.get(i - 1));
-                                        }
-                                        plugin.levels.save();
-                                        for (String message : plugin.language.get.getStringList("console.pvplevels.generate.message")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_levels}", String.valueOf(xpList.size()))));
-                                        }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList("console.pvplevels.generate.number")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
-                                    }
-                                } else {
-                                    for (String message : plugin.language.get.getStringList("console.pvplevels.generate.usage")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                    }
-                                }
-                            } else {
-                                for (String message : plugin.language.get.getStringList("console.pvplevels.generate.disable")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("boosters")) {
-                        unknown = false;
-                        if (sender.hasPermission("pvplevels.command.boosters")) {
-                            if (args.length >= 2) {
-                                if (args[1].equalsIgnoreCase("give")) {
-                                    if (sender.hasPermission("pvplevels.command.boosters.give")) {
-                                        if (args.length == 6) {
-                                            Player target = plugin.getServer().getPlayer(args[2]);
-                                            if (target != null) {
-                                                if (args[3].equalsIgnoreCase("global")) {
-                                                    if (plugin.isDouble(args[4])) {
-                                                        if (plugin.isInt(args[5])) {
-                                                            List<String> list = plugin.boosters.get.getStringList("players." + target.getUniqueId().toString() + ".global");
-                                                            list.add(args[4] + " " + args[5]);
-                                                            plugin.boosters.get.set("players." + target.getUniqueId().toString() + ".global", list);
-                                                            plugin.boosters.save();
-                                                            if (path.equalsIgnoreCase("player")) {
-                                                                for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.give.message")) {
-                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player_target}", target.getName()).replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
-                                                                }
-                                                                if (!target.getName().equals(sender.getName())) {
-                                                                    for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.give.target")) {
-                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                for (String message : plugin.language.get.getStringList("console.pvplevels.boosters.give.target")) {
-                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_global_type}", args[4]).replace("{pvplevels_booster_global_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
-                                                                }
-                                                            }
-                                                        } else {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.give.number")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                            }
-                                                        }
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.give.booster")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                        }
-                                                    }
-                                                } else if (args[3].equalsIgnoreCase("personal")) {
-                                                    if (plugin.isDouble(args[4])) {
-                                                        if (plugin.isInt(args[5])) {
-                                                            List<String> list = plugin.boosters.get.getStringList("players." + target.getUniqueId().toString() + ".personal");
-                                                            list.add(args[4] + " " + args[5]);
-                                                            plugin.boosters.get.set("players." + target.getUniqueId().toString() + ".personal", list);
-                                                            plugin.boosters.save();
-                                                            if (path.equalsIgnoreCase("player")) {
-                                                                for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.personal.give.message")) {
-                                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_player_target}", target.getName()).replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
-                                                                }
-                                                                if (!target.getName().equals(sender.getName())) {
-                                                                    for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.personal.give.target")) {
-                                                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                for (String message : plugin.language.get.getStringList("console.pvplevels.boosters.personal.give.target")) {
-                                                                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_booster_personal_type}", args[4]).replace("{pvplevels_booster_personal_time}", plugin.boostersManager.timeLeft(Integer.parseInt(args[5])))));
-                                                                }
-                                                            }
-                                                        } else {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.personal.give.number")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                            }
-                                                        }
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.personal.give.booster")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.give.usage")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                    }
-                                                }
-                                            } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.give.online")) {
-                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                }
-                                            }
-                                        } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.give.usage")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                            }
-                                        }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.give.permission")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
-                                    }
-                                } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.usage")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                    }
-                                }
-                            } else {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.boosters.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.boosters.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("gui")) {
-                        unknown = false;
-                        if (sender.hasPermission("pvplevels.command.gui")) {
+                        if (sender.hasPermission("pvplevels.admin.group")) {
                             if (args.length > 1) {
-                                if (args[1].equalsIgnoreCase("open")) {
-                                    if (args.length > 2) {
-                                        if (sender.hasPermission("pvplevels.command.gui.open." + args[2])) {
-                                            if (args.length == 3) {
-                                                if (path.equalsIgnoreCase("player")) {
-                                                    Player player = (Player) sender;
-                                                    GUI gui = plugin.guiList.get(args[2]);
-                                                    if (gui != null) {
-                                                        gui.open(player);
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList("player.pvplevels.gui.open.found")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_gui_file}", args[2])));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList("console.pvplevels.gui.open.usage")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                    }
-                                                }
-                                            } else if (args.length == 4) {
-                                                Player target = plugin.getServer().getPlayer(args[3]);
-                                                if (target != null) {
-                                                    GUI gui = plugin.guiList.get(args[2]);
-                                                    if (gui != null) {
-                                                        gui.open(target);
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.found")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_gui_file}", args[2])));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.online")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                    }
-                                                }
-                                            } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.usage")) {
-                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                }
-                                            }
-                                        } else {
-                                            for (String message : plugin.language.get.getStringList("player.pvplevels.gui.open.permission")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                            }
-                                        }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.open.usage")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
-                                    }
-                                } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.usage")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                    }
-                                }
-                            } else {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.gui.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.gui.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("player")) {
-                        unknown = false;
-                        if (sender.hasPermission("pvplevels.command.player")) {
-                            if (args.length > 1) {
-                                if (args[1].equalsIgnoreCase("get")) {
-                                    playerCheckXP(sender, args, "get", path);
-                                } else if (args[1].equalsIgnoreCase("lose")) {
-                                    playerCheckXP(sender, args, "lose", path);
-                                } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.player.usage")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                    }
-                                }
-                            } else {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.player.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                }
-                            }
-                        } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.player.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                            }
-                        }
-                    } else if (args[0].equalsIgnoreCase("coins")) {
-                        unknown = false;
-                        if (sender.hasPermission("pvplevels.command.coins")) {
-                            if (args.length > 2) {
                                 if (args[1].equalsIgnoreCase("set")) {
-                                    if (sender.hasPermission("pvplevels.command.coins.set")) {
-                                        if (args.length == 4) {
-                                            Player target = plugin.getServer().getPlayer(args[2]);
-                                            if (target != null) {
-                                                if (plugin.isInt(args[3])) {
-                                                    long set = Long.parseLong(args[3]);
-                                                    if (set >= 0) {
-                                                        PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                        playerConnect.coins(set);
-                                                        if (sender instanceof Player) {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.set.set")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", String.valueOf(set)).replace("{pvplevels_player}", target.getName())));
-                                                            }
-                                                        } else {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.set")) {
-                                                                target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", String.valueOf(set))));
-                                                            }
-                                                        }
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.0")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                        }
+                                    if (args.length == 4) {
+                                        final Player target = plugin.getServer().getPlayer(args[2]);
+                                        if (target != null) {
+                                            if (plugin.isString(args[3]) && plugin.levels.get.contains(args[3])) {
+                                                final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                                playerConnect.setGroup(args[3]);
+                                                if (type.equalsIgnoreCase("player")) {
+                                                    for (String message : plugin.language.get.getStringList("group.set.message")) {
+                                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{target}", target.getName()).replace("{group}", args[3])));
                                                     }
                                                 } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.number")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    for (String message : plugin.language.get.getStringList("console.group.set.message")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{group}", args[3])));
                                                     }
                                                 }
                                             } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.online")) {
-                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                if (type.equalsIgnoreCase("player")) {
+                                                    for (String message : plugin.language.get.getStringList("group.valid")) {
+                                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.language.get.getStringList("console.group.valid")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
                                                 }
                                             }
                                         } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("group.online")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList("console.group.online")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
                                             }
                                         }
                                     } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.coins.set.permission")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("group.set.usage")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList("console.group.set.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
                                         }
                                     }
-                                } else if (args[1].equalsIgnoreCase("add")) {
-                                    if (sender.hasPermission("pvplevels.command.coins.add")) {
-                                        if (args.length == 4) {
-                                            Player target = plugin.getServer().getPlayer(args[2]);
-                                            if (target != null) {
-                                                if (plugin.isInt(args[3])) {
-                                                    PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                    long set = playerConnect.coins() + Long.parseLong(args[3]);
-                                                    if (set >= 0) {
-                                                        playerConnect.coins(set);
-                                                        if (sender instanceof Player) {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.add.added")) {
-                                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3]).replace("{pvplevels_player}", target.getName())));
-                                                            }
-                                                        } else {
-                                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.added")) {
-                                                                target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3])));
-                                                            }
-                                                        }
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.0")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.number")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                    }
+                                } else if (args[1].equalsIgnoreCase("reset")) {
+                                    if (args.length == 3) {
+                                        Player target = plugin.getServer().getPlayer(args[2]);
+                                        if (target != null) {
+                                            PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                            playerConnect.setGroup("default");
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("group.reset.message")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{target}", target.getName())));
                                                 }
                                             } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.online")) {
+                                                for (String message : plugin.language.get.getStringList("console.group.reset.message")) {
                                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                                 }
                                             }
                                         } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                            }
-                                        }
-                                    } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.coins.add.permission")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                        }
-                                    }
-                                } else if (args[1].equalsIgnoreCase("remove")) {
-                                    if (sender.hasPermission("pvplevels.command.coins.remove")) {
-                                        if (args.length == 4) {
-                                            Player target = plugin.getServer().getPlayer(args[2]);
-                                            if (target != null) {
-                                                if (plugin.isInt(args[3])) {
-                                                    PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
-                                                    long set = playerConnect.coins() - Long.parseLong(args[3]);
-                                                    if (set >= 0) {
-                                                        playerConnect.coins(set);
-                                                    } else {
-                                                        playerConnect.coins(0L);
-                                                    }
-                                                    if (sender instanceof Player) {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.remove.removed")) {
-                                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3]).replace("{pvplevels_player}", target.getName())));
-                                                        }
-                                                    } else {
-                                                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.removed")) {
-                                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_coins_amount}", args[3])));
-                                                        }
-                                                    }
-                                                } else {
-                                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.number")) {
-                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                                    }
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("group.online")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
                                                 }
                                             } else {
-                                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.online")) {
+                                                for (String message : plugin.language.get.getStringList("console.group.online")) {
                                                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
                                                 }
                                             }
-                                        } else {
-                                            for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
-                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                                            }
                                         }
                                     } else {
-                                        for (String message : plugin.language.get.getStringList("player.pvplevels.coins.remove.permission")) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("group.reset.usage")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList("console.group.reset.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
                                         }
                                     }
                                 } else {
-                                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
-                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.language.get.getStringList("group.usage")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("console.group.usage")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
                                     }
                                 }
                             } else {
-                                for (String message : plugin.language.get.getStringList(path + ".pvplevels.coins.usage")) {
-                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("group.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.group.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
                                 }
                             }
                         } else {
-                            for (String message : plugin.language.get.getStringList("player.pvplevels.coins.permission")) {
-                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("group.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("reset")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.admin.reset")) {
+                            if (args.length > 2) {
+                                final Player target = plugin.getServer().getPlayer(args[2]);
+                                if (target != null) {
+                                    if (args[1].equalsIgnoreCase("kills")) {
+                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        playerConnect.setKills(0L);
+                                        triggerReset(type, sender, target, "kills", 1, 0);
+                                    } else if (args[1].equalsIgnoreCase("deaths")) {
+                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        playerConnect.setDeaths(0L);
+                                        triggerReset(type, sender, target, "deaths", 1, 0);
+                                    } else if (args[1].equalsIgnoreCase("level")) {
+                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        playerConnect.setLevel(plugin.config.get.getLong("start-level"));
+                                        playerConnect.setXp(0L);
+                                        triggerReset(type, sender, target, "level", 1, 0);
+                                    } else if (args[1].equalsIgnoreCase("killstreak")) {
+                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        if (args.length > 3) {
+                                            triggerReset(type, sender, target, "killstreak " + args[3], playerConnect.getKillstreak(), 0);
+                                        } else {
+                                            triggerReset(type, sender, target, "killstreak", playerConnect.getKillstreak(), 0);
+                                        }
+                                        playerConnect.setKillstreak(0L);
+                                    } else if (args[1].equalsIgnoreCase("stats")) {
+                                        if (args.length == 4) {
+                                            final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                            playerConnect.setKills(0L);
+                                            playerConnect.setDeaths(0L);
+                                            playerConnect.setXp(0L);
+                                            playerConnect.setLevel(plugin.config.get.getLong("start-level"));
+                                            playerConnect.setKillstreak(0L);
+                                            playerConnect.setKillstreak_top(0L);
+                                            if (Boolean.parseBoolean(args[2])) {
+                                                playerConnect.setGroup("default");
+                                            }
+                                            triggerReset(type, sender, target, "stats", 1, 0);
+                                        } else {
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("reset.stats.usage")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList("console.reset.stats.usage")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("reset.found")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList("console.reset.found")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.language.get.getStringList("reset.online")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("console.reset.online")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("reset.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.reset.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("reset.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("xp")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.admin.xp")) {
+                            if (args.length == 3) {
+                                final Player target = plugin.getServer().getPlayer(args[1]);
+                                if (target != null) {
+                                    if (plugin.isLong(args[2])) {
+                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        long set = Long.parseLong(args[2]);
+                                        boolean plus = true;
+                                        if (args[2].contains("+")) {
+                                            set = playerConnect.getXp() + Long.parseLong(args[2].replace("+", ""));
+                                        } else if (args[2].contains("-")) {
+                                            set = playerConnect.getXp() - Long.parseLong(args[2].replace("-", ""));
+                                            plus = false;
+                                        }
+                                        long number = plugin.config.get.getLong("start-level");
+                                        for (long integer : xpList(playerConnect)) {
+                                            if (set >= integer && integer != 0) {
+                                                number++;
+                                            }
+                                        }
+                                        if (set >= 0) {
+                                            final Set<String> stringList = plugin.levels.get.getConfigurationSection(playerConnect.getGroup()).getKeys(false);
+                                            stringList.remove("execute");
+                                            final Set<Integer> list = stringList.stream().map(Integer::parseInt).collect(Collectors.toSet());
+                                            final long maxXP = plugin.levels.get.getLong(playerConnect.getGroup() + "." + Collections.max(list) + ".xp");
+                                            if (set >= maxXP) {
+                                                playerConnect.setXp(maxXP);
+                                            } else {
+                                                playerConnect.setXp(set);
+                                            }
+                                        } else {
+                                            playerConnect.setXp(0L);
+                                        }
+                                            if (playerConnect.getLevel() != number) {
+                                                if (plus) {
+                                                    playerConnect.setLevel(number - 1);
+                                                    plugin.xpManager.sendCommands(target, plugin.levels.get.getString(playerConnect.getGroup() + "." + number + ".execute") + ".level.up", plugin.execute.get, "", 0, 0, 0, 0);
+                                                    playerConnect.setLevel(number);
+                                                } else {
+                                                    playerConnect.setLevel(number);
+                                                    plugin.xpManager.sendCommands(target, plugin.levels.get.getString(playerConnect.getGroup() + "." + number + ".execute") + ".level.down", plugin.execute.get, "", 0, 0, 0, 0);
+                                                }
+                                            }
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("xp.set")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{xp}", String.valueOf(args[2])).replace("{player}", sender.getName())));
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList("console.xp.set")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{xp}", String.valueOf(args[2]))));
+                                            }
+                                        }
+                                        for (String message : plugin.language.get.getStringList("xp.target")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{xp}", String.valueOf(args[2]))));
+                                        }
+                                    } else {
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("xp.number")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList("console.xp.number")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.language.get.getStringList("xp.online")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("console.xp.online")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("xp.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.xp.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("xp.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("level")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.admin.level")) {
+                            if (args.length == 3) {
+                                final Player target = plugin.getServer().getPlayer(args[1]);
+                                if (target != null) {
+                                    if (plugin.isLong(args[2])) {
+                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        long set = Long.parseLong(args[2]);
+                                        if (args[2].contains("+")) {
+                                            set = playerConnect.getLevel() + Long.parseLong(args[2].replace("+", ""));
+                                        } else if (args[2].contains("-")) {
+                                            set = playerConnect.getLevel() - Long.parseLong(args[2].replace("-", ""));
+                                        }
+                                        if (set >= plugin.config.get.getLong("start-level") && plugin.levels.get.contains(playerConnect.getGroup() + "." + set)) {
+                                            playerConnect.setLevel(set - 1);
+                                            plugin.xpManager.sendCommands(target, plugin.levels.get.getString(playerConnect.getGroup() + "." + set + ".execute") + ".level.up", plugin.execute.get, "", 0, 0, 0, 0);
+                                            playerConnect.setLevel(set);
+                                            playerConnect.setXp(plugin.levels.get.getLong(playerConnect.getGroup() + "." + set + ".xp"));
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("level.set")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{level}", String.valueOf(set)).replace("{player}", sender.getName())));
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList("console.level.set")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{level}", String.valueOf(set))));
+                                                }
+                                            }
+                                            for (String message : plugin.language.get.getStringList("level.target")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{level}", String.valueOf(set))));
+                                            }
+                                        } else {
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("level.found")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList("console.level.found")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("level.number")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList("console.level.number")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.language.get.getStringList("level.online")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("console.level.online")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("level.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.level.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("level.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("multiplier")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.admin.multiplier")) {
+                            if (args.length == 4) {
+                                final Player target = plugin.getServer().getPlayer(args[1]);
+                                if (target != null) {
+                                    if (plugin.isDouble(args[2])) {
+                                        if (plugin.isInt(args[3])) {
+                                            final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                            playerConnect.setMultiplier(Double.parseDouble(args[2]));
+                                            playerConnect.setMultiplier_time(Integer.parseInt(args[3]));
+                                            playerConnect.setMultiplier_time_left(Integer.parseInt(args[3]));
+                                            plugin.multipliers.add(target);
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("multiplier.got")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{player}", sender.getName()).replace("{multiplier}", args[2]).replace("{time}", plugin.statsManager.time("multiplier", new GregorianCalendar(0, 0, 0, 0, 0, Integer.parseInt(args[3])).getTime().getTime()))));
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList("console.multiplier.got")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{multiplier}", args[2]).replace("{time}", plugin.statsManager.time("multiplier", new GregorianCalendar(0, 0, 0, 0, 0, Integer.parseInt(args[3])).getTime().getTime()))));
+                                                }
+                                            }
+                                            for (String message : plugin.language.get.getStringList("multiplier.target")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{multiplier}", args[2]).replace("{time}", plugin.statsManager.time("multiplier", new GregorianCalendar(0, 0, 0, 0, 0, Integer.parseInt(args[3])).getTime().getTime()))));
+                                            }
+                                        } else {
+                                            if (type.equalsIgnoreCase("player")) {
+                                                for (String message : plugin.language.get.getStringList("multiplier.number")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                }
+                                            } else {
+                                                for (String message : plugin.language.get.getStringList("console.multiplier.number")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        if (type.equalsIgnoreCase("player")) {
+                                            for (String message : plugin.language.get.getStringList("multiplier.double")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                            }
+                                        } else {
+                                            for (String message : plugin.language.get.getStringList("console.multiplier.double")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.language.get.getStringList("multiplier.online")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.language.get.getStringList("console.multiplier.online")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.language.get.getStringList("multiplier.usage")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.language.get.getStringList("console.multiplier.usage")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.language.get.getStringList("multiplier.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
                             }
                         }
                     }
                     if (unknown) {
-                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.command.unknown")) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_command}", args[0])));
+                        if (type.equalsIgnoreCase("player")) {
+                            for (String message : plugin.language.get.getStringList("command.unknown")) {
+                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{command}", args[0])));
+                            }
+                        } else {
+                            for (String message : plugin.language.get.getStringList("console.command.unknown")) {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{command}", args[0])));
+                            }
                         }
                     }
                 }
             } else {
-                for (String message : plugin.language.get.getStringList("player.pvplevels.command.permission")) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                if (type.equalsIgnoreCase("player")) {
+                    for (String message : plugin.language.get.getStringList("command.permission")) {
+                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                    }
                 }
             }
         }
         return true;
     }
 
-    private void playerCheckXP(CommandSender sender, String[] args, String type, String path) {
-        if (sender.hasPermission("pvplevels.command." + type)) {
-            if (args.length == 4) {
-                if (plugin.config.get.contains("xp." + args[2])) {
-                    Player target = plugin.getServer().getPlayer(args[3]);
-                    if (target != null) {
-                        if (type.equalsIgnoreCase("get")) {
-                            plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], null, target, true);
-                            return;
-                        }
-                        plugin.xpManager.check(plugin.get(target.getUniqueId().toString()), args[2], null, target, false);
-                    } else {
-                        for (String message : plugin.language.get.getStringList(path + ".pvplevels.player." + type + ".online")) {
-                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                        }
-                    }
-                } else {
-                    for (String message : plugin.language.get.getStringList(path + ".pvplevels.player." + type + ".config")) {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{pvplevels_xp_type}", args[2])));
-                    }
-                }
-            } else {
-                for (String message : plugin.language.get.getStringList(path + ".pvplevels.player." + type + ".usage")) {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-                }
+    private ArrayList<Long> xpList(final PlayerConnect playerConnect) {
+        final ArrayList<Long> xp = new ArrayList<>();
+        for (String level : plugin.levels.get.getConfigurationSection(playerConnect.getGroup()).getKeys(false)) {
+            if (!level.equalsIgnoreCase("execute")) {
+                xp.add(plugin.levels.get.getLong(playerConnect.getGroup() + "." + level + ".xp"));
             }
-        } else {
-            for (String message : plugin.language.get.getStringList("player.pvplevels.player." + type + ".permission")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        }
-    }
-
-    private void setValue(CommandSender sender, Player target, String colum, Long set, PlayerConnect playerConnect, String[] args, String type, String path) {
-        boolean killsCheck = true;
-        boolean deathsCheck = true;
-        boolean xpAddCheck = true;
-        boolean xpRemoveCheck = true;
-        boolean xpSetCheck = true;
-        boolean levelCheck = true;
-        if (colum.equalsIgnoreCase("kills")) {
-            if (set > 0L) {
-                playerConnect.kills(set);
-            } else if (set == 0) {
-                playerConnect.kills(0L);
-            } else {
-                killsCheck = false;
-            }
-        } else if (colum.equalsIgnoreCase("deaths")) {
-            if (set > 0L) {
-                playerConnect.deaths(set);
-            } else if (set == 0) {
-                playerConnect.deaths(0L);
-            } else {
-                deathsCheck = false;
-            }
-        } else if (colum.equalsIgnoreCase("xp")) {
-            if (type.equalsIgnoreCase("add")) {
-                ArrayList<Long> xp = xpControl();
-                if (set <= xp.get(xp.size() - 1)) {
-                    if (!plugin.xpManager.isMaxLevel(target, playerConnect)) {
-                        playerConnect.xp(set);
-                        plugin.xpManager.getLevel(playerConnect, target);
-                    } else {
-                        xpAddCheck = false;
-                    }
-                } else {
-                    xpAddCheck = false;
-                }
-            } else if (type.equalsIgnoreCase("remove")) {
-                if (set >= 0) {
-                    playerConnect.xp(set);
-                    if (!plugin.config.get.getBoolean("levelup.xp-clear") && playerConnect.xp() < plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp")) {
-                        plugin.xpManager.loseLevel(playerConnect, playerConnect.level() - 1, target, null);
-                    }
-                } else {
-                    long lowerLevel = playerConnect.level() - 1;
-                    if (plugin.levels.get.contains("levels." + lowerLevel + ".xp")) {
-                        long all = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp") - Long.parseLong(args[3]);
-                        if (all >= 0) {
-                            playerConnect.xp(all);
-                        } else {
-                            playerConnect.xp(0L);
-                        }
-                        plugin.xpManager.loseLevel(playerConnect, lowerLevel, target, null);
-                    } else {
-                        xpRemoveCheck = false;
-                    }
-                }
-            } else {
-                ArrayList<Long> xp = xpControl();
-                if (set <= xp.get(xp.size() - 1)) {
-                    if (!plugin.xpManager.isMaxLevel(target, playerConnect)) {
-                        playerConnect.xp(set);
-                        plugin.xpManager.getLevel(playerConnect, target);
-                    } else {
-                        xpSetCheck = false;
-                    }
-                } else {
-                    xpSetCheck = false;
-                }
-            }
-        } else if (colum.equalsIgnoreCase("level")) {
-            if (set > 0L) {
-                if (plugin.levels.get.contains("levels." + set)) {
-                    playerConnect.level(set);
-                    if (plugin.config.get.getBoolean("levelup.xp-clear")) {
-                        playerConnect.xp(0L);
-                    } else {
-                        playerConnect.xp(plugin.levels.get.getLong("levels." + set + ".xp"));
-                    }
-                } else {
-                    levelCheck = false;
-                }
-            } else if (set == 0) {
-                playerConnect.level(0L);
-                playerConnect.xp(0L);
-            }
-        }
-        if (killsCheck && deathsCheck && xpAddCheck && xpRemoveCheck && xpSetCheck && levelCheck) {
-            if (sender instanceof Player) {
-                for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + "." + colum))
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message
-                            .replace("{pvplevels_player}", args[2]).replace("{pvplevels_" + args[0] + "}", args[3])));
-            } else {
-                for (String message : plugin.language.get.getStringList(path + ".pvplevels." + args[0] + "." + colum))
-                    target.sendMessage(ChatColor.translateAlternateColorCodes('&', message
-                            .replace("{pvplevels_player}", args[2]).replace("{pvplevels_" + args[0] + "}", args[3])));
-            }
-        } else if (!killsCheck) {
-            for (String message : plugin.language.get.getStringList(path + ".pvplevels.set.kills-cannot")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        } else if (!deathsCheck) {
-            for (String message : plugin.language.get.getStringList(path + ".pvplevels.set.deaths-cannot")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        } else if (!xpAddCheck) {
-            for (String message : plugin.language.get.getStringList(path + ".pvplevels.set.xp-add-cannot")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        } else if (!xpRemoveCheck) {
-            for (String message : plugin.language.get.getStringList(path + ".pvplevels.set.xp-remove-cannot")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        } else if (!xpSetCheck) {
-            for (String message : plugin.language.get.getStringList(path + ".pvplevels.set.xp-set-cannot")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        } else if (!levelCheck) {
-            for (String message : plugin.language.get.getStringList(path + ".pvplevels.set.level-cannot")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-            }
-        }
-    }
-
-    private ArrayList<Long> xpControl() {
-        ArrayList<Long> xp = new ArrayList<>();
-        for (String level : plugin.levels.get.getConfigurationSection("levels").getKeys(false)) {
-            xp.add(plugin.levels.get.getLong("levels." + level + ".xp"));
         }
         return xp;
+    }
+
+    private void triggerReset(final String type, final CommandSender sender, final Player target, String path, final long set, final long next) {
+        if (path.contains("killstreak")) {
+            final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+            String killer = "";
+            if (path.split(" ").length == 2) {
+                killer = path.split(" ")[1];
+            }
+            if (plugin.config.get.contains("killstreak." + playerConnect.getGroup())) {
+                ArrayList<Integer> list = new ArrayList<>();
+                final long killstreak = playerConnect.getKillstreak();
+                for (String select : plugin.config.get.getConfigurationSection("killstreak." + playerConnect.getGroup()).getKeys(false)) {
+                    if (!select.equalsIgnoreCase("worlds") && !select.equalsIgnoreCase("get")) {
+                        if (killstreak >= Integer.parseInt(select)) {
+                            list.add(Integer.parseInt(select));
+                        }
+                    }
+                }
+                if (!list.isEmpty()) {
+                    for (String commands : plugin.config.get.getStringList("killstreak." + playerConnect.getGroup() + "." + +list.get(list.size() - 1) + ".lost")) {
+                        plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.replacePlaceholders(target, commands.replace("{lost}", String.valueOf(killstreak)).replace("{target}", killer)));
+                    }
+                }
+            }
+            path = "killstreak";
+        }
+        if (type.equalsIgnoreCase("player")) {
+            for (String message : plugin.language.get.getStringList("reset." + path + ".reset")) {
+                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{target}", target.getName())));
+            }
+        } else {
+            for (String message : plugin.language.get.getStringList("console.reset." + path + ".reset")) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName())));
+            }
+        }
+        if (set > next) {
+            for (String message : plugin.language.get.getStringList("reset." + path + ".target")) {
+                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName())));
+            }
+        }
     }
 
     private void broadcast(String text, String[] args) {

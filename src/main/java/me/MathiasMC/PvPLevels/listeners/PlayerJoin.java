@@ -1,9 +1,9 @@
 package me.MathiasMC.PvPLevels.listeners;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -15,13 +15,16 @@ public class PlayerJoin implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler
     public void onJoin(PlayerJoinEvent e) {
-        Player player = e.getPlayer();
-        if (!player.hasPlayedBefore()) {
-            plugin.systemManager.executeCommands(player, plugin.config.get, "join-first", "commands", 0L);
-        } else {
-            plugin.systemManager.executeCommands(player, plugin.config.get, "join", "commands", 0L);
+        final Player player = e.getPlayer();
+        final String uuid = player.getUniqueId().toString();
+        if (plugin.list().contains(uuid)) {
+            final PlayerConnect playerConnect = plugin.get(uuid);
+            if (playerConnect.getMultiplier() != 0) {
+                player.sendMessage("your multiplier has started again you joined");
+                plugin.multipliers.add(player);
+            }
         }
     }
 }

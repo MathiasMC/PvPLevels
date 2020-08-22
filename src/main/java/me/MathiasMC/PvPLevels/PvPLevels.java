@@ -6,21 +6,18 @@ import me.MathiasMC.PvPLevels.data.Database;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.data.Purge;
 import me.MathiasMC.PvPLevels.files.*;
-import me.MathiasMC.PvPLevels.gui.GUI;
+import me.MathiasMC.PvPLevels.gui.Menu;
 import me.MathiasMC.PvPLevels.listeners.*;
 import me.MathiasMC.PvPLevels.managers.*;
 import me.MathiasMC.PvPLevels.placeholders.PlaceholderAPI;
-import me.MathiasMC.PvPLevels.utils.KillSessionUtils;
 import me.MathiasMC.PvPLevels.utils.Metrics;
 import me.MathiasMC.PvPLevels.utils.TextUtils;
 import me.MathiasMC.PvPLevels.utils.UpdateUtils;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -28,82 +25,81 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PvPLevels extends JavaPlugin {
 
     public static PvPLevels call;
 
+    public final ConsoleCommandSender consoleSender = Bukkit.getServer().getConsoleSender();
+
+    public Database database;
+
+    public TextUtils textUtils;
     public Config config;
     public Language language;
     public Levels levels;
-    public Boosters boosters;
-    public Zones zones;
-    public TextUtils textUtils;
-    public XPManager xpManager;
-    public StatsManager statsManager;
-    public SystemManager systemManager;
-    public EntityManager entityManager;
-    public KillSessionUtils killSessionUtils;
-    public BoostersManager boostersManager;
-    public PlaceholderManager placeholderManager;
+    public Execute execute;
+
     public GUIFolder guiFolder;
-    public Database database;
-    public final ConsoleCommandSender consoleCommandSender = Bukkit.getServer().getConsoleSender();
+
+    public GUIManager guiManager;
+    public PlaceholderManager placeholderManager;
+    public KillSessionManager killSessionManager;
+    public StatsManager statsManager;
+    public XPManager xpManager;
+
     private final Map<String, PlayerConnect> playerConnect = new HashMap<>();
-    public final ArrayList<Location> blocksList = new ArrayList<>();
+
+    private final HashMap<Player, Menu> playerMenu = new HashMap<>();
+
+    public final HashMap<String, FileConfiguration> guiFiles = new HashMap<>();
+
     public final HashSet<String> spawners = new HashSet<>();
-    public final HashMap<String, GUI> guiList = new HashMap<>();
-    public final HashMap<String, Integer> guiPageID = new HashMap<>();
-    public final HashMap<String, String> guiPageSort = new HashMap<>();
-    public final HashMap<String, Boolean> guiPageSortReverse = new HashMap<>();
+
+    public final ArrayList<Location> blocksList = new ArrayList<>();
+
     public final Map<String, String> lastDamagers = new HashMap<>();
-    public final HashMap<String, Location> wandPos1 = new HashMap<>();
-    public final HashMap<String, Location> wandPos2 = new HashMap<>();
-    public ItemStack wand;
+
+    public final HashSet<OfflinePlayer> multipliers = new HashSet<>();
 
     public void onEnable() {
         call = this;
         if (!getDataFolder().exists()) {
             getDataFolder().mkdir();
         }
+
         textUtils = new TextUtils(this);
-        xpManager = new XPManager(this);
-        statsManager = new StatsManager(this);
-        systemManager = new SystemManager(this);
-        entityManager = new EntityManager(this);
-        killSessionUtils = new KillSessionUtils(this);
-        boostersManager = new BoostersManager(this);
-        placeholderManager = new PlaceholderManager(this);
         config = new Config(this);
         language = new Language(this);
         levels = new Levels(this);
-        boosters = new Boosters(this);
-        zones = new Zones(this);
-        database = new Database(this);
+        execute = new Execute(this);
+
         guiFolder = new GUIFolder(this);
+
+        guiManager = new GUIManager(this);
+        placeholderManager = new PlaceholderManager(this);
+        killSessionManager = new KillSessionManager(this);
+        statsManager = new StatsManager(this);
+        xpManager = new XPManager(this);
+
+        database = new Database(this);
         if (database.set()) {
-            textUtils.info("Database ( Connected )");
-            if (config.get.getBoolean("load-players.reload")) { database.loadOnline(); }
-            if (config.get.getBoolean("load-players.all")) { database.loadALL(); }
-            getServer().getPluginManager().registerEvents(new EntityDeath(this), this);
-            getServer().getPluginManager().registerEvents(new EntityDamageByEntity(this), this);
+            database.loadALL();
             getServer().getPluginManager().registerEvents(new PlayerLogin(this), this);
+            getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
             getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
-            getServer().getPluginManager().registerEvents(new InventoryClick(this), this);
-            getServer().getPluginManager().registerEvents(new InventoryClose(this), this);
-            if (config.get.getBoolean("events.CreatureSpawn")) { getServer().getPluginManager().registerEvents(new CreatureSpawn(this), this); }
-            if (config.get.getBoolean("events.PlayerJoin")) { getServer().getPluginManager().registerEvents(new PlayerJoin(this), this); }
-            if (config.get.getBoolean("events.PlayerRespawn")) { getServer().getPluginManager().registerEvents(new PlayerRespawn(this), this); }
-            if (config.get.getBoolean("events.BlockPlace")) { getServer().getPluginManager().registerEvents(new BlockPlace(this), this); }
-            if (config.get.getBoolean("events.BlockBreak")) { getServer().getPluginManager().registerEvents(new BlockBreak(this), this); }
+            getServer().getPluginManager().registerEvents(new InventoryClick(), this);
+            getServer().getPluginManager().registerEvents(new EntityDeath(this), this);
+            getServer().getPluginManager().registerEvents(new CreatureSpawn(this), this);
+            getServer().getPluginManager().registerEvents(new BlockBreak(this), this);
+            getServer().getPluginManager().registerEvents(new BlockPlace(this), this);
+            getServer().getPluginManager().registerEvents(new EntityDamageByEntity(this), this);
             getCommand("pvplevels").setExecutor(new PvPLevels_Command(this));
-            getCommand("pvpstats").setExecutor(new PvPStats_Command(this));
-            getCommand("pvptop").setExecutor(new PvPTop_Command(this));
-            getCommand("pvpboosters").setExecutor(new PvPBoosters_Command(this));
-            getCommand("pvpprofile").setExecutor(new PvPProfile_Command(this));
-            getCommand("pvpadmin").setExecutor(new PvPAdmin_Command(this));
-            getCommand("pvpshop").setExecutor(new PvPShop_Command(this));
-            if (config.get.getBoolean("placeholders.PlaceholderAPI")) { placeholders(); }
+            getCommand("pvplevels").setTabCompleter(new PvPLevels_TabComplete(this));
+            int pluginId = 1174;
+            final Metrics metrics = new Metrics(this, pluginId);
+            metrics.addCustomChart(new Metrics.SimplePie("levels", () -> String.valueOf(levels.get.getConfigurationSection("").getKeys(false).size())));
             if (config.get.getBoolean("update-check")) {
                 new UpdateUtils(this, 20807).getVersion(version -> {
                     if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
@@ -113,12 +109,44 @@ public class PvPLevels extends JavaPlugin {
                     }
                 });
             }
-            if (config.get.getBoolean("save.use")) { systemManager.saveSchedule(); }
-            int pluginId = 1174;
-            Metrics metrics = new Metrics(this, pluginId);
-            metrics.addCustomChart(new Metrics.SimplePie("levels", () -> String.valueOf(levels.get.getConfigurationSection("levels").getKeys(false).size())));
-            if (config.get.getBoolean("mysql.purge.use")) { new Purge(this); }
-            this.wand = getWand();
+            if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                new PlaceholderAPI(this).register();
+                textUtils.info("PlaceholderAPI (found)");
+            }
+            if (config.get.contains("mysql.purge")) {
+                new Purge(this);
+            }
+            if (isLevelsValid()) {
+                textUtils.info("Validator ( passed )");
+            }
+
+            if (config.get.getBoolean("save.use")) {
+                saveSchedule();
+            }
+
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
+                for (OfflinePlayer offlinePlayer : multipliers) {
+                    if (offlinePlayer.isOnline()) {
+                        final PlayerConnect playerConnect = get(offlinePlayer.getUniqueId().toString());
+                        int left = playerConnect.getMultiplier_time_left();
+                        if (left > 0) {
+                            left--;
+                            playerConnect.setMultiplier_time_left(left);
+                            return;
+                        }
+                        for (String message : language.get.getStringList("multiplier.lost")) {
+                            getServer().dispatchCommand(consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", offlinePlayer.getName()).replace("{multiplier}", String.valueOf(playerConnect.getMultiplier()))));
+                        }
+                        playerConnect.setMultiplier(0D);
+                        playerConnect.setMultiplier_time(0);
+                        playerConnect.setMultiplier_time_left(0);
+                        multipliers.remove(offlinePlayer);
+                    } else {
+                        multipliers.remove(offlinePlayer);
+                    }
+                }
+            }, 20, 20);
+
         } else {
             textUtils.error("Disabling plugin cannot connect to database");
             getServer().getPluginManager().disablePlugin(this);
@@ -134,19 +162,19 @@ public class PvPLevels extends JavaPlugin {
         call = null;
     }
 
-    public void load(String uuid) {
-        PlayerConnect data = new PlayerConnect(uuid);
+    public void load(final String uuid) {
+        final PlayerConnect data = new PlayerConnect(uuid);
         playerConnect.put(uuid, data);
     }
 
-    public void unload(String uuid) {
-        PlayerConnect data = playerConnect.remove(uuid);
+    public void unload(final String uuid) {
+        final PlayerConnect data = playerConnect.remove(uuid);
         if (data != null) {
             data.save();
         }
     }
 
-    public PlayerConnect get(String uuid) {
+    public PlayerConnect get(final String uuid) {
         return playerConnect.get(uuid);
     }
 
@@ -154,9 +182,87 @@ public class PvPLevels extends JavaPlugin {
         return playerConnect.keySet();
     }
 
-    public boolean isInt(String s) {
+    public Menu getPlayerMenu(final Player player) {
+        Menu playerMenu;
+        if (!this.playerMenu.containsKey(player)) {
+            playerMenu = new Menu(player);
+            this.playerMenu.put(player, playerMenu);
+            return playerMenu;
+        } else {
+            return this.playerMenu.get(player);
+        }
+    }
+
+    private void saveSchedule() {
+        final int interval = config.get.getInt("save.interval");
+        textUtils.info("Saving to the database every ( " + interval + " ) minutes");
+        getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+            for (String uuid : list()) {
+                get(uuid).save();
+            }
+        }, interval * 1200, interval * 1200);
+    }
+
+    public String replacePlaceholders(final OfflinePlayer player, String message) {
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, message);
+        }
+        final String uuid = player.getUniqueId().toString();
+        if (list().contains(uuid)) {
+            final PlayerConnect playerConnect = get(uuid);
+            message = internalReplace(playerConnect, message)
+                    .replace("{level_group}", statsManager.group(playerConnect))
+                    .replace("{level_prefix}", statsManager.prefix(playerConnect))
+                    .replace("{level_suffix}", statsManager.suffix(playerConnect))
+            ;
+        }
+        message = message
+                .replace("{player}", player.getName())
+                .replace("{uuid}", uuid);
+        return message;
+    }
+
+    public String internalReplace(final PlayerConnect playerConnect, String message) {
+        return message.replace("{kills}", String.valueOf(playerConnect.getKills()))
+                .replace("{deaths}", String.valueOf(playerConnect.getDeaths()))
+                .replace("{xp}", String.valueOf(playerConnect.getXp()))
+                .replace("{level}", String.valueOf(playerConnect.getLevel()))
+                .replace("{level_next}", String.valueOf(playerConnect.getLevel() + 1))
+                .replace("{kdr}", statsManager.kdr(playerConnect))
+                .replace("{kill_factor}", statsManager.kill_factor(playerConnect))
+                .replace("{killstreak}", String.valueOf(playerConnect.getKillstreak()))
+                .replace("{killstreak_top}", String.valueOf(playerConnect.getKillstreak_top()))
+                .replace("{xp_required}", String.valueOf(statsManager.xp_required(playerConnect, false)))
+                .replace("{xp_need}", String.valueOf(statsManager.xp_need(playerConnect)))
+                .replace("{xp_progress}", String.valueOf(statsManager.xp_progress(playerConnect)))
+                .replace("{xp_progress_style}", String.valueOf(statsManager.xp_progress_style(playerConnect, "xp-progress-style")))
+                .replace("{xp_progress_style_2}", String.valueOf(statsManager.xp_progress_style(playerConnect, "xp-progress-style-2")))
+                .replace("{date}", statsManager.time("date", playerConnect.getTime().getTime()))
+                .replace("{time}", statsManager.time("time", playerConnect.getTime().getTime()))
+                .replace("{group}", playerConnect.getGroup())
+                ;
+    }
+
+    public boolean versionID() {
+        if (getServer().getVersion().contains("1.8")) { return true; }
+        if (getServer().getVersion().contains("1.9")) { return true; }
+        if (getServer().getVersion().contains("1.10")) { return true; }
+        if (getServer().getVersion().contains("1.11")) { return true; }
+        return getServer().getVersion().contains("1.12");
+    }
+
+    public boolean isInt(final String s) {
         try {
             Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isLong(final String s) {
+        try {
+            Long.parseLong(s);
         } catch(NumberFormatException e) {
             return false;
         }
@@ -172,85 +278,17 @@ public class PvPLevels extends JavaPlugin {
         return true;
     }
 
-    public int random(int min, int max) {
-        Random random = new Random();
-        return random.nextInt(max - min + 1) + min;
+    public boolean isString(final String text) {
+        return text.matches("^[a-zA-Z]*$");
     }
 
-    private void placeholders() {
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new PlaceholderAPI(this).register();
-            textUtils.info("PlaceholderAPI (found) adding placeholders");
-        }
-    }
-
-    public String PlaceholderReplace(Player player, String message) {
-        String group = "";
-        String group_to = "";
-        if (list().contains(player.getUniqueId().toString())) {
-            group = statsManager.group(player);
-            group_to = statsManager.group_to(player);
-        }
-        message = replacePlaceholders(message, player.getUniqueId().toString(), player.getName(), group, group_to);
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, message);
-        }
-        return message;
-    }
-
-    public String OfflinePlaceholderReplace(OfflinePlayer offlinePlayer, String message) {
-        message = replacePlaceholders(message, offlinePlayer.getUniqueId().toString(), offlinePlayer.getName(), "", "");
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(offlinePlayer, message);
-        }
-        return message;
-    }
-
-    private String replacePlaceholders(String message, String uuid, String name, String group, String group_to) {
-        if (list().contains(uuid)) {
-            PlayerConnect playerConnect = get(uuid);
-            message = message
-                    .replace("{pvplevels_kills}", String.valueOf(playerConnect.kills()))
-                    .replace("{pvplevels_deaths}", String.valueOf(playerConnect.deaths()))
-                    .replace("{pvplevels_xp}", String.valueOf(playerConnect.xp()))
-                    .replace("{pvplevels_xp_required}", String.valueOf(statsManager.xp_required(uuid, false)))
-                    .replace("{pvplevels_xp_required_next}", String.valueOf(statsManager.xp_required(uuid, true)))
-                    .replace("{pvplevels_xp_progress}", String.valueOf(statsManager.xp_progress(uuid)))
-                    .replace("{pvplevels_xp_progress_style}", String.valueOf(statsManager.xp_progress_style(uuid)))
-                    .replace("{pvplevels_level}", String.valueOf(playerConnect.level()))
-                    .replace("{pvplevels_level_to}", String.valueOf(playerConnect.level() + 1))
-                    .replace("{pvplevels_kdr}", statsManager.kdr(uuid))
-                    .replace("{pvplevels_kill_factor}", statsManager.kill_factor(uuid))
-                    .replace("{pvplevels_group}", group)
-                    .replace("{pvplevels_group_to}", group_to)
-                    .replace("{pvplevels_killstreak}", String.valueOf(playerConnect.killstreak()))
-                    .replace("{pvplevels_killstreak_top}", String.valueOf(playerConnect.killstreak_top()))
-                    .replace("{pvplevels_coins}", String.valueOf(playerConnect.coins()))
-                    .replace("{pvplevels_time}", statsManager.time(uuid))
-                    .replace("{pvplevels_date}", statsManager.date(uuid));
-        }
-        message = message
-                .replace("{pvplevels_player}", name)
-                .replace("{pvplevels_uuid}", uuid);
-        return message;
-    }
-
-    public boolean versionID() {
-        if (getServer().getVersion().contains("1.8")) { return true; }
-        if (getServer().getVersion().contains("1.9")) { return true; }
-        if (getServer().getVersion().contains("1.10")) { return true; }
-        if (getServer().getVersion().contains("1.11")) { return true; }
-        if (getServer().getVersion().contains("1.12")) { return true; }
-        return false;
-    }
-
-    public ItemStack getID(String bb, int amount) {
+    public ItemStack getID(final String bb, final int amount) {
         if (versionID()) {
             try {
-                String[] parts = bb.split(":");
-                int matId = Integer.parseInt(parts[0]);
+                final String[] parts = bb.split(":");
+                final int matId = Integer.parseInt(parts[0]);
                 if (parts.length == 2) {
-                    short data = Short.parseShort(parts[1]);
+                    final short data = Short.parseShort(parts[1]);
                     return new ItemStack(Material.getMaterial(matId), amount, data);
                 }
                 return new ItemStack(Material.getMaterial(matId));
@@ -266,7 +304,11 @@ public class PvPLevels extends JavaPlugin {
         }
     }
 
-    public void copy(String filename, File file) {
+    public int random(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
+    }
+
+    public void copy(final String filename, final File file) {
         try {
             ByteStreams.copy(getResource(filename), new FileOutputStream(file));
         } catch (IOException exception) {
@@ -274,16 +316,64 @@ public class PvPLevels extends JavaPlugin {
         }
     }
 
-    public ItemStack getWand() {
-        ItemStack itemStack = new ItemStack(Material.STICK);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&bPvPLevels Wand"));
-        ArrayList<String> list = new ArrayList<>();
-        list.add(ChatColor.translateAlternateColorCodes('&', "&6This tool is used to select points"));
-        itemMeta.setLore(list);
-        itemStack.addUnsafeEnchantment(Enchantment.ARROW_INFINITE, 0);
-        itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
+    public boolean isLevelsValid() {
+        boolean valid = true;
+        for (String group : levels.get.getConfigurationSection("").getKeys(false)) {
+            final ArrayList<Long> list = new ArrayList<>();
+            if (!levels.get.contains(group + "." + config.get.getLong("start-level"))) {
+                textUtils.error("Validator ( not passed ) (group ( " + group + " ) (level ( " + config.get.getLong("start-level") + " ) is not found )");
+                valid = false;
+            }
+            if (levels.get.getLong(group + "." + config.get.getLong("start-level") + ".xp") != 0) {
+                textUtils.error("Validator ( not passed ) (group ( " + group + " ) (level ( " + config.get.getLong("start-level") + " ) xp is not 0 )");
+                valid = false;
+            }
+            if (!levels.get.contains(group + ".execute")) {
+                textUtils.error("Validator ( not passed ) (group ( " + group + " ) is missing execute )");
+                valid = false;
+            }
+            for (String level : levels.get.getConfigurationSection(group).getKeys(false)) {
+                if (!level.equalsIgnoreCase("execute")) {
+                    if (!isLong(level)) {
+                        textUtils.error("Validator ( not passed ) ( " + group + " ) (level ( " + level + " ) not a number )");
+                        valid = false;
+                    }
+                    if (!levels.get.contains(group + "." + level + ".prefix")) {
+                        textUtils.error("Validator ( not passed ) ( " + group + " ) (level ( " + level + " ) is missing prefix )");
+                        valid = false;
+                    }
+                    if (!levels.get.contains(group + "." + level + ".suffix")) {
+                        textUtils.error("Validator ( not passed ) ( " + group + " ) (level ( " + level + " ) is missing suffix )");
+                        valid = false;
+                    }
+                    if (!levels.get.contains(group + "." + level + ".group")) {
+                        textUtils.error("Validator ( not passed ) ( " + group + " ) (level ( " + level + " ) is missing group )");
+                        valid = false;
+                    }
+                    if (!levels.get.contains(group + "." + level + ".execute")) {
+                        textUtils.error("Validator ( not passed ) ( " + group + " ) (level ( " + level + " ) is missing execute )");
+                        valid = false;
+                    }
+                    if (!execute.get.contains(levels.get.getString(group + "." + level + ".execute"))) {
+                        textUtils.error("Validator ( not passed ) ( " + group + " ) (execute group ( " + levels.get.getString(group + "." + level + ".execute") + " ) is not found in execute.yml)");
+                        valid = false;
+                    }
+                    if (!levels.get.contains(group + "." + level + ".xp")) {
+                        textUtils.error("Validator ( not passed ) ( " + group + " ) (level ( " + level + " ) is missing xp )");
+                        valid = false;
+                    }
+                    list.add(levels.get.getLong(group + "." + level + ".xp"));
+                }
+            }
+            for (int i = 1; i < list.size(); i++) {
+                long last = list.get(i - 1);
+                long current = list.get(i);
+                if (last >= current) {
+                    textUtils.error("Validator ( not passed ) ( " + group + " ) ( xp about level ( " + (i - 1) + " ) is not setup correct )");
+                    valid = false;
+                }
+            }
+        }
+        return valid;
     }
 }

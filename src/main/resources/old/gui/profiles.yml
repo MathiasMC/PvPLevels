@@ -1,5 +1,5 @@
 settings:
-  name: '&f&lAll Profiles &7(&cAdmin&7)'
+  name: '&f&lAll Profiles'
   size: 54
   perpage: 36
   player:
@@ -17,9 +17,6 @@ settings:
       - '&eXP Progress: &7> &6{xp_progress}%'
       - '&6{xp_progress_style}'
       - '&eGroup &7> &6{group}'
-      - '&eLast Seen: &7> &6{date} {time}'
-      - '&eID: [{uuid}]'
-      - '&eShift + RMB to delete &7(&ccannot undo this&7)'
     MATERIAL: '397:0'
     AMOUNT: 1
 45:
@@ -93,16 +90,28 @@ settings:
   OPTIONS:
     - SORT_KILLFACTOR
 8:
-  NAME: '&f&lSort &7&l- &b&lLast Seen'
-  LORES: []
-  MATERIAL: '347:0'
-  AMOUNT: 1
-  OPTIONS:
-    - SORT_LASTSEEN
-49:
   NAME: '&f&lSort &7&l- &b&lReverse order'
   LORES: []
   MATERIAL: '340:0'
   AMOUNT: 1
   OPTIONS:
     - SORT_REVERSE
+49:
+  NAME: '&6Your stats'
+  LORES:
+    - '&eKills: &7> &6{kills}'
+    - '&eDeaths: &7> &6{deaths}'
+    - '&eXP: &7> &6{xp}'
+    - '&eLevel: &7> &6{level}'
+    - '&eKDR: &7> &6{kdr}'
+    - '&eKill Factor: &7> &6{kill_factor}'
+    - '&eKillStreak: &7> &6{killstreak}'
+    - '&eTop KillStreak: &7> &6{killstreak_top}'
+    - '&eXP Required: &7> &6{xp_required}'
+    - '&eXP Progress: &7> &6{xp_progress}%'
+    - '&6{xp_progress_style}'
+    - '&eGroup &7> &6{group}'
+  MATERIAL: '397:0'
+  AMOUNT: 1
+  OPTIONS:
+    - PLAYER_HEAD

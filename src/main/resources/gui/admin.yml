@@ -1,139 +1,108 @@
 settings:
   name: '&f&lAll Profiles &7(&cAdmin&7)'
   size: 54
-  profile-all:
-    INDEX: 9
-    PAGE: 36
-    default-sort: lastseen
-    default-reverse: true
-    NAME: '&6{pvplevels_player}'
+  perpage: 36
+  player:
+    NAME: '&6{player}'
     LORES:
-      - '&eKills: &7> &6{pvplevels_kills}'
-      - '&eDeaths: &7> &6{pvplevels_deaths}'
-      - '&eXP: &7> &6{pvplevels_xp}'
-      - '&eLevel: &7> &6{pvplevels_level}'
-      - '&eKDR: &7> &6{pvplevels_kdr}'
-      - '&eKill Factor: &7> &6{pvplevels_kill_factor}'
-      - '&eKillStreak: &7> &6{pvplevels_killstreak}'
-      - '&eTop KillStreak: &7> &6{pvplevels_killstreak_top}'
-      - '&eCoins: &7> &6{pvplevels_coins}'
-      - '&eXP Required: &7> &6{pvplevels_xp_required}'
-      - '&eXP Progress: &7> &6{pvplevels_xp_progress}%'
-      - '&6{pvplevels_xp_progress_style}'
-      - '&eLast Seen: &7> &6{pvplevels_date} {pvplevels_time}'
-      - '&eID: [{pvplevels_uuid}]'
+      - '&eKills: &7> &6{kills}'
+      - '&eDeaths: &7> &6{deaths}'
+      - '&eXP: &7> &6{xp}'
+      - '&eLevel: &7> &6{level}'
+      - '&eKDR: &7> &6{kdr}'
+      - '&eKill Factor: &7> &6{kill_factor}'
+      - '&eKillStreak: &7> &6{killstreak}'
+      - '&eTop KillStreak: &7> &6{killstreak_top}'
+      - '&eXP Required: &7> &6{xp_required}'
+      - '&eXP Progress: &7> &6{xp_progress}%'
+      - '&6{xp_progress_style}'
+      - '&eGroup &7> &6{group}'
+      - '&eLast Seen: &7> &6{date} {time}'
+      - '&eID: [{uuid}]'
       - '&eShift + RMB to delete &7(&ccannot undo this&7)'
     MATERIAL: PLAYER_HEAD
     AMOUNT: 1
-    back:
-      NAME: '&bGo Back'
-      LORES: []
-      MATERIAL: STICK
-      AMOUNT: 1
-      POSITION: 46
-    next:
-      NAME: '&bNext Page'
-      LORES: []
-      MATERIAL: STICK
-      AMOUNT: 1
-      POSITION: 53
-sortKills:
+45:
+  NAME: '&bGo Back'
+  LORES: []
+  MATERIAL: STICK
+  AMOUNT: 1
+  OPTIONS:
+    - BACK
+53:
+  NAME: '&bNext Page'
+  LORES: []
+  MATERIAL: STICK
+  AMOUNT: 1
+  OPTIONS:
+    - NEXT
+0:
   NAME: '&f&lSort &7&l- &b&lKills'
   LORES: []
   MATERIAL: IRON_SWORD
   AMOUNT: 1
-  POSITION: 0
   OPTIONS:
     - SORT_KILLS
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortDeaths:
+1:
   NAME: '&f&lSort &7&l- &b&lDeaths'
   LORES: []
   MATERIAL: LAVA_BUCKET
   AMOUNT: 1
-  POSITION: 1
   OPTIONS:
     - SORT_DEATHS
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortXP:
+2:
   NAME: '&f&lSort &7&l- &b&lXP'
   LORES: []
   MATERIAL: EXPERIENCE_BOTTLE
   AMOUNT: 1
-  POSITION: 2
   OPTIONS:
     - SORT_XP
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortLevel:
+3:
   NAME: '&f&lSort &7&l- &b&lLevel'
   LORES: []
   MATERIAL: DRAGON_EGG
   AMOUNT: 1
-  POSITION: 3
   OPTIONS:
     - SORT_LEVEL
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortKillStreak:
+4:
   NAME: '&f&lSort &7&l- &b&lKillStreak'
   LORES: []
   MATERIAL: BOW
   AMOUNT: 1
-  POSITION: 4
   OPTIONS:
     - SORT_KILLSTREAK
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortLastSeen:
-  NAME: '&f&lSort &7&l- &b&lLast Seen'
+5:
+  NAME: '&f&lSort &7&l- &b&lKillStreak Top'
   LORES: []
-  MATERIAL: CLOCK
+  MATERIAL: ARROW
   AMOUNT: 1
-  POSITION: 5
   OPTIONS:
-    - SORT_LASTSEEN
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortKDR:
+    - SORT_KILLSTREAK_TOP
+6:
   NAME: '&f&lSort &7&l- &b&lKDR'
   LORES: []
   MATERIAL: BEACON
   AMOUNT: 1
-  POSITION: 6
   OPTIONS:
     - SORT_KDR
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortKillFactor:
+7:
   NAME: '&f&lSort &7&l- &b&lKill Factor'
   LORES: []
   MATERIAL: ANVIL
   AMOUNT: 1
-  POSITION: 7
   OPTIONS:
     - SORT_KILLFACTOR
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortXPRequired:
-  NAME: '&f&lSort &7&l- &b&lXP Required'
+8:
+  NAME: '&f&lSort &7&l- &b&lLast Seen'
   LORES: []
-  MATERIAL: SLIME_BALL
+  MATERIAL: CLOCK
   AMOUNT: 1
-  POSITION: 8
   OPTIONS:
-    - SORT_XPREQUIRED
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}
-sortReverse:
+    - SORT_LASTSEEN
+49:
   NAME: '&f&lSort &7&l- &b&lReverse order'
   LORES: []
   MATERIAL: BOOK
   AMOUNT: 1
-  POSITION: 49
   OPTIONS:
     - SORT_REVERSE
-  COMMANDS:
-    - pvplevels gui open admin.yml {pvplevels_player}

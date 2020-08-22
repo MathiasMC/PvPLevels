@@ -1,0 +1,40 @@
+#                                         #
+#                PvPLevels                #
+#                   by                    #
+#                MathiasMC                #
+#  Any ideas for the plugin or need help? #
+#           contact me on spigot          #
+#                                         #
+
+default:
+  xp:
+    get:
+      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &6{xp_need} &eto level &c{level_next}
+    item:
+      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp&7) &6{xp_need} &eto level &c{level_next}
+    boost:
+      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}
+    both:
+      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp & {multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}
+    lose:
+      - pvplevels message {player} &7[&bPvPLevels&7] &cYou have lost &6{lost} &cXP
+  level:
+    up:
+      - pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}
+    down:
+      - pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}
+
+default-last:
+  xp:
+    get: []
+    item: []
+    boost: []
+    both: []
+    lose:
+      - pvplevels message {player} &7[&bPvPLevels&7] &cYou have lost &6{lost} &cXP
+  level:
+    up:
+      - pvplevels message {player} &7[&bPvPLevels&7] &eYou are now the last level {level_next}
+      - pvplevels broadcast null &e{player} is now the last level {level_next}
+    down:
+      - pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}

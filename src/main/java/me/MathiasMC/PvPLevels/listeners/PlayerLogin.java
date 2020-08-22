@@ -1,7 +1,7 @@
 package me.MathiasMC.PvPLevels.listeners;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
-import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,15 +17,11 @@ public class PlayerLogin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onLogin(PlayerLoginEvent e) {
-        String uuid = e.getPlayer().getUniqueId().toString();
-        String name = e.getPlayer().getName();
-        plugin.database.insert(uuid, name);
+        final Player player = e.getPlayer();
+        final String uuid = player.getUniqueId().toString();
+        plugin.database.insert(uuid);
         if (!plugin.list().contains(uuid)) {
             plugin.load(uuid);
-        }
-        PlayerConnect playerConnect = plugin.get(uuid);
-        if (!playerConnect.name().equalsIgnoreCase(name)) {
-            playerConnect.name(name);
         }
     }
 }

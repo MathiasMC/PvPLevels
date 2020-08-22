@@ -1,9 +1,12 @@
 package me.MathiasMC.PvPLevels.placeholders;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+
+import java.util.GregorianCalendar;
+import java.util.concurrent.TimeUnit;
 
 public class PlaceholderAPI extends PlaceholderExpansion {
 
@@ -43,59 +46,88 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(player == null){
             return "";
         }
+        final String uuid = player.getUniqueId().toString();
+        final PlayerConnect playerConnect = plugin.get(uuid);
         if(identifier.equals("kills")) {
-            return String.valueOf(plugin.get(player.getUniqueId().toString()).kills());
+            return String.valueOf(playerConnect.getKills());
         }
         if(identifier.equals("deaths")){
-            return String.valueOf(plugin.get(player.getUniqueId().toString()).deaths());
+            return String.valueOf(playerConnect.getDeaths());
         }
         if(identifier.equals("xp")){
-            return String.valueOf(plugin.get(player.getUniqueId().toString()).xp());
+            return String.valueOf(playerConnect.getXp());
         }
         if(identifier.equals("level")){
-            return String.valueOf(plugin.get(player.getUniqueId().toString()).level());
+            return String.valueOf(playerConnect.getLevel());
+        }
+        if(identifier.equals("level_next")){
+            return String.valueOf(playerConnect.getLevel() + 1);
         }
         if(identifier.equals("killstreak")){
-            return String.valueOf(plugin.get(player.getUniqueId().toString()).killstreak());
+            return String.valueOf(playerConnect.getKillstreak());
         }
         if(identifier.equals("killstreak_top")){
-            return String.valueOf(plugin.get(player.getUniqueId().toString()).killstreak_top());
-        }
-        if (identifier.equals("coins")) {
-            return String.valueOf(plugin.get(player.getUniqueId().toString()).coins());
+            return String.valueOf(playerConnect.getKillstreak_top());
         }
         if(identifier.equals("kdr")){
-            return plugin.statsManager.kdr(player.getUniqueId().toString());
+            return plugin.statsManager.kdr(playerConnect);
         }
         if(identifier.equals("kill_factor")){
-            return plugin.statsManager.kill_factor(player.getUniqueId().toString());
+            return plugin.statsManager.kill_factor(playerConnect);
+        }
+        if (identifier.equals("xp_need")) {
+            return String.valueOf(plugin.statsManager.xp_need(playerConnect));
         }
         if(identifier.equals("xp_required")){
-            return String.valueOf(plugin.statsManager.xp_required(player.getUniqueId().toString(), false));
+            return String.valueOf(plugin.statsManager.xp_required(playerConnect, false));
         }
         if(identifier.equals("xp_required_next")){
-            return String.valueOf(plugin.statsManager.xp_required(player.getUniqueId().toString(), true));
+            return String.valueOf(plugin.statsManager.xp_required(playerConnect, true));
         }
         if(identifier.equals("xp_progress")){
-            return String.valueOf(plugin.statsManager.xp_progress(player.getUniqueId().toString()));
+            return String.valueOf(plugin.statsManager.xp_progress(playerConnect));
         }
         if(identifier.equals("xp_progress_style")){
-            return String.valueOf(plugin.statsManager.xp_progress_style(player.getUniqueId().toString()));
+            return String.valueOf(plugin.statsManager.xp_progress_style(playerConnect, "xp-progress-style"));
         }
-        if(identifier.equals("group")){
-            return String.valueOf(plugin.statsManager.group(player));
-        }
-        if(identifier.equals("group_to")){
-            return String.valueOf(plugin.statsManager.group_to(player));
-        }
-        if(identifier.equals("prefix")){
-            return String.valueOf(plugin.statsManager.prefix(player));
+        if(identifier.equals("xp_progress_style_2")){
+            return String.valueOf(plugin.statsManager.xp_progress_style(playerConnect, "xp-progress-style-2"));
         }
         if(identifier.equals("time")){
-            return String.valueOf(plugin.statsManager.time(player.getUniqueId().toString()));
+            return String.valueOf(plugin.statsManager.time("time", playerConnect.getTime().getTime()));
         }
         if(identifier.equals("date")){
-            return String.valueOf(plugin.statsManager.date(player.getUniqueId().toString()));
+            return String.valueOf(plugin.statsManager.time("date", playerConnect.getTime().getTime()));
+        }
+        if(identifier.equals("group")) {
+            return playerConnect.getGroup();
+        }
+        if(identifier.equals("level_group")) {
+            return plugin.statsManager.group(playerConnect);
+        }
+        if(identifier.equals("level_prefix")) {
+            return plugin.statsManager.prefix(playerConnect);
+        }
+        if(identifier.equals("multiplier")) {
+            if (playerConnect.getMultiplier() != 0D) {
+                return String.valueOf(playerConnect.getMultiplier());
+            } else {
+                return String.valueOf(1);
+            }
+        }
+        if(identifier.equals("multiplier_time")) {
+            if (playerConnect.getMultiplier_time() != 0D) {
+                return plugin.statsManager.time("multiplier", (new GregorianCalendar(0, 0,0,0,0, playerConnect.getMultiplier_time()).getTime().getTime()));
+            } else {
+                return String.valueOf(0);
+            }
+        }
+        if(identifier.equals("multiplier_time_left")) {
+            if (playerConnect.getMultiplier_time() != 0D) {
+                return plugin.statsManager.time("multiplier", (new GregorianCalendar(0, 0,0,0,0, playerConnect.getMultiplier_time_left()).getTime().getTime()));
+            } else {
+                return String.valueOf(0);
+            }
         }
         if (identifier.equals("helmet_remaining_durability")) {
             return String.valueOf(plugin.placeholderManager.getDurability(player.getInventory().getHelmet())[0]);
@@ -132,39 +164,6 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         }
         if (identifier.equals("item_in_offhand_max_durability")) {
             return String.valueOf(plugin.placeholderManager.getDurability(plugin.placeholderManager.getHandItemStack(player, false))[1]);
-        }
-        if(identifier.equals("global_booster")){
-            return plugin.boostersManager.getGlobalPlaceholder();
-        }
-        if(identifier.equals("global_booster_name")){
-            return plugin.boostersManager.getGlobalNamePlaceholder();
-        }
-        if(identifier.equals("global_booster_time")){
-            return plugin.boostersManager.getGlobalTimePlaceholder();
-        }
-        if(identifier.equals("global_booster_time_left")){
-            return plugin.boostersManager.getGlobalTimeLeftPlaceholder();
-        }
-        if(identifier.equals("global_booster_time_prefix")){
-            return plugin.boostersManager.getGlobalTimePrefixPlaceholder();
-        }
-        if(identifier.equals("global_booster_time_left_prefix")){
-            return plugin.boostersManager.getGlobalTimeLeftPrefixPlaceholder();
-        }
-        if(identifier.equals("personal_booster")){
-            return plugin.boostersManager.getPersonalPlaceholder(player.getUniqueId().toString());
-        }
-        if(identifier.equals("personal_booster_time")){
-            return plugin.boostersManager.getPersonalTimePlaceholder(player.getUniqueId().toString());
-        }
-        if(identifier.equals("personal_booster_time_left")){
-            return plugin.boostersManager.getPersonalTimeLeftPlaceholder(player.getUniqueId().toString());
-        }
-        if(identifier.equals("personal_booster_time_prefix")){
-            return plugin.boostersManager.getPersonalTimePrefixPlaceholder(player.getUniqueId().toString());
-        }
-        if(identifier.equals("personal_booster_time_left_prefix")){
-            return plugin.boostersManager.getPersonalTimeLeftPrefixPlaceholder(player.getUniqueId().toString());
         }
         if(identifier.equals("top_1_kills_name")){
             return plugin.statsManager.getTopValue("kills", 0, true, true);

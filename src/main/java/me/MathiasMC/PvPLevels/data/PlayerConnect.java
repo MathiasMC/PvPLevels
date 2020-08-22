@@ -1,15 +1,15 @@
 package me.MathiasMC.PvPLevels.data;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerConnect {
 
-    private final String playeruuid;
+    private final String uuid;
 
-    private String name;
+    private String group;
 
     private Long kills;
 
@@ -23,153 +23,120 @@ public class PlayerConnect {
 
     private Long killstreak_top;
 
-    private Long coins;
+    private Double multiplier;
 
-    private Double personalBooster;
+    private Integer multiplier_time;
 
-    private int personalBoosterTime = 0;
-
-    private int personalBoosterTime_left = 0;
-
-    private int taskID;
+    private Integer multiplier_time_left;
 
     private Timestamp time;
 
     public PlayerConnect(String uuid) {
-        playeruuid = uuid;
-        String[] data = PvPLevels.call.database.getValues(uuid);
-        name = data[0];
-        kills = Long.parseLong(data[1]);
-        deaths = Long.parseLong(data[2]);
-        xp = Long.parseLong(data[3]);
-        level = Long.parseLong(data[4]);
-        killstreak = Long.parseLong(data[5]);
-        killstreak_top = Long.parseLong(data[6]);
-        coins = Long.parseLong(data[7]);
-        time = Timestamp.valueOf(data[8]);
-        loadTimer();
+        this.uuid = uuid;
+        final String[] data = PvPLevels.call.database.getValues(uuid);
+        this.group = data[0];
+        this.kills = Long.parseLong(data[1]);
+        this.deaths = Long.parseLong(data[2]);
+        this.xp = Long.parseLong(data[3]);
+        this.level = Long.parseLong(data[4]);
+        this.killstreak = Long.parseLong(data[5]);
+        this.killstreak_top = Long.parseLong(data[6]);
+        final String[] split = data[7].split(" ");
+        multiplier = Double.parseDouble(split[0]);
+        multiplier_time = Integer.parseInt(split[1]);
+        multiplier_time_left = this.multiplier_time;
+        this.time = Timestamp.valueOf(data[8]);
     }
 
-    public String name() {
-        return name;
+    public void setGroup(final String group) {
+        this.group = group;
     }
 
-    public Long kills() {
-        return kills;
+    public void setKills(final Long kills) {
+        this.kills = kills;
     }
 
-    public Long deaths() {
-        return deaths;
+    public void setDeaths(final Long deaths) {
+        this.deaths = deaths;
     }
 
-    public Long xp() {
-        return xp;
+    public void setXp(final Long xp) {
+        this.xp = xp;
     }
 
-    public Long level() {
-        return level;
+    public void setLevel(final Long level) {
+        this.level = level;
     }
 
-    public Long killstreak() {
-        return killstreak;
+    public void setKillstreak(final Long killstreak) {
+        this.killstreak = killstreak;
     }
 
-    public Long killstreak_top() {
-        return killstreak_top;
+    public void setKillstreak_top(final Long killstreak_top) {
+        this.killstreak_top = killstreak_top;
     }
 
-    public Long coins() {
-        return coins;
+    public void setMultiplier(final Double multiplier) {
+        this.multiplier = multiplier;
     }
 
-    public void name(String set) {
-        name = set;
+    public void setMultiplier_time(final Integer multiplier_time) {
+        this.multiplier_time = multiplier_time;
     }
 
-    public void kills(Long set) {
-        kills = set;
-    }
-
-    public void deaths(Long set) {
-        deaths = set;
-    }
-
-    public void xp(Long set) {
-        xp = set;
-    }
-
-    public void level(Long set) {
-        level = set;
+    public void setMultiplier_time_left(final Integer multiplier_time_left) {
+        this.multiplier_time_left = multiplier_time_left;
     }
 
     public void setTime() {
-        time = new Timestamp(new Date().getTime());
+        this.time = new Timestamp(new Date().getTime());
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public Long getKills() {
+        return kills;
+    }
+
+    public Long getDeaths() {
+        return deaths;
+    }
+
+    public Long getXp() {
+        return xp;
+    }
+
+    public Long getLevel() {
+        return level;
+    }
+
+    public Long getKillstreak() {
+        return killstreak;
+    }
+
+    public Long getKillstreak_top() {
+        return killstreak_top;
+    }
+
+    public Double getMultiplier() {
+        return multiplier;
+    }
+
+    public Integer getMultiplier_time() {
+        return multiplier_time;
+    }
+
+    public Integer getMultiplier_time_left() {
+        return multiplier_time_left;
     }
 
     public Timestamp getTime() {
         return time;
     }
 
-    public void killstreak(Long set) {
-        killstreak = set;
-    }
-
-    public void killstreak_top(Long set) {
-        killstreak_top = set;
-    }
-
-    public void coins(Long set) {
-        coins = set;
-    }
-
     public void save() {
-        PvPLevels.call.database.setValues(playeruuid, name, kills, deaths, xp, level, killstreak, killstreak_top, coins, time);
-    }
-
-    public Double getPersonalBooster() {
-        return personalBooster;
-    }
-
-    public int getPersonalBoosterTime() {
-        return personalBoosterTime;
-    }
-
-    public int getPersonalBoosterTime_left() {
-        return personalBoosterTime_left;
-    }
-
-    public void timer(int timeAmount, Double personalBooster) {
-        this.personalBooster = personalBooster;
-        this.personalBoosterTime = timeAmount;
-        this.taskID = PvPLevels.call.getServer().getScheduler().scheduleSyncRepeatingTask(PvPLevels.call, new Runnable(){
-            int timeRemaining = timeAmount;
-            public void run(){
-                personalBoosterTime_left = timeRemaining;
-                if (timeRemaining <= 0) {
-                    endBoost();
-                    PvPLevels.call.boosters.get.set("players." + playeruuid + ".personal-active", null);
-                    PvPLevels.call.boosters.save();
-                }
-                timeRemaining--;
-            }
-        }, 0L, 20L);
-    }
-
-    private void endBoost() {
-        PvPLevels.call.getServer().getScheduler().cancelTask(this.taskID);
-        this.personalBooster = null;
-        this.personalBoosterTime = 0;
-        this.personalBoosterTime_left = 0;
-        for (String command : PvPLevels.call.boosters.get.getStringList("personal-settings.end")) {
-            PvPLevels.call.getServer().dispatchCommand(PvPLevels.call.consoleCommandSender, command.replace("{pvplevels_player}", PvPLevels.call.getServer().getOfflinePlayer(UUID.fromString(playeruuid)).getName()));
-        }
-    }
-
-    public void loadTimer() {
-        String path = "players." + playeruuid + ".personal-active";
-        if (PvPLevels.call.boosters.get.contains(path)) {
-            String[] get = PvPLevels.call.boosters.get.getString(path).split(" ");
-            timer(Integer.parseInt(get[1]), Double.valueOf(get[0]));
-        }
+        PvPLevels.call.database.setValues(uuid, group, kills, deaths, xp, level, killstreak, killstreak_top, (multiplier + " " + multiplier_time), time);
     }
 }

@@ -8,16 +8,77 @@ softdepend: [PlaceholderAPI]
 api-version: 1.13
 commands:
   pvplevels:
-    description: PvPLevels main command
-  pvpstats:
-    description: See stats
-  pvptop:
-    description: See top stats
-  pvpboosters:
-    description: See boosters
-  pvpprofile:
-    description: See profile
-  pvpadmin:
-    description: See admin
-  pvpshop:
-    description: See shop
+    description: "PvPLevels main command"
+    aliases: ["pvpl"]
+permissions:
+  pvplevels.*:
+    description: "Access to use all pvplevels commands"
+    children:
+      pvplevels.player.*: true
+      pvplevels.admin.*: true
+  pvplevels.player.*:
+    description: "Access to use all player commands"
+    children:
+      pvplevels.player.help: true
+      pvplevels.player.profiles: true
+      pvplevels.player.stats: true
+      pvplevels.player.top: true
+  pvplevels.admin.*:
+    description: "Access to use all admin commands"
+    children:
+      pvplevels.admin.reload: true
+      pvplevels.admin.broadcast: true
+      pvplevels.admin.message: true
+      pvplevels.admin.actionbar: true
+      pvplevels.admin.save: true
+      pvplevels.admin.admin: true
+      pvplevels.admin.group: true
+      pvplevels.admin.reset: true
+      pvplevels.admin.xp: true
+      pvplevels.admin.level: true
+      pvplevels.admin.multiplier: true
+  pvplevels.player.help:
+    default: "op"
+    description: "Access to use help"
+  pvplevels.player.profiles:
+    default: "op"
+    description: "Access to use profiles gui"
+  pvplevels.player.stats:
+    default: "op"
+    description: "Access to see stats"
+  pvplevels.player.top:
+    default: "op"
+    description: "Access to see top"
+  pvplevels.admin.reload:
+    default: "op"
+    description: "Access to use reload"
+  pvplevels.admin.broadcast:
+    default: "op"
+    description: "Access to use broadcast"
+  pvplevels.admin.message:
+    default: "op"
+    description: "Access to use message"
+  pvplevels.admin.actionbar:
+    default: "op"
+    description: "Access to use actionbar"
+  pvplevels.admin.save:
+    default: "op"
+    description: "Access to use save"
+  pvplevels.admin.admin:
+    default: "op"
+    description: "Access to use admin gui"
+  pvplevels.admin.group:
+    default: "op"
+    description: "Access to use group"
+  pvplevels.admin.reset:
+    default: "op"
+    description: "Access to use reset"
+  pvplevels.admin.xp:
+    default: "op"
+    description: "Access to use xp"
+  pvplevels.admin.level:
+    default: "op"
+    description: "Access to use level"
+  pvplevels.admin.multiplier:
+    default: "op"
+    description: "Access to use multiplier"

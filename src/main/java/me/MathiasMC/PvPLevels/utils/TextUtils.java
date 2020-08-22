@@ -30,10 +30,6 @@ public class TextUtils {
         logger.severe("[" + prefix + "] " + text);
     }
 
-    public void debug(String text) {
-        logger.warning("[" + prefix + "] [DEBUG] " + text);
-    }
-
     public void exception(StackTraceElement[] stackTraceElement, String text) {
         info("(!) " + prefix + " has being encountered an error, pasting below for support (!)");
         for (int i = 0; i < stackTraceElement.length; i++) {

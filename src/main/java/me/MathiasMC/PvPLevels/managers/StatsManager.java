@@ -4,9 +4,8 @@ import com.google.common.base.Strings;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
-import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -20,62 +19,62 @@ public class StatsManager {
         this.plugin = plugin;
     }
 
-    public String kdr(String uuid) {
-        PlayerConnect playerConnect = plugin.get(uuid);
-        if (playerConnect.deaths() > 0L) {
-            DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
+    public String kdr(final PlayerConnect playerConnect) {
+        if (playerConnect.getDeaths() > 0L) {
+            final DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
             decimalFormat.applyPattern("#.##");
-            return decimalFormat.format(Double.valueOf(playerConnect.kills()) / Double.valueOf(playerConnect.deaths()));
-        } else if (playerConnect.deaths() == 0L) {
-            return String.valueOf(playerConnect.kills());
+            return decimalFormat.format(Double.valueOf(playerConnect.getKills()) / Double.valueOf(playerConnect.getDeaths()));
+        } else if (playerConnect.getDeaths() == 0L) {
+            return String.valueOf(playerConnect.getKills());
         }
         return String.valueOf(0.0D);
     }
 
-    public String kill_factor(String uuid) {
-        PlayerConnect playerConnect = plugin.get(uuid);
-        if (playerConnect.kills() > 0L) {
-            DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
+    public String kill_factor(final PlayerConnect playerConnect) {
+        if (playerConnect.getKills() > 0L) {
+            final DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
             decimalFormat.applyPattern("#.##");
-            return decimalFormat.format(Double.valueOf(playerConnect.kills()) / (Double.valueOf(playerConnect.kills()) + Double.valueOf(playerConnect.deaths())));
+            return decimalFormat.format(Double.valueOf(playerConnect.getKills()) / (Double.valueOf(playerConnect.getKills()) + Double.valueOf(playerConnect.getDeaths())));
         }
         return String.valueOf(0L);
     }
 
-    public Long xp_required(String uuid, boolean next) {
-        PlayerConnect playerConnect = plugin.get(uuid);
+    public Long xp_required(final PlayerConnect playerConnect, final boolean next) {
         Long level;
         if (!next) {
-            level = playerConnect.level();
+            level = playerConnect.getLevel();
         } else {
-            level = playerConnect.level() + 1;
+            level = playerConnect.getLevel() + 1;
         }
-        if (plugin.levels.get.getConfigurationSection("levels").getKeys(false).size() > level) {
-            return plugin.levels.get.getLong("levels." + (level + 1) + ".xp");
+        final String group = playerConnect.getGroup();
+        if (plugin.levels.get.getConfigurationSection(group).getKeys(false).size() > level) {
+            return plugin.levels.get.getLong(group + "." + (level + 1) + ".xp");
         }
         return 0L;
     }
 
-    public String xp_progress(String uuid) {
-        PlayerConnect playerConnect = plugin.get(uuid);
-        Long currentXP = plugin.levels.get.getLong("levels." + playerConnect.level() + ".xp");
-        if (plugin.config.get.getBoolean("levelup.xp-clear")) {
-            currentXP = 0L;
-        }
-        try {
-        return new DecimalFormat("#").format(Math.round(((Double.valueOf(playerConnect.xp()) - currentXP) / (plugin.levels.get.getLong("levels." + (playerConnect.level() + 1) + ".xp") - currentXP) * 100) * 10.0) / 10.0);
-        } catch (Exception exception) {
-            return "";
-        }
+    public Long xp_need(final PlayerConnect playerConnect) {
+        return plugin.levels.get.getLong(playerConnect.getGroup() + "." + (playerConnect.getLevel() + 1) + ".xp") - playerConnect.getXp();
     }
 
-    public String xp_progress_style(String uuid) {
-        char xp = (char) Integer.parseInt(plugin.config.get.getString("xp-progress-style.xp.symbol").substring(2), 16);
-        char none = (char) Integer.parseInt(plugin.config.get.getString("xp-progress-style.none.symbol").substring(2), 16);
-        ChatColor xpColor = getChatColor(plugin.config.get.getString("xp-progress-style.xp.color"));
-        ChatColor noneColor = getChatColor(plugin.config.get.getString("xp-progress-style.none.color"));
-        int bars = plugin.config.get.getInt("xp-progress-style.amount");
-        int progressBars = (int) (bars * Double.parseDouble(xp_progress(uuid)) / 100);
+    public int xp_progress(final PlayerConnect playerConnect) {
+        final long xp_cur = playerConnect.getXp();
+        final long xp_req_cur = plugin.levels.get.getLong(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".xp");
+        final long xp_req_next = plugin.levels.get.getLong(playerConnect.getGroup() + "." + (playerConnect.getLevel() + 1) + ".xp");
+        final double set = (double) (xp_cur - xp_req_cur) / (xp_req_next - xp_req_cur);
+        if (xp_cur > xp_req_next) {
+            return 100;
+        }
+        return (int) Math.round(set * 100);
+    }
+
+    public String xp_progress_style(final PlayerConnect playerConnect, final String path) {
+        final char xp = (char) Integer.parseInt(plugin.config.get.getString(path + ".xp.symbol").substring(2), 16);
+        final char none = (char) Integer.parseInt(plugin.config.get.getString(path + ".none.symbol").substring(2), 16);
+        final ChatColor xpColor = getChatColor(plugin.config.get.getString(path + ".xp.color"));
+        final ChatColor noneColor = getChatColor(plugin.config.get.getString(path + ".none.color"));
+        final int bars = plugin.config.get.getInt(path + ".amount");
+        final int progressBars = (bars * xp_progress(playerConnect) / 100);
         try {
             return Strings.repeat("" + xpColor + xp, progressBars) + Strings.repeat("" + noneColor + none, bars - progressBars);
         } catch (Exception exception) {
@@ -83,116 +82,98 @@ public class StatsManager {
         }
     }
 
-    public String group(Player player) {
-        return getGroup(player, plugin.get(player.getUniqueId().toString()).level());
-    }
-
-    public String group_to(Player player) {
-        return getGroup(player, plugin.get(player.getUniqueId().toString()).level() + 1L);
-    }
-
-    private String getGroup(Player player, Long level) {
-        String group = plugin.systemManager.getGroup(player, plugin.config.get, "groups.list", false);
-        if (group != null) {
-            if (plugin.config.get.contains("groups.list." + group + ".list." + level)) {
-                return plugin.config.get.getString("groups.list." + group + ".list." + level);
-            } else {
-                return plugin.config.get.getString("groups.list." + group + ".none");
-            }
+    public String prefix(final PlayerConnect playerConnect) {
+        long level = playerConnect.getLevel();
+        if (!plugin.levels.get.contains(playerConnect.getGroup() + "." + level + ".group")) {
+            level = plugin.config.get.getLong("start-level");
         }
-        return plugin.config.get.getString("groups.none");
+        return ChatColor.translateAlternateColorCodes('&', plugin.internalReplace(playerConnect, plugin.levels.get.getString(playerConnect.getGroup() + "." + level + ".prefix")));
     }
 
-    public String prefix(Player player) {
-        String prefix_name = "%pvplevels_prefix%";
-        String group = plugin.systemManager.getGroup(player, plugin.config.get, "placeholders.prefix", false);
-        if (group != null) {
-            PlayerConnect playerConnect = plugin.get(player.getUniqueId().toString());
-            if (plugin.config.get.contains("placeholders.prefix." + group + ".list." + playerConnect.level())) {
-                prefix_name = ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(player, plugin.config.get.getString("placeholders.prefix." + group + ".list." + playerConnect.level())));
-            } else {
-                prefix_name = ChatColor.translateAlternateColorCodes('&', plugin.PlaceholderReplace(player, plugin.config.get.getString("placeholders.prefix." + group + ".none")));
-            }
+    public String suffix(final PlayerConnect playerConnect) {
+        long level = playerConnect.getLevel();
+        if (!plugin.levels.get.contains(playerConnect.getGroup() + "." + level + ".group")) {
+            level = plugin.config.get.getLong("start-level");
         }
-        return prefix_name;
+        return ChatColor.translateAlternateColorCodes('&', plugin.internalReplace(playerConnect, plugin.levels.get.getString(playerConnect.getGroup() + "." + level + ".suffix")));
     }
 
-    public String getTopValue(String type, int number, boolean key, boolean reverse) {
-        List<String> map;
+    public String group(final PlayerConnect playerConnect) {
+        long level = playerConnect.getLevel();
+        if (!plugin.levels.get.contains(playerConnect.getGroup() + "." + level + ".group")) {
+            level = plugin.config.get.getLong("start-level");
+        }
+        return ChatColor.translateAlternateColorCodes('&', plugin.internalReplace(playerConnect, plugin.levels.get.getString(playerConnect.getGroup() + "." + level + ".group")));
+    }
+
+    public String getTopValue(final String type, final int number, final boolean key, final boolean reverse) {
+        final LinkedHashMap<OfflinePlayer, Long> linkedHashMap = getTopMap(type, reverse);
         if (key) {
-            map = new ArrayList<String>(getTopMap(type, reverse).keySet());
+            final ArrayList<OfflinePlayer> map = new ArrayList<>(linkedHashMap.keySet());
             if (map.size() > number) {
-                return plugin.get(map.get(number)).name();
+                return map.get(number).getName();
             } else {
-                return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("pvptop." + type + ".name"));
+                return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("top.name"));
             }
-        }
-        map = new ArrayList<String>(getTopMap(type, reverse).values());
-        if (map.size() > number) {
-            return String.valueOf(map.get(number));
         } else {
-            return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("pvptop." + type + ".value"));
-        }
-    }
-
-    public void clearKillStreak(PlayerConnect playerConnect, Player player, String killer) {
-        if (playerConnect.killstreak() > 0L) {
-            String group = plugin.systemManager.getGroup(player, plugin.config.get, "killstreaks", true);
-            if (group != null) {
-                Long killstreak = playerConnect.killstreak();
-                ArrayList<Integer> list = new ArrayList<>();
-                for (String inter : plugin.config.get.getConfigurationSection("killstreaks." + group).getKeys(false)) {
-                    if (!inter.equalsIgnoreCase("delay") && !inter.equalsIgnoreCase("permission") && !inter.equalsIgnoreCase("worlds")) {
-                        if (killstreak >= Integer.parseInt(inter)) {
-                            list.add(Integer.valueOf(inter));
-                        }
-                    }
-                }
-                if (!list.isEmpty()) {
-                    for (String commands : plugin.config.get.getStringList("killstreaks." + group + "." +  + list.get(list.size() - 1) + ".lose-commands")) {
-                        plugin.getServer().dispatchCommand(plugin.consoleCommandSender, plugin.PlaceholderReplace(player, commands.replace("{pvplevels_killstreak_lost}", String.valueOf(killstreak)).replace("{pvplevels_type}", killer)));
-                    }
-                }
-            }
-            playerConnect.killstreak(0L);
-        }
-    }
-
-    public LinkedHashMap getTopMap(String type, boolean reverse) {
-        Map<String, Long> unsorted = new HashMap<>();
-        Map<String, Double> unsortedDouble = new HashMap<>();
-        for (String uuid : plugin.list()) {
-            if (type.equalsIgnoreCase("kills") && !plugin.config.get.getStringList("pvptop.kills.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).kills()); }
-            if (type.equalsIgnoreCase("deaths") && !plugin.config.get.getStringList("pvptop.deaths.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).deaths()); }
-            if (type.equalsIgnoreCase("xp") && !plugin.config.get.getStringList("pvptop.xp.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).xp()); }
-            if (type.equalsIgnoreCase("level") && !plugin.config.get.getStringList("pvptop.level.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).level()); }
-            if (type.equalsIgnoreCase("killstreak") && !plugin.config.get.getStringList("pvptop.killstreak.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).killstreak()); }
-            if (type.equalsIgnoreCase("killstreak_top") && !plugin.config.get.getStringList("pvptop.killstreak_top.excluded").contains(uuid)) { unsorted.put(uuid, plugin.get(uuid).killstreak_top()); }
-            if (type.equalsIgnoreCase("lastseen")) { unsorted.put(uuid, plugin.get(uuid).getTime().getTime()); }
-            if (type.equalsIgnoreCase("kdr")) { unsortedDouble.put(uuid, Double.parseDouble(plugin.statsManager.kdr(uuid))); }
-            if (type.equalsIgnoreCase("killfactor")) { unsortedDouble.put(uuid, Double.parseDouble(plugin.statsManager.kill_factor(uuid))); }
-            if (type.equalsIgnoreCase("xprequired")) { unsorted.put(uuid, plugin.statsManager.xp_required(uuid, false)); }
-        }
-        if (type.equalsIgnoreCase("kdr") || type.equalsIgnoreCase("killfactor")) {
-            LinkedHashMap<String, Double> sortedDouble = new LinkedHashMap<>();
-            if (reverse) {
-                unsortedDouble.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sortedDouble.put(x.getKey(), x.getValue()));
+            final ArrayList<Long> map = new ArrayList<>(linkedHashMap.values());
+            if (map.size() > number) {
+                return String.valueOf(map.get(number));
             } else {
-                unsortedDouble.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.naturalOrder())).forEachOrdered(x -> sortedDouble.put(x.getKey(), x.getValue()));
+                return ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString("top.value"));
             }
-            return sortedDouble;
+        }
+    }
+
+    public LinkedHashMap<OfflinePlayer, Long> getTopMap(final String type, final boolean reverse) {
+        final Map<OfflinePlayer, Long> unsorted = new HashMap<>();
+        final Set<String> list = plugin.list();
+        final List<String> excluded = plugin.config.get.getStringList("top.excluded");
+        for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
+            final String uuid = offlinePlayer.getUniqueId().toString();
+            if (list.contains(uuid) && !excluded.contains(uuid)) {
+                final PlayerConnect playerConnect = plugin.get(uuid);
+                switch (type) {
+                    case "kills":
+                        unsorted.put(offlinePlayer, playerConnect.getKills());
+                        break;
+                    case "deaths":
+                        unsorted.put(offlinePlayer, playerConnect.getDeaths());
+                        break;
+                    case "xp":
+                        unsorted.put(offlinePlayer, playerConnect.getXp());
+                        break;
+                    case "level":
+                        unsorted.put(offlinePlayer, playerConnect.getLevel());
+                        break;
+                    case "killstreak":
+                        unsorted.put(offlinePlayer, playerConnect.getKillstreak());
+                        break;
+                    case "killstreak_top":
+                        unsorted.put(offlinePlayer, playerConnect.getKillstreak_top());
+                        break;
+                    case "lastseen":
+                        unsorted.put(offlinePlayer, playerConnect.getTime().getTime());
+                        break;
+                    case "kdr":
+                        unsorted.put(offlinePlayer, Long.valueOf(plugin.statsManager.kdr(playerConnect)));
+                        break;
+                    case "killfactor":
+                        unsorted.put(offlinePlayer, Long.valueOf(plugin.statsManager.kill_factor(playerConnect)));
+                        break;
+                }
+            }
+        }
+        final LinkedHashMap<OfflinePlayer, Long> sorted = new LinkedHashMap<>();
+        if (reverse) {
+            unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
         } else {
-            LinkedHashMap<String, Long> sorted = new LinkedHashMap<>();
-            if (reverse) {
-                unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
-            } else {
-                unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.naturalOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
-            }
-            return sorted;
+            unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.naturalOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
         }
+        return sorted;
     }
 
-    private ChatColor getChatColor(String colorCode){
+    private ChatColor getChatColor(final String colorCode){
         switch (colorCode){
             case "&0" : return ChatColor.BLACK;
             case "&1" : return ChatColor.DARK_BLUE;
@@ -220,15 +201,9 @@ public class StatsManager {
         }
     }
 
-    public String time(String uuid) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(plugin.config.get.getString("placeholders.time.format"));
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(plugin.config.get.getString("placeholders.time.zone")));
-        return simpleDateFormat.format(new Date(plugin.get(uuid).getTime().getTime()));
-    }
-
-    public String date(String uuid) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(plugin.config.get.getString("placeholders.date.format"));
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(plugin.config.get.getString("placeholders.date.zone")));
-        return simpleDateFormat.format(new Date(plugin.get(uuid).getTime().getTime()));
+    public String time(final String path, final long time) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(plugin.config.get.getString(path + ".format"));
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(plugin.config.get.getString(path + ".zone")));
+        return simpleDateFormat.format(new Date(time));
     }
 }

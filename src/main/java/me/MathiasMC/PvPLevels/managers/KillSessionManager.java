@@ -1,16 +1,19 @@
-package me.MathiasMC.PvPLevels.utils;
+package me.MathiasMC.PvPLevels.managers;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public class KillSessionUtils {
+public class KillSessionManager {
 
     private final PvPLevels plugin;
 
-    public KillSessionUtils(final PvPLevels plugin) {
+    public KillSessionManager(final PvPLevels plugin) {
         this.plugin = plugin;
     }
 
@@ -58,19 +61,19 @@ public class KillSessionUtils {
     private void task(final Player killed, final String attacker, final Entity killer) {
         if (!killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
             int id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-                    if (killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
-                        String[] split = killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=");
-                        int time = Integer.parseInt(split[1]);
-                        if (time > -1) {
-                            killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, Integer.valueOf(split[0]) + "=" + (time - 1));
-                        }
-                        if (time == 0) {
-                            plugin.getServer().getScheduler().cancelTask(Integer.parseInt(split[0]));
-                            killsessiontime.remove(killed.getUniqueId().toString() + "=" + attacker);
-                            killsession.remove(attacker);
-                            sendMessage(killer, killed, "remove");
-                        }
+                if (killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
+                    String[] split = killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=");
+                    int time = Integer.parseInt(split[1]);
+                    if (time > -1) {
+                        killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, Integer.valueOf(split[0]) + "=" + (time - 1));
                     }
+                    if (time == 0) {
+                        plugin.getServer().getScheduler().cancelTask(Integer.parseInt(split[0]));
+                        killsessiontime.remove(killed.getUniqueId().toString() + "=" + attacker);
+                        killsession.remove(attacker);
+                        sendMessage(killer, killed, "remove");
+                    }
+                }
             },0L, 20L);
             killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, id + "=" + plugin.config.get.getInt("kill-session.time"));
             sendMessage(killer, killed, "get");
@@ -80,8 +83,8 @@ public class KillSessionUtils {
     }
 
     private void sendMessage(final Entity killer, final Player killed, final String path) {
-        for (String command : plugin.config.get.getStringList("kill-session.commands." + path)) {
-            plugin.getServer().dispatchCommand(plugin.consoleCommandSender, command.replace("{pvplevels_player}", killer.getName()).replace("{pvplevels_killed}", killed.getName()).replace("{pvplevels_amount}", String.valueOf(plugin.config.get.getInt("kill-session.amount"))));
+        for (String command : plugin.config.get.getStringList("kill-session." + path)) {
+            plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{player}", killer.getName()).replace("{killed}", killed.getName()).replace("{amount}", String.valueOf(plugin.config.get.getInt("kill-session.amount"))));
         }
     }
 }
