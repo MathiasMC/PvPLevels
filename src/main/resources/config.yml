@@ -134,8 +134,13 @@ xp:
         max: 20
 
     zombie:
-      # Target entity with specific custom name with color codes support
-      #name: ''
+
+      # if has custom name test give another amount of xp (you can still use color codes on entity just not use it here) (match string of customName)
+      name:
+        'test':
+          min: 7
+          max: 7
+
       min: 5
       max: 5
       worlds:
@@ -145,8 +150,12 @@ xp:
         max: 2
 
     skeleton:
-      # Target entity with specific custom name with color codes support
-      #name: ''
+
+      # if has custom name test give another amount of xp (you can still use color codes on entity just not use it here) (match string of customName)
+      name:
+        'test':
+          min: 7
+          max: 7
 
       # Get more xp with an specific item (PlaceholderAPI support)
       items:

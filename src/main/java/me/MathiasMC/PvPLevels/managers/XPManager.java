@@ -121,19 +121,17 @@ public class XPManager {
                 if (plugin.xpManager.isMax(playerConnect)) {
                     return;
                 }
-                if (plugin.config.get.contains(path + ".name")) {
-                    if (customName != null && !plugin.replacePlaceholders(player, ChatColor.translateAlternateColorCodes('&', plugin.config.get.getString(path + ".name"))).equalsIgnoreCase(customName)) {
-                        return;
-                    }
+                int add = plugin.random(plugin.config.get.getInt(path + ".min"), plugin.config.get.getInt(path + ".max"));
+                final String coloredName = ChatColor.stripColor(customName);
+                if (plugin.config.get.contains(path + ".name." + coloredName)) {
+                    add = plugin.random(plugin.config.get.getInt(path + ".name." + coloredName + ".min"), plugin.config.get.getInt(path + ".name." + coloredName + ".max"));
                 }
-                int itemBoost = hasItem(player, path);
+                int item_boost = hasItem(player, path);
+                add = add + item_boost;
                 String getPath = "get";
-                if (itemBoost != 0) {
+                if (item_boost != 0) {
                     getPath = "item";
-                } else {
-                    itemBoost = plugin.random(plugin.config.get.getInt(path + ".min"), plugin.config.get.getInt(path + ".max"));
                 }
-                int add = itemBoost;
                 Double multiplier = playerConnect.getMultiplier();
                 if (multiplier != 0D) {
                     if (getPath.equalsIgnoreCase("item")) {
@@ -141,11 +139,11 @@ public class XPManager {
                     } else {
                         getPath = "boost";
                     }
-                    add = (int) (itemBoost * multiplier);
+                    add = (int) (add * multiplier);
                 } else {
                     multiplier = 0D;
                 }
-                getXP(player, playerConnect, add, entityType, getPath, itemBoost, multiplier);
+                getXP(player, playerConnect, add, entityType, getPath, item_boost, multiplier);
             } else {
                 loseXP(player, playerConnect, path, entityType);
             }
