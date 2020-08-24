@@ -122,9 +122,11 @@ public class XPManager {
                     return;
                 }
                 int add = plugin.random(plugin.config.get.getInt(path + ".min"), plugin.config.get.getInt(path + ".max"));
-                final String coloredName = ChatColor.stripColor(customName);
-                if (plugin.config.get.contains(path + ".name." + coloredName)) {
-                    add = plugin.random(plugin.config.get.getInt(path + ".name." + coloredName + ".min"), plugin.config.get.getInt(path + ".name." + coloredName + ".max"));
+                if (customName != null) {
+                    String coloredName = plugin.replacePlaceholders(player, ChatColor.stripColor(customName));
+                    if (plugin.config.get.contains(path + ".name." + coloredName)) {
+                        add = plugin.random(plugin.config.get.getInt(path + ".name." + coloredName + ".min"), plugin.config.get.getInt(path + ".name." + coloredName + ".max"));
+                    }
                 }
                 int item_boost = hasItem(player, path);
                 add = add + item_boost;

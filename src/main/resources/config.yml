@@ -135,7 +135,10 @@ xp:
 
     zombie:
 
-      # if has custom name test give another amount of xp (you can still use color codes on entity just not use it here) (match string of customName)
+      # if has custom name test give another amount of xp
+      # you can still use color codes on entity just not use it here
+      # match string of customName
+      # supports PlaceholderAPI
       name:
         'test':
           min: 7
@@ -151,7 +154,10 @@ xp:
 
     skeleton:
 
-      # if has custom name test give another amount of xp (you can still use color codes on entity just not use it here) (match string of customName)
+      # if has custom name test give another amount of xp
+      # you can still use color codes on entity just not use it here
+      # match string of customName
+      # supports PlaceholderAPI
       name:
         'test':
           min: 7
