@@ -2,6 +2,7 @@ package me.MathiasMC.PvPLevels.listeners;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +23,9 @@ public class PlayerJoin implements Listener {
         if (plugin.list().contains(uuid)) {
             final PlayerConnect playerConnect = plugin.get(uuid);
             if (playerConnect.getMultiplier() != 0) {
-                player.sendMessage("your multiplier has started again you joined");
+                for (String message : plugin.language.get.getStringList("multiplier.join")) {
+                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", player.getName())));
+                }
                 plugin.multipliers.add(player);
             }
         }

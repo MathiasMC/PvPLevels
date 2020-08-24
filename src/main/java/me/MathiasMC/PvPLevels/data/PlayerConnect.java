@@ -42,9 +42,16 @@ public class PlayerConnect {
         this.killstreak = Long.parseLong(data[5]);
         this.killstreak_top = Long.parseLong(data[6]);
         final String[] split = data[7].split(" ");
-        multiplier = Double.parseDouble(split[0]);
-        multiplier_time = Integer.parseInt(split[1]);
-        multiplier_time_left = this.multiplier_time;
+        if (split.length == 3) {
+            multiplier = Double.parseDouble(split[0]);
+            multiplier_time = Integer.parseInt(split[1]);
+            multiplier_time_left = Integer.parseInt(split[2]);
+        } else {
+            multiplier = Double.parseDouble(split[0]);
+            multiplier_time = Integer.parseInt(split[1]);
+            multiplier_time_left = 0;
+            save();
+        }
         this.time = Timestamp.valueOf(data[8]);
     }
 
@@ -137,6 +144,6 @@ public class PlayerConnect {
     }
 
     public void save() {
-        PvPLevels.call.database.setValues(uuid, group, kills, deaths, xp, level, killstreak, killstreak_top, (multiplier + " " + multiplier_time), time);
+        PvPLevels.call.database.setValues(uuid, group, kills, deaths, xp, level, killstreak, killstreak_top, (multiplier + " " + multiplier_time + " " + multiplier_time_left), time);
     }
 }

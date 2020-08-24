@@ -29,11 +29,9 @@ help:
     - 'pvplevels message {player} &7&l> &f/pvplevels broadcast <null/permission> <text>'
     - 'pvplevels message {player} &7&l> &f/pvplevels message <player> <text>'
     - 'pvplevels message {player} &7&l> &f/pvplevels actionbar <player> <seconds> <text>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels group set <player> <groupName>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels group reset <player>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels reset <kills, deaths, xp, level, killstreak, stats>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels reset stats <player> <resetGroup>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels set/add/remove xp/level <player> <amount>'
+    - 'pvplevels message {player} &7&l> &f/pvplevels group set/reset <player> <groupName (set)>'
+    - 'pvplevels message {player} &7&l> &f/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
+    - 'pvplevels message {player} &7&l> &f/pvplevels xp/level <player> <+-amount>'
     - 'pvplevels message {player} &7&l> &f/pvplevels admin'
     - 'pvplevels message {player} &7&l> &f/pvplevels profiles'
     - 'pvplevels message {player} &7&l> &f/pvplevels stats <player>'
@@ -189,6 +187,8 @@ multiplier:
     - 'pvplevels message {target} &7[&bPvPLevels&7] &eStarted an &6{multiplier} &emultiplier for &b{time}'
   lost:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYour multiplier &6{multiplier} multiplier &chas run out'
+  join:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &eStarted your multiplier again.'
 stats:
   permission:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
@@ -339,11 +339,9 @@ console:
       - '&7&l> &f/pvplevels broadcast <null/permission> <text>'
       - '&7&l> &f/pvplevels message <player> <text>'
       - '&7&l> &f/pvplevels actionbar <player> <seconds> <text>'
-      - '&7&l> &f/pvplevels group set <player> <groupName>'
-      - '&7&l> &f/pvplevels group reset <player>'
-      - '&7&l> &f/pvplevels reset <kills, deaths, xp, level, killstreak, stats>'
-      - '&7&l> &f/pvplevels reset stats <player> <resetGroup>'
-      - '&7&l> &f/pvplevels set/add/remove xp/level <player> <amount>'
+      - '&7&l> &f/pvplevels group set/reset <player> <groupName (set)>'
+      - '&7&l> &f/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
+      - '&7&l> &f/pvplevels xp/level <player> <+-amount>'
       - '&7&l> &f/pvplevels admin'
       - '&7&l> &f/pvplevels profiles'
       - '&7&l> &f/pvplevels stats <player>'

@@ -89,7 +89,7 @@ public class Database {
                             preparedStatement.setLong(6, plugin.config.get.getLong("start-level"));
                             preparedStatement.setLong(7, 0L);
                             preparedStatement.setLong(8, 0L);
-                            preparedStatement.setString(9, "0.0 0");
+                            preparedStatement.setString(9, "0.0 0 0");
                             preparedStatement.setTimestamp(10, new Timestamp(new Date().getTime()));
                             preparedStatement.executeUpdate();
                         }
@@ -220,7 +220,7 @@ public class Database {
                     plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
                 }
         }
-        return new String[] { "default", String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(plugin.config.get.getLong("start-level")), String.valueOf(0L), String.valueOf(0L), "0.0 0", String.valueOf(new Timestamp(new Date().getTime())) };
+        return new String[] { "default", String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(plugin.config.get.getLong("start-level")), String.valueOf(0L), String.valueOf(0L), "0.0 0 0", String.valueOf(new Timestamp(new Date().getTime())) };
     }
 
     private ArrayList<String> getUUIDList() {
