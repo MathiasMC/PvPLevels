@@ -57,7 +57,7 @@ public class Database {
             if (connection == null || connection.isClosed()) {
                 return false;
             }
-            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `group` TINYTEXT(255), `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `killstreak_top` bigint(255), `multiplier` LONGTEXT(255), `lastseen` DATETIME);");
+            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `group` text(255), `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `killstreak_top` bigint(255), `multiplier` text(255), `lastseen` DATETIME);");
         }
         return true;
     }
@@ -66,6 +66,7 @@ public class Database {
         try {
             return check();
         } catch (SQLException e) {
+            plugin.textUtils.exception(e.getStackTrace(), e.getMessage());
             return false;
         }
     }
