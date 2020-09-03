@@ -33,9 +33,11 @@ public class Database {
     private Connection get() {
         try {
             if (plugin.config.get.getBoolean("mysql.use")) {
+                plugin.textUtils.info("Database ( Connected ) ( MySQL )");
                 Class.forName("com.mysql.jdbc.Driver");
                 return DriverManager.getConnection("jdbc:mysql://" + plugin.config.get.getString("mysql.host") + ":" + plugin.config.get.getString("mysql.port") + "/" + plugin.config.get.getString("mysql.database"), plugin.config.get.getString("mysql.username"), plugin.config.get.getString("mysql.password"));
             } else {
+                plugin.textUtils.info("Database ( Connected ) ( SQLite )");
                 Class.forName("org.sqlite.JDBC");
                 return DriverManager.getConnection("jdbc:sqlite:" + new File(plugin.getDataFolder(), "data.db"));
             }

@@ -108,6 +108,9 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(identifier.equals("level_prefix")) {
             return plugin.statsManager.prefix(playerConnect);
         }
+        if(identifier.equals("level_suffix")) {
+            return plugin.statsManager.suffix(playerConnect);
+        }
         if(identifier.equals("multiplier")) {
             if (playerConnect.getMultiplier() != 0D) {
                 return String.valueOf(playerConnect.getMultiplier());

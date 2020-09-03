@@ -211,7 +211,7 @@ public class XPManager {
     }
 
     public void sendCommands(final Player killer, final String path, final FileConfiguration fileConfiguration, final String customName, final int add, final int lost, final int item_boost, final double multiplier) {
-        if (path != null) {
+        if (path != null && fileConfiguration.contains(path)) {
             for (String command : fileConfiguration.getStringList(path)) {
                 plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.replacePlaceholders(killer, command.replace("{type}", customName).replace("{xp}", String.valueOf(add)).replace("{lost}", String.valueOf(lost)).replace("{item_boost}", String.valueOf(item_boost)).replace("{multiplier}", String.valueOf(multiplier))));
             }
