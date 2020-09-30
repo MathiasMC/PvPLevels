@@ -70,11 +70,15 @@ public class XPManager {
                 }
             }
         }
-        if (killer != null && !plugin.config.get.getStringList("excluded").contains(killer.getUniqueId().toString())) {
-            if (!plugin.killSessionManager.check(entity, killer) && !plugin.spawners.contains(entity.getUniqueId().toString())) {
+        if (killer != null) {
+            final String killerUUID = killer.getUniqueId().toString();
+            if (!plugin.config.get.getStringList("excluded").contains(killerUUID)
+                    && !plugin.killSessionManager.check(entity, killer)
+                    && !plugin.spawners.contains(entity.getUniqueId().toString())
+                    && !entity.getUniqueId().toString().equalsIgnoreCase(killerUUID)) {
                 check(killer, entity.getCustomName(), entity.getType().toString().toLowerCase(), entity.getName(), true);
                 if (entity instanceof Player) {
-                    final PlayerConnect playerConnect = plugin.get(killer.getUniqueId().toString());
+                    final PlayerConnect playerConnect = plugin.get(killerUUID);
                     if (world(killer, plugin.config.get, "kills." + playerConnect.getGroup())) {
                         playerConnect.setKills(playerConnect.getKills() + 1);
                         final String path = "kills." + playerConnect.getGroup() + "." + playerConnect.getKills();
