@@ -20,14 +20,12 @@ public class PlayerJoin implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
         final String uuid = player.getUniqueId().toString();
-        if (plugin.list().contains(uuid)) {
-            final PlayerConnect playerConnect = plugin.get(uuid);
-            if (playerConnect.getMultiplier() != 0) {
-                for (String message : plugin.language.get.getStringList("multiplier.join")) {
-                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", player.getName())));
-                }
-                plugin.multipliers.add(player);
+        final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
+        if (playerConnect.getMultiplier() != 0) {
+            for (String message : plugin.language.get.getStringList("multiplier.join")) {
+                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", player.getName())));
             }
+            plugin.multipliers.add(player);
         }
     }
 }

@@ -28,7 +28,7 @@ public class XPManager {
             final Player killed = (Player) entity;
             final String killedUUID = killed.getUniqueId().toString();
             if (!plugin.config.get.getStringList("excluded").contains(killedUUID)) {
-                final PlayerConnect playerConnect = plugin.get(killedUUID);
+                final PlayerConnect playerConnect = plugin.getPlayerConnect(killedUUID);
                 check(killed, entity.getCustomName(), getEntityKiller(killed, playerConnect.getGroup()), "", false);
                 if (world(killed, plugin.config.get, "deaths." + playerConnect.getGroup())) {
                     boolean run = false;
@@ -78,7 +78,7 @@ public class XPManager {
                     && !entity.getUniqueId().toString().equalsIgnoreCase(killerUUID)) {
                 check(killer, entity.getCustomName(), entity.getType().toString().toLowerCase(), entity.getName(), true);
                 if (entity instanceof Player) {
-                    final PlayerConnect playerConnect = plugin.get(killerUUID);
+                    final PlayerConnect playerConnect = plugin.getPlayerConnect(killerUUID);
                     if (world(killer, plugin.config.get, "kills." + playerConnect.getGroup())) {
                         playerConnect.setKills(playerConnect.getKills() + 1);
                         final String path = "kills." + playerConnect.getGroup() + "." + playerConnect.getKills();
@@ -113,7 +113,7 @@ public class XPManager {
 
     public void check(final Player player, final String customName, final String xpType, String entityType, final boolean xpUP) {
         final String uuid = player.getUniqueId().toString();
-        final PlayerConnect playerConnect = plugin.get(uuid);
+        final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
         final String group = playerConnect.getGroup();
         String path = "xp." + group + "." + xpType;
         if (plugin.config.get.contains(path) && player.hasPermission("pvplevels.group." + group) && world(player, plugin.config.get, path)) {

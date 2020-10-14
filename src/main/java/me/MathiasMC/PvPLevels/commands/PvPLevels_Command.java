@@ -221,8 +221,8 @@ public class PvPLevels_Command implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("save")) {
                         unknown = false;
                         if (sender.hasPermission("pvplevels.admin.save")) {
-                            for (String uuid : plugin.list()) {
-                                plugin.get(uuid).save();
+                            for (String uuid : plugin.listPlayerConnect()) {
+                                plugin.getPlayerConnect(uuid).save();
                             }
                             if (type.equalsIgnoreCase("player")) {
                                 for (String message : plugin.language.get.getStringList("save.message")) {
@@ -399,7 +399,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                         final Player target = plugin.getServer().getPlayer(args[2]);
                                         if (target != null) {
                                             if (plugin.isString(args[3]) && plugin.levels.get.contains(args[3])) {
-                                                final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                                final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                                 playerConnect.setGroup(args[3]);
                                                 if (type.equalsIgnoreCase("player")) {
                                                     for (String message : plugin.language.get.getStringList("group.set.message")) {
@@ -447,7 +447,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                     if (args.length == 3) {
                                         Player target = plugin.getServer().getPlayer(args[2]);
                                         if (target != null) {
-                                            PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                            PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                             playerConnect.setGroup("default");
                                             if (type.equalsIgnoreCase("player")) {
                                                 for (String message : plugin.language.get.getStringList("group.reset.message")) {
@@ -516,20 +516,20 @@ public class PvPLevels_Command implements CommandExecutor {
                                 final Player target = plugin.getServer().getPlayer(args[2]);
                                 if (target != null) {
                                     if (args[1].equalsIgnoreCase("kills")) {
-                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         playerConnect.setKills(0L);
                                         triggerReset(type, sender, target, "kills", 1, 0);
                                     } else if (args[1].equalsIgnoreCase("deaths")) {
-                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         playerConnect.setDeaths(0L);
                                         triggerReset(type, sender, target, "deaths", 1, 0);
                                     } else if (args[1].equalsIgnoreCase("level")) {
-                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         playerConnect.setLevel(plugin.config.get.getLong("start-level"));
                                         playerConnect.setXp(0L);
                                         triggerReset(type, sender, target, "level", 1, 0);
                                     } else if (args[1].equalsIgnoreCase("killstreak")) {
-                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         if (args.length > 3) {
                                             triggerReset(type, sender, target, "killstreak " + args[3], playerConnect.getKillstreak(), 0);
                                         } else {
@@ -538,7 +538,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                         playerConnect.setKillstreak(0L);
                                     } else if (args[1].equalsIgnoreCase("stats")) {
                                         if (args.length == 4) {
-                                            final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                            final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                             playerConnect.setKills(0L);
                                             playerConnect.setDeaths(0L);
                                             playerConnect.setXp(0L);
@@ -607,7 +607,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
                                     if (plugin.isLong(args[2])) {
-                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         long set = Long.parseLong(args[2]);
                                         boolean plus = true;
                                         if (args[2].contains("+")) {
@@ -627,11 +627,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             stringList.remove("execute");
                                             final Set<Integer> list = stringList.stream().map(Integer::parseInt).collect(Collectors.toSet());
                                             final long maxXP = plugin.levels.get.getLong(playerConnect.getGroup() + "." + Collections.max(list) + ".xp");
-                                            if (set >= maxXP) {
-                                                playerConnect.setXp(maxXP);
-                                            } else {
-                                                playerConnect.setXp(set);
-                                            }
+                                            playerConnect.setXp(Math.min(set, maxXP));
                                         } else {
                                             playerConnect.setXp(0L);
                                         }
@@ -704,7 +700,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
                                     if (plugin.isLong(args[2])) {
-                                        final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                        final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         long set = Long.parseLong(args[2]);
                                         if (args[2].contains("+")) {
                                             set = playerConnect.getLevel() + Long.parseLong(args[2].replace("+", ""));
@@ -787,7 +783,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                 if (target != null) {
                                     if (plugin.isDouble(args[2])) {
                                         if (plugin.isInt(args[3])) {
-                                            final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+                                            final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                             playerConnect.setMultiplier(Double.parseDouble(args[2]));
                                             playerConnect.setMultiplier_time(Integer.parseInt(args[3]));
                                             playerConnect.setMultiplier_time_left(Integer.parseInt(args[3]));
@@ -891,7 +887,7 @@ public class PvPLevels_Command implements CommandExecutor {
 
     private void triggerReset(final String type, final CommandSender sender, final Player target, String path, final long set, final long next) {
         if (path.contains("killstreak")) {
-            final PlayerConnect playerConnect = plugin.get(target.getUniqueId().toString());
+            final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
             String killer = "";
             if (path.split(" ").length == 2) {
                 killer = path.split(" ")[1];

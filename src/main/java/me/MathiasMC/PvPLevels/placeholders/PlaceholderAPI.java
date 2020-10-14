@@ -47,7 +47,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return "";
         }
         final String uuid = player.getUniqueId().toString();
-        final PlayerConnect playerConnect = plugin.get(uuid);
+        final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
         if(identifier.equals("kills")) {
             return String.valueOf(playerConnect.getKills());
         }

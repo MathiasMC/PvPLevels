@@ -127,12 +127,11 @@ public class StatsManager {
 
     public LinkedHashMap<OfflinePlayer, Long> getTopMap(final String type, final boolean reverse) {
         final Map<OfflinePlayer, Long> unsorted = new HashMap<>();
-        final Set<String> list = plugin.list();
         final List<String> excluded = plugin.config.get.getStringList("top.excluded");
         for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
             final String uuid = offlinePlayer.getUniqueId().toString();
-            if (list.contains(uuid) && !excluded.contains(uuid)) {
-                final PlayerConnect playerConnect = plugin.get(uuid);
+            if (!excluded.contains(uuid)) {
+                final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
                 switch (type) {
                     case "kills":
                         unsorted.put(offlinePlayer, playerConnect.getKills());

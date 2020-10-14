@@ -19,8 +19,8 @@ public class Purge {
             startInterval = 1;
         }
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            for (String uuid : plugin.list()) {
-                if (isOld(plugin.get(uuid).getTime())) {
+            for (String uuid : plugin.listPlayerConnect()) {
+                if (isOld(plugin.getPlayerConnect(uuid).getTime())) {
                     plugin.database.delete(uuid);
                     if (plugin.config.get.contains("mysql.purge.commands")) {
                         for (String command : plugin.config.get.getStringList("mysql.purge.commands")) {

@@ -87,7 +87,7 @@ public class AdminGUI extends GUI {
                                         plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{target}", offlinePlayer.getName()).replace("{player}", player.getName()));
                                     }
                                 }
-                                plugin.unload(targetUUID);
+                                plugin.unloadPlayerConnect(targetUUID);
                                 plugin.database.delete(targetUUID);
                                 if (plugin.config.get.contains("mysql.purge.commands")) {
                                     for (String command : plugin.config.get.getStringList("mysql.purge.commands")) {

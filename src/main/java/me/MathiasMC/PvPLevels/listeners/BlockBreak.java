@@ -22,7 +22,7 @@ public class BlockBreak implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         Location location = e.getBlock().getLocation();
         Player player = e.getPlayer();
-        PlayerConnect playerConnect = plugin.get(player.getUniqueId().toString());
+        PlayerConnect playerConnect = plugin.getPlayerConnect(player.getUniqueId().toString());
         if (!plugin.xpManager.isMax(playerConnect)) {
             if (!plugin.blocksList.contains(location)) {
                 final Material material = e.getBlock().getType();

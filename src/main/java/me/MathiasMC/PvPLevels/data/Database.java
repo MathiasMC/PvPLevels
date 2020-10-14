@@ -59,7 +59,7 @@ public class Database {
             if (connection == null || connection.isClosed()) {
                 return false;
             }
-            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` varchar(255) PRIMARY KEY, `group` text(255), `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `killstreak_top` bigint(255), `multiplier` text(255), `lastseen` DATETIME);");
+            connection.createStatement().execute("CREATE TABLE IF NOT EXISTS `players` (`uuid` char(36) PRIMARY KEY, `group` text(255), `kills` bigint(255), `deaths` bigint(255), `xp` bigint(255), `level` bigint(255), `killstreak` bigint(255), `killstreak_top` bigint(255), `multiplier` text(255), `lastseen` DATETIME);");
         }
         return true;
     }
@@ -130,7 +130,7 @@ public class Database {
                             preparedStatement = connection.prepareStatement("DELETE FROM players WHERE uuid = ?");
                             preparedStatement.setString(1, uuid);
                             preparedStatement.executeUpdate();
-                            plugin.unload(uuid);
+                            plugin.unloadPlayerConnect(uuid);
                         }
                     } catch (SQLException exception) {
                         plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
@@ -256,15 +256,5 @@ public class Database {
             return array;
         }
         return null;
-    }
-
-    public void loadALL() {
-        if (set()) {
-            for (String list : getUUIDList()) {
-                if (!plugin.list().contains(list)) {
-                    plugin.load(list);
-                }
-            }
-        }
     }
 }

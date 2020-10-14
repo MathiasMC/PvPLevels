@@ -85,7 +85,6 @@ public class PvPLevels extends JavaPlugin {
 
         database = new Database(this);
         if (database.set()) {
-            database.loadALL();
             getServer().getPluginManager().registerEvents(new PlayerLogin(this), this);
             getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
             getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
@@ -127,7 +126,7 @@ public class PvPLevels extends JavaPlugin {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
                 for (OfflinePlayer offlinePlayer : multipliers) {
                     if (offlinePlayer.isOnline()) {
-                        final PlayerConnect playerConnect = get(offlinePlayer.getUniqueId().toString());
+                        final PlayerConnect playerConnect = getPlayerConnect(offlinePlayer.getUniqueId().toString());
                         int left = playerConnect.getMultiplier_time_left();
                         if (left > 0) {
                             left--;
@@ -162,23 +161,23 @@ public class PvPLevels extends JavaPlugin {
         call = null;
     }
 
-    public void load(final String uuid) {
-        final PlayerConnect data = new PlayerConnect(uuid);
-        playerConnect.put(uuid, data);
-    }
-
-    public void unload(final String uuid) {
+    public void unloadPlayerConnect(final String uuid) {
         final PlayerConnect data = playerConnect.remove(uuid);
         if (data != null) {
             data.save();
         }
     }
 
-    public PlayerConnect get(final String uuid) {
-        return playerConnect.get(uuid);
+    public PlayerConnect getPlayerConnect(final String uuid) {
+        if (playerConnect.containsKey(uuid)) {
+            return playerConnect.get(uuid);
+        }
+        final PlayerConnect playerConnect = new PlayerConnect(uuid);
+        this.playerConnect.put(uuid, playerConnect);
+        return playerConnect;
     }
 
-    public Set<String> list() {
+    public Set<String> listPlayerConnect() {
         return playerConnect.keySet();
     }
 
@@ -197,8 +196,8 @@ public class PvPLevels extends JavaPlugin {
         final int interval = config.get.getInt("save.interval");
         textUtils.info("Saving to the database every ( " + interval + " ) minutes");
         getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
-            for (String uuid : list()) {
-                get(uuid).save();
+            for (String uuid : listPlayerConnect()) {
+                getPlayerConnect(uuid).save();
             }
         }, interval * 1200, interval * 1200);
     }
@@ -208,14 +207,12 @@ public class PvPLevels extends JavaPlugin {
             message = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, message);
         }
         final String uuid = player.getUniqueId().toString();
-        if (list().contains(uuid)) {
-            final PlayerConnect playerConnect = get(uuid);
+            final PlayerConnect playerConnect = getPlayerConnect(uuid);
             message = internalReplace(playerConnect, message)
                     .replace("{level_group}", statsManager.group(playerConnect))
                     .replace("{level_prefix}", statsManager.prefix(playerConnect))
                     .replace("{level_suffix}", statsManager.suffix(playerConnect))
             ;
-        }
         message = message
                 .replace("{player}", player.getName())
                 .replace("{uuid}", uuid);
