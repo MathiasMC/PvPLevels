@@ -116,7 +116,7 @@ public class PvPLevels_TabComplete implements TabCompleter {
                         commands.addAll(getPlayers(args[2]));
                     } else if (args.length == 4) {
                         if (args[1].equalsIgnoreCase("set")) {
-                            commands.addAll(plugin.levels.get.getConfigurationSection("").getKeys(false));
+                            commands.addAll(plugin.getFileUtils().levels.getConfigurationSection("").getKeys(false));
                         }
                     }
                 }

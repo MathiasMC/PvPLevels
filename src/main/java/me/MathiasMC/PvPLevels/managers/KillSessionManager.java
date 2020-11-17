@@ -22,7 +22,7 @@ public class KillSessionManager {
     private final Map<String, String> killsessiontime = new HashMap<>();
 
     public boolean check(Entity entity, Entity killer) {
-        if (plugin.config.get.getBoolean("kill-session.use")) {
+        if (plugin.getFileUtils().config.getBoolean("kill-session.use")) {
             if (entity instanceof Player) {
                 boolean returning = false;
                 boolean check = false;
@@ -35,7 +35,7 @@ public class KillSessionManager {
                         if (killed.getUniqueId().toString().equalsIgnoreCase(killsession.get(attacker).get(i).split(";")[0])) {
                             String uuid = killsession.get(attacker).get(i).split(";")[0];
                             int nameamount = Integer.parseInt(killsession.get(attacker).get(i).split(";")[1]);
-                            int SessionInt = plugin.config.get.getInt("kill-session.amount");
+                            int SessionInt = plugin.getFileUtils().config.getInt("kill-session.amount");
                             if (killed.getUniqueId().toString().equalsIgnoreCase(uuid))
                                 if (nameamount >= SessionInt) {
                                     returning = true;
@@ -75,7 +75,7 @@ public class KillSessionManager {
                     }
                 }
             },0L, 20L);
-            killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, id + "=" + plugin.config.get.getInt("kill-session.time"));
+            killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, id + "=" + plugin.getFileUtils().config.getInt("kill-session.time"));
             sendMessage(killer, killed, "get");
         } else {
             sendMessage(killer, killed, "abuse");
@@ -83,8 +83,8 @@ public class KillSessionManager {
     }
 
     private void sendMessage(final Entity killer, final Player killed, final String path) {
-        for (String command : plugin.config.get.getStringList("kill-session." + path)) {
-            plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{player}", killer.getName()).replace("{killed}", killed.getName()).replace("{amount}", String.valueOf(plugin.config.get.getInt("kill-session.amount"))));
+        for (String command : plugin.getFileUtils().config.getStringList("kill-session." + path)) {
+            plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{player}", killer.getName()).replace("{killed}", killed.getName()).replace("{amount}", String.valueOf(plugin.getFileUtils().config.getInt("kill-session.amount"))));
         }
     }
 }

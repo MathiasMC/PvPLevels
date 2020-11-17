@@ -13,17 +13,17 @@ public class Purge {
 
     public Purge(final PvPLevels plugin) {
         this.plugin = plugin;
-        final int interval = plugin.config.get.getInt("mysql.purge.interval");
+        final int interval = plugin.getFileUtils().config.getInt("mysql.purge.interval");
         int startInterval = interval;
-        if (plugin.config.get.getBoolean("mysql.purge.check-on-startup")) {
+        if (plugin.getFileUtils().config.getBoolean("mysql.purge.check-on-startup")) {
             startInterval = 1;
         }
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             for (String uuid : plugin.listPlayerConnect()) {
                 if (isOld(plugin.getPlayerConnect(uuid).getTime())) {
                     plugin.database.delete(uuid);
-                    if (plugin.config.get.contains("mysql.purge.commands")) {
-                        for (String command : plugin.config.get.getStringList("mysql.purge.commands")) {
+                    if (plugin.getFileUtils().config.contains("mysql.purge.commands")) {
+                        for (String command : plugin.getFileUtils().config.getStringList("mysql.purge.commands")) {
                             plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{uuid}", uuid));
                         }
                     }
@@ -33,6 +33,6 @@ public class Purge {
     }
 
     private boolean isOld(Timestamp date) {
-        return ChronoUnit.DAYS.between(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()) > plugin.config.get.getInt("mysql.purge.inactive-days");
+        return ChronoUnit.DAYS.between(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), LocalDate.now()) > plugin.getFileUtils().config.getInt("mysql.purge.inactive-days");
     }
 }

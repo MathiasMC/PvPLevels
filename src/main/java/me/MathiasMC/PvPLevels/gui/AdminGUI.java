@@ -1,40 +1,32 @@
 package me.MathiasMC.PvPLevels.gui;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AdminGUI extends GUI {
 
-    private final PvPLevels plugin = PvPLevels.call;
+    private final PvPLevels plugin = PvPLevels.getInstance();
     private final FileConfiguration file;
     private final Player player = playerMenu.getPlayer();
-    private final int maxItems;
 
     public AdminGUI(Menu menu) {
         super(menu);
         file = plugin.guiFiles.get("admin");
         setPlayers();
-        maxItems = file.getInt("settings.perpage");
     }
 
     @Override
-    public String getName() {
-        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(file.getString("settings.name")));
-    }
-
-    @Override
-    public int getSize() {
-        return file.getInt("settings.size");
+    public FileConfiguration getFile() {
+        return this.file;
     }
 
     @Override
@@ -73,53 +65,68 @@ public class AdminGUI extends GUI {
             }
             setPlayers();
             super.open();
-        } else {
-            if (e.isShiftClick() && e.isRightClick() && player.hasPermission("pvplevels.admin.pvpadmin")) {
-                if (e.getCurrentItem().getItemMeta().hasLore()) {
-                    for (String lore : e.getCurrentItem().getItemMeta().getLore()) {
-                        final Matcher matcher = Pattern.compile("\\[([^]]+)]").matcher(lore);
-                        if (matcher.find()) {
-                            final OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(matcher.group(1)));
-                            if (offlinePlayer != null) {
-                                final String targetUUID = offlinePlayer.getUniqueId().toString();
-                                if (offlinePlayer.isOnline()) {
-                                    for (String command : plugin.language.get.getStringList("pvpadmin.online")) {
-                                        plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{target}", offlinePlayer.getName()).replace("{player}", player.getName()));
-                                    }
-                                }
-                                plugin.unloadPlayerConnect(targetUUID);
-                                plugin.database.delete(targetUUID);
-                                if (plugin.config.get.contains("mysql.purge.commands")) {
-                                    for (String command : plugin.config.get.getStringList("mysql.purge.commands")) {
-                                        plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{pvplevels_player}", offlinePlayer.getName()).replace("{pvplevels_uuid}", targetUUID));
-                                    }
-                                }
-                                for (String command : plugin.language.get.getStringList("pvpadmin.deleted")) {
-                                    plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{target}", offlinePlayer.getName()).replace("{player}", player.getName()));
-                                }
-                                setPlayers();
-                                super.open();
-                            }
-                            break;
-                        }
-                    }
+            return;
+        }
+
+        if (!e.isShiftClick() && !e.isRightClick()) {
+            return;
+        }
+
+        if (!player.hasPermission("pvplevels.admin.admin")) {
+            return;
+        }
+
+        final ItemMeta itemMeta = e.getCurrentItem().getItemMeta();
+
+        if (itemMeta == null) {
+            return;
+        }
+
+        if (!itemMeta.hasLore()) {
+            return;
+        }
+
+        final String uuid = getUUID(itemMeta.getLore());
+
+        if (uuid == null) {
+            return;
+        }
+
+        final OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
+        if (offlinePlayer != null) {
+            final String targetUUID = offlinePlayer.getUniqueId().toString();
+            plugin.database.delete(targetUUID);
+            plugin.unloadPlayerConnect(uuid);
+            if (offlinePlayer.isOnline()) {
+                for (String command : plugin.getFileUtils().language.getStringList("admin.online")) {
+                    plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{target}", offlinePlayer.getName()).replace("{player}", player.getName()));
                 }
             }
+            if (plugin.getFileUtils().config.contains("mysql.purge.commands")) {
+                for (String command : plugin.getFileUtils().config.getStringList("mysql.purge.commands")) {
+                    plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{player}", offlinePlayer.getName()).replace("{uuid}", targetUUID));
+                }
+            }
+            for (String command : plugin.getFileUtils().language.getStringList("admin.deleted")) {
+                plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{target}", offlinePlayer.getName()).replace("{player}", player.getName()));
+            }
+            setPlayers();
+            super.open();
         }
+    }
+
+    private String getUUID(final List<String> lores) {
+        for (String lore : lores) {
+            final Matcher matcher = Pattern.compile("\\[([^]]+)]").matcher(lore);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        }
+        return null;
     }
 
     @Override
     public void setItems() {
-        plugin.guiManager.setGUIItemStack(inventory, file, player);
-        if (!players.isEmpty()) {
-            for (int i = 0; i < maxItems; i++) {
-                index = maxItems * page + i;
-                if (index >= players.size()) break;
-                final OfflinePlayer offlinePlayer = players.get(index);
-                if (offlinePlayer != null) {
-                    inventory.addItem(plugin.guiManager.getPlayerHead(file, offlinePlayer, offlinePlayer.getName(), "settings.player"));
-                }
-            }
-        }
+        plugin.getItemStackManager().setupGUI(inventory, file, player);
     }
 }

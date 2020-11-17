@@ -17,7 +17,11 @@ public class PlayerQuit implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent e) {
-        final PlayerConnect playerConnect = plugin.getPlayerConnect(e.getPlayer().getUniqueId().toString());
+        final String uuid = e.getPlayer().getUniqueId().toString();
+        if (!plugin.listPlayerConnect().contains(uuid)) {
+            return;
+        }
+        final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
         playerConnect.setTime();
         playerConnect.save();
     }

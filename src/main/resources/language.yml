@@ -22,7 +22,13 @@ command:
 help:
   permission:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
-  message:
+  player:
+    - 'pvplevels message {player} &c&m---------------------------------------------'
+    - 'pvplevels message {player} &7&l> &f/pvplevels profiles'
+    - 'pvplevels message {player} &7&l> &f/pvplevels stats <player>'
+    - 'pvplevels message {player} &7&l> &f/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
+    - 'pvplevels message {player} &c&m---------------------------------------------'
+  admin:
     - 'pvplevels message {player} &c&m---------------------------------------------'
     - 'pvplevels message {player} &7&l> &f/pvplevels save'
     - 'pvplevels message {player} &7&l> &f/pvplevels reload'
@@ -48,6 +54,10 @@ reload:
 admin:
   permission:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+  deleted:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &eDeleted data for player: {target}'
+  online:
+    - 'kick {target} Your profile was deleted.'
 profiles:
   permission:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
@@ -56,11 +66,6 @@ save:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
   message:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &aSaved cached data to the database!'
-pvpadmin:
-  deleted:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eDeleted player: {target}'
-  online:
-    - 'kick {target} &cYour profile was deleted.'
 message:
   permission:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'

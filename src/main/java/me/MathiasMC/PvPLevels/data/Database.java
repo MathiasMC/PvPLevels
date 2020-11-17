@@ -5,7 +5,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Database {
@@ -32,17 +31,17 @@ public class Database {
 
     private Connection get() {
         try {
-            if (plugin.config.get.getBoolean("mysql.use")) {
-                plugin.textUtils.info("Database ( Connected ) ( MySQL )");
+            if (plugin.getFileUtils().config.getBoolean("mysql.use")) {
+                plugin.getTextUtils().info("Database ( Connected ) ( MySQL )");
                 Class.forName("com.mysql.jdbc.Driver");
-                return DriverManager.getConnection("jdbc:mysql://" + plugin.config.get.getString("mysql.host") + ":" + plugin.config.get.getString("mysql.port") + "/" + plugin.config.get.getString("mysql.database"), plugin.config.get.getString("mysql.username"), plugin.config.get.getString("mysql.password"));
+                return DriverManager.getConnection("jdbc:mysql://" + plugin.getFileUtils().config.getString("mysql.host") + ":" + plugin.getFileUtils().config.getString("mysql.port") + "/" + plugin.getFileUtils().config.getString("mysql.database"), plugin.getFileUtils().config.getString("mysql.username"), plugin.getFileUtils().config.getString("mysql.password"));
             } else {
-                plugin.textUtils.info("Database ( Connected ) ( SQLite )");
+                plugin.getTextUtils().info("Database ( Connected ) ( SQLite )");
                 Class.forName("org.sqlite.JDBC");
                 return DriverManager.getConnection("jdbc:sqlite:" + new File(plugin.getDataFolder(), "data.db"));
             }
         } catch (ClassNotFoundException | SQLException e) {
-            plugin.textUtils.exception(e.getStackTrace(), e.getMessage());
+            plugin.getTextUtils().exception(e.getStackTrace(), e.getMessage());
             return null;
         }
     }
@@ -68,7 +67,7 @@ public class Database {
         try {
             return check();
         } catch (SQLException e) {
-            plugin.textUtils.exception(e.getStackTrace(), e.getMessage());
+            plugin.getTextUtils().exception(e.getStackTrace(), e.getMessage());
             return false;
         }
     }
@@ -89,7 +88,7 @@ public class Database {
                             preparedStatement.setLong(3, 0L);
                             preparedStatement.setLong(4, 0L);
                             preparedStatement.setLong(5, 0L);
-                            preparedStatement.setLong(6, plugin.config.get.getLong("start-level"));
+                            preparedStatement.setLong(6, plugin.getFileUtils().config.getLong("start-level"));
                             preparedStatement.setLong(7, 0L);
                             preparedStatement.setLong(8, 0L);
                             preparedStatement.setString(9, "0.0 0 0");
@@ -97,19 +96,19 @@ public class Database {
                             preparedStatement.executeUpdate();
                         }
                     } catch (SQLException exception) {
-                        plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                        plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                     } finally {
                         if (resultSet != null)
                             try {
                                 resultSet.close();
                             } catch (SQLException exception) {
-                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                                plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                             }
                         if (preparedStatement != null)
                             try {
                                 preparedStatement.close();
                             } catch (SQLException exception) {
-                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                                plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                             }
                     }
                 }
@@ -130,22 +129,21 @@ public class Database {
                             preparedStatement = connection.prepareStatement("DELETE FROM players WHERE uuid = ?");
                             preparedStatement.setString(1, uuid);
                             preparedStatement.executeUpdate();
-                            plugin.unloadPlayerConnect(uuid);
                         }
                     } catch (SQLException exception) {
-                        plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                        plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                     } finally {
                         if (resultSet != null)
                             try {
                                 resultSet.close();
                             } catch (SQLException exception) {
-                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                                plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                             }
                         if (preparedStatement != null)
                             try {
                                 preparedStatement.close();
                             } catch (SQLException exception) {
-                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                                plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                             }
                     }
                 }
@@ -177,19 +175,19 @@ public class Database {
                             preparedStatement.executeUpdate();
                         }
                     } catch (SQLException exception) {
-                        plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                        plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                     } finally {
                         if (resultSet != null)
                             try {
                                 resultSet.close();
                             } catch (SQLException exception) {
-                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                                plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                             }
                         if (preparedStatement != null)
                             try {
                                 preparedStatement.close();
                             } catch (SQLException exception) {
-                                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                                plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                             }
                     }
                 }
@@ -208,53 +206,21 @@ public class Database {
                 return new String[]{ resultSet.getString("group"), String.valueOf(resultSet.getLong("kills")), String.valueOf(resultSet.getLong("deaths")), String.valueOf(resultSet.getLong("xp")), String.valueOf(resultSet.getLong("level")), String.valueOf(resultSet.getLong("killstreak")), String.valueOf(resultSet.getLong("killstreak_top")), resultSet.getString("multiplier"), String.valueOf(resultSet.getTimestamp("lastseen")) };
             }
         } catch (SQLException exception) {
-            plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+            plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
         } finally {
             if (resultSet != null)
                 try {
                     resultSet.close();
                 } catch (SQLException exception) {
-                    plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                    plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                 }
             if (statement != null)
                 try {
                     statement.close();
                 } catch (SQLException exception) {
-                    plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
+                    plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                 }
         }
-        return new String[] { "default", String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(plugin.config.get.getLong("start-level")), String.valueOf(0L), String.valueOf(0L), "0.0 0 0", String.valueOf(new Timestamp(new Date().getTime())) };
-    }
-
-    private ArrayList<String> getUUIDList() {
-        if (set()) {
-            ArrayList<String> array = new ArrayList<>();
-            Statement statement = null;
-            ResultSet resultSet = null;
-            try {
-                statement = connection.createStatement();
-                resultSet = statement.executeQuery("SELECT * FROM players");
-                while (resultSet.next()) {
-                    array.add(resultSet.getString("uuid"));
-                }
-            } catch (SQLException exception) {
-                plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
-            } finally {
-                if (resultSet != null)
-                    try {
-                        resultSet.close();
-                    } catch (SQLException exception) {
-                        plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
-                    }
-                if (statement != null)
-                    try {
-                        statement.close();
-                    } catch (SQLException exception) {
-                        plugin.textUtils.exception(exception.getStackTrace(), exception.getMessage());
-                    }
-            }
-            return array;
-        }
-        return null;
+        return new String[] { "default", String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(plugin.getFileUtils().config.getLong("start-level")), String.valueOf(0L), String.valueOf(0L), "0.0 0 0", String.valueOf(new Timestamp(new Date().getTime())) };
     }
 }

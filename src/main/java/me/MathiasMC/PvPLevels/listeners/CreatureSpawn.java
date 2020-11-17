@@ -18,7 +18,7 @@ public class CreatureSpawn implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onCreatureSpawn(CreatureSpawnEvent e) {
         final LivingEntity livingEntity = e.getEntity();
-        if (e.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER && plugin.config.get.getStringList("spawners").contains(livingEntity.getName().toLowerCase())) {
+        if (e.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER && plugin.getFileUtils().config.getStringList("spawners").contains(livingEntity.getName().toLowerCase())) {
             plugin.spawners.add(livingEntity.getUniqueId().toString());
         }
     }

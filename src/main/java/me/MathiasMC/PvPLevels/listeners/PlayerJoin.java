@@ -22,7 +22,7 @@ public class PlayerJoin implements Listener {
         final String uuid = player.getUniqueId().toString();
         final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
         if (playerConnect.getMultiplier() != 0) {
-            for (String message : plugin.language.get.getStringList("multiplier.join")) {
+            for (String message : plugin.getFileUtils().language.getStringList("multiplier.join")) {
                 plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", player.getName())));
             }
             plugin.multipliers.add(player);

@@ -26,6 +26,7 @@ permissions:
   pvplevels.admin.*:
     description: "Access to use all admin commands"
     children:
+      pvplevels.admin.help: true
       pvplevels.admin.reload: true
       pvplevels.admin.broadcast: true
       pvplevels.admin.message: true
@@ -49,6 +50,9 @@ permissions:
   pvplevels.player.top:
     default: "op"
     description: "Access to see top"
+  pvplevels.admin.help:
+    default: "op"
+    description: "Access to use help"
   pvplevels.admin.reload:
     default: "op"
     description: "Access to use reload"

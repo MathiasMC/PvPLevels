@@ -1,6 +1,7 @@
 package me.MathiasMC.PvPLevels.listeners;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+import me.MathiasMC.PvPLevels.api.Type;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,16 +24,16 @@ public class BlockBreak implements Listener {
         Location location = e.getBlock().getLocation();
         Player player = e.getPlayer();
         PlayerConnect playerConnect = plugin.getPlayerConnect(player.getUniqueId().toString());
-        if (!plugin.xpManager.isMax(playerConnect)) {
+        if (!plugin.getXPManager().isMaxLevel(playerConnect)) {
             if (!plugin.blocksList.contains(location)) {
                 final Material material = e.getBlock().getType();
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     if (e.getBlock().getLocation().getBlock().getType().equals(Material.AIR)) {
                         String translate = material.name();
-                        if (plugin.language.get.contains("translate.blocks." + translate)) {
-                            translate = plugin.language.get.getString("translate.blocks." + translate);
+                        if (plugin.getFileUtils().language.contains("translate.blocks." + translate)) {
+                            translate = plugin.getFileUtils().language.getString("translate.blocks." + translate);
                         }
-                        plugin.xpManager.check(player, "", material.name().toLowerCase(), translate, true);
+                        plugin.getXPManager().check(player, "", material.name().toLowerCase(), translate, true, Type.BLOCK);
                     }
                 }, 2L);
             } else {

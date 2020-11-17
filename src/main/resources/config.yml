@@ -9,6 +9,9 @@
 # Check for updates on startup?
 update-check: true
 
+# Level validator (check setup for errors)
+level-validator: true
+
 # Database settings
 mysql:
   use: false
@@ -17,6 +20,17 @@ mysql:
   database: database
   username: username
   password: password
+
+  # Get latest data on player join
+  # Used to sync cached data across multiple servers
+  # Recommended setting is 1-10 to be sure the other servers has updated data before getting new data
+  # If using SQLite or one server set to 0
+  # Seconds.
+  update: 2
+
+  # Save to the database every x amount of times got xp
+  # Recommended setting 3-20
+  save: 5
 
   # Automatically remove inactive players from the database (remove section to disable)
   purge:
@@ -33,11 +47,6 @@ mysql:
     # Additional commands that will be executed along with the purge. It may
     # be useful for deleting player data from a databases of other plugins.
     commands: []
-
-# Save every x amount of minutes
-save:
-  use: true
-  interval: 60
 
 # Stop players from farming xp from killing the same player
 kill-session:

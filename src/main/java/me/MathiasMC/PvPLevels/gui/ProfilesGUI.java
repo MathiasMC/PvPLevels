@@ -1,37 +1,27 @@
 package me.MathiasMC.PvPLevels.gui;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ProfilesGUI extends GUI {
 
-    private final PvPLevels plugin = PvPLevels.call;
+    private final PvPLevels plugin = PvPLevels.getInstance();
     private final FileConfiguration file;
     private final Player player = playerMenu.getPlayer();
-    private final int maxItems;
 
     public ProfilesGUI(Menu menu) {
         super(menu);
         file = plugin.guiFiles.get("profiles");
         setPlayers();
-        maxItems = file.getInt("settings.perpage");
     }
 
     @Override
-    public String getName() {
-        return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(file.getString("settings.name")));
-    }
-
-    @Override
-    public int getSize() {
-        return file.getInt("settings.size");
+    public FileConfiguration getFile() {
+        return this.file;
     }
 
     @Override
@@ -75,16 +65,6 @@ public class ProfilesGUI extends GUI {
 
     @Override
     public void setItems() {
-        plugin.guiManager.setGUIItemStack(inventory, file, player);
-        if (!players.isEmpty()) {
-            for (int i = 0; i < maxItems; i++) {
-                index = maxItems * page + i;
-                if (index >= players.size()) break;
-                final OfflinePlayer offlinePlayer = players.get(index);
-                if (offlinePlayer != null) {
-                    inventory.addItem(plugin.guiManager.getPlayerHead(file, offlinePlayer, offlinePlayer.getName(), "settings.player"));
-                }
-            }
-        }
+        plugin.getItemStackManager().setupGUI(inventory, file, player);
     }
 }
