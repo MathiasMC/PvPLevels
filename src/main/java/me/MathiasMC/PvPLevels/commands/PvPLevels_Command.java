@@ -404,6 +404,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             if (plugin.getCalculateManager().isString(args[3]) && plugin.getFileUtils().levels.contains(args[3])) {
                                                 final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                                 playerConnect.setGroup(args[3]);
+                                                playerConnect.save();
                                                 if (type.equalsIgnoreCase("player")) {
                                                     for (String message : plugin.getFileUtils().language.getStringList("group.set.message")) {
                                                         plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{target}", target.getName()).replace("{group}", args[3])));
@@ -452,6 +453,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                         if (target != null) {
                                             PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                             playerConnect.setGroup("default");
+                                            playerConnect.save();
                                             if (type.equalsIgnoreCase("player")) {
                                                 for (String message : plugin.getFileUtils().language.getStringList("group.reset.message")) {
                                                     plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{target}", target.getName())));
@@ -715,6 +717,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             plugin.getXPManager().sendCommands(target, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + set + ".execute") + ".level.up", plugin.getFileUtils().execute, "", 0, 0, 0, 0);
                                             playerConnect.setLevel(set);
                                             playerConnect.setXp(plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + set + ".xp"));
+                                            playerConnect.save();
                                             if (type.equalsIgnoreCase("player")) {
                                                 for (String message : plugin.getFileUtils().language.getStringList("level.set")) {
                                                     plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{level}", String.valueOf(set)).replace("{player}", sender.getName())));
@@ -790,6 +793,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             playerConnect.setMultiplier(Double.parseDouble(args[2]));
                                             playerConnect.setMultiplierTime(Integer.parseInt(args[3]));
                                             playerConnect.setMultiplierTimeLeft(Integer.parseInt(args[3]));
+                                            playerConnect.save();
                                             plugin.multipliers.add(target);
                                             if (type.equalsIgnoreCase("player")) {
                                                 for (String message : plugin.getFileUtils().language.getStringList("multiplier.got")) {
@@ -889,8 +893,9 @@ public class PvPLevels_Command implements CommandExecutor {
     }
 
     private void triggerReset(final String type, final CommandSender sender, final Player target, String path, final long set, final long next) {
+        final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
+        playerConnect.save();
         if (path.contains("killstreak")) {
-            final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
             String killer = "";
             if (path.split(" ").length == 2) {
                 killer = path.split(" ")[1];

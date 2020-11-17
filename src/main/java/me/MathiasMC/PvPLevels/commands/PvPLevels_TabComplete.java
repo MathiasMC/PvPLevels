@@ -22,7 +22,7 @@ public class PvPLevels_TabComplete implements TabCompleter {
             final Player player = (Player) sender;
             final List<String> commands = new ArrayList<>();
             final List<String> list = new ArrayList<>();
-            if (player.hasPermission("pvplevels.player.help")) {
+            if (player.hasPermission("pvplevels.player.help") || player.hasPermission("pvplevels.admin.help")) {
                 if (args.length == 1) {
                     commands.add("help");
                 }

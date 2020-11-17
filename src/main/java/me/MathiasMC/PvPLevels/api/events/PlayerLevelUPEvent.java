@@ -40,8 +40,9 @@ public class PlayerLevelUPEvent extends Event implements Cancellable {
     }
 
     public void execute() {
-        playerConnect.setLevel(level);
         plugin.getXPManager().sendCommands(player, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".execute") + ".level.up", plugin.getFileUtils().execute, "", 0, 0, 0, 0);
+        playerConnect.setLevel(level);
+        playerConnect.save();
     }
 
     @Override

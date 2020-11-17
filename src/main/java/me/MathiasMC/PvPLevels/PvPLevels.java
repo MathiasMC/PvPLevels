@@ -121,6 +121,7 @@ public class PvPLevels extends JavaPlugin {
                         playerConnect.setMultiplier(0D);
                         playerConnect.setMultiplierTime(0);
                         playerConnect.setMultiplierTimeLeft(0);
+                        playerConnect.save();
                     }
                     multipliers.remove(offlinePlayer);
                 }
