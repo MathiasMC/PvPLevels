@@ -18,7 +18,7 @@ public class EntityDeath implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntity(EntityDeathEvent e) {
         final LivingEntity livingEntity = e.getEntity();
         if (livingEntity == null) {

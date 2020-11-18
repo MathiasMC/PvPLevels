@@ -93,7 +93,11 @@ public class XPManager {
             return;
         }
 
-        if (!player.hasPermission("pvplevels.group." + group) && world(player, plugin.getFileUtils().config, path)) {
+        if (!player.hasPermission("pvplevels.group." + group)) {
+            return;
+        }
+
+        if (!world(player, plugin.getFileUtils().config, path)) {
             return;
         }
 
@@ -118,7 +122,7 @@ public class XPManager {
             if (item_boost != 0) {
                 getPath = "item";
             }
-            Double multiplier = playerConnect.getMultiplier();
+            double multiplier = playerConnect.getMultiplier();
             if (multiplier != 0D) {
                 if (getPath.equalsIgnoreCase("item")) {
                     getPath = "both";
