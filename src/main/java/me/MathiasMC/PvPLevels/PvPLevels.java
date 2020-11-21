@@ -83,7 +83,7 @@ public class PvPLevels extends JavaPlugin {
             getCommand("pvplevels").setTabCompleter(new PvPLevels_TabComplete(this));
             int pluginId = 1174;
             final Metrics metrics = new Metrics(this, pluginId);
-            metrics.addCustomChart(new Metrics.SimplePie("levels", () -> String.valueOf(fileUtils.levels.getConfigurationSection("").getKeys(false).size())));
+            metrics.addCustomChart(new Metrics.SimplePie("lite", () -> "No"));
             if (fileUtils.config.getBoolean("update-check")) {
                 new UpdateUtils(this, 20807).getVersion(version -> {
                     if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
