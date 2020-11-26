@@ -79,8 +79,8 @@ public class GenerateThread extends Thread {
                     final String executeS = config.getString("generate.levels." + i + ".execute").replace("{group}", group);
                     levels.set(group + "." + i + ".execute", executeS);
                     execute.set(executeS + ".xp.lose", config.getStringList("generate.lose"));
-                    execute.set(executeS + ".level.up", config.getString("generate.levels." + i + ".up"));
-                    execute.set(executeS + ".level.down", config.getString("generate.levels." + i + ".down"));
+                    execute.set(executeS + ".level.up", config.getStringList("generate.levels." + i + ".up"));
+                    execute.set(executeS + ".level.down", config.getStringList("generate.levels." + i + ".down"));
                     plugin.getTextUtils().info("[Generate] ( " + i + " ) has config commands ( Added )");
                 }
                 if (lastXP != 0) {
