@@ -51,12 +51,12 @@ public class PlayerKillEvent extends Event implements Cancellable {
     }
 
     public void execute() {
-        playerConnect.setKills(playerConnect.getKills() + 1);
-        final String path = "kills." + playerConnect.getGroup() + "." + playerConnect.getKills();
+        killerPlayerConnect.setKills(killerPlayerConnect.getKills() + 1);
+        final String path = "kills." + killerPlayerConnect.getGroup() + "." + killerPlayerConnect.getKills();
         if (plugin.getFileUtils().config.contains(path)) {
             plugin.getXPManager().sendCommands(killer, path, plugin.getFileUtils().config, "", 0, 0, 0, 0);
         } else {
-            plugin.getXPManager().sendCommands(killer, "kills." + playerConnect.getGroup() + ".get", plugin.getFileUtils().config, "", 0, 0, 0, 0);
+            plugin.getXPManager().sendCommands(killer, "kills." + killerPlayerConnect.getGroup() + ".get", plugin.getFileUtils().config, "", 0, 0, 0, 0);
         }
     }
 
