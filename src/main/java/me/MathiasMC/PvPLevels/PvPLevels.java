@@ -18,6 +18,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -52,6 +54,15 @@ public class PvPLevels extends JavaPlugin {
     public final Map<String, String> lastDamagers = new HashMap<>();
 
     public final HashSet<OfflinePlayer> multipliers = new HashSet<>();
+
+    public String generateGroup = null;
+
+    public long generateAmount = 0;
+
+    public boolean isGenerate = false;
+
+    private final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+    private final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
 
     public void onEnable() {
         call = this;
@@ -185,6 +196,10 @@ public class PvPLevels extends JavaPlugin {
     public void updatePlayerConnect(final String uuid) {
         unloadPlayerConnect(uuid);
         getPlayerConnect(uuid);
+    }
+
+    public ScriptEngine getScriptEngine() {
+        return this.scriptEngine;
     }
 
     public PlayerConnect getPlayerConnect(final String uuid) {

@@ -43,6 +43,7 @@ help:
     - 'pvplevels message {player} &7&l> &f/pvplevels stats <player>'
     - 'pvplevels message {player} &7&l> &f/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
     - 'pvplevels message {player} &7&l> &f/pvplevels multiplier <player> <1.8> <seconds>'
+    - 'pvplevels message {player} &7&l> &f/pvplevels generate <group> <amount>'
     - 'pvplevels message {player} &c&m---------------------------------------------'
 reload:
   permission:
@@ -51,6 +52,21 @@ reload:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &eReloaded all configs'
   validator:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &eReloaded all configs &7(&cvalidator not passed, check console for infomation&7)'
+generate:
+  permission:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+  use:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThis command is not enabled.'
+  usage:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels generate <group> <amount>'
+  valid:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a valid group name [a-zA-Z]'
+  number:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a number!'
+  generate:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou cannot generate levels right now already one is already calculating...'
+  group:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &aNow you must confirm by using the console /pvplevels generate confirm'
 admin:
   permission:
     - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
@@ -352,12 +368,24 @@ console:
       - '&7&l> &f/pvplevels stats <player>'
       - '&7&l> &f/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
       - '&7&l> &f/pvplevels multiplier <player> <1.8> <seconds>'
+      - '&7&l> &f/pvplevels generate <group> <amount>'
       - '&c&m---------------------------------------------'
   reload:
     all:
       - '&7[&bPvPLevels&7] &eReloaded all configs'
     validator:
       - '&7[&bPvPLevels&7] &eReloaded all configs &7(&cvalidator not passed&7)'
+  generate:
+    use:
+      - '&7[&bPvPLevels&7] &cThis command is not enabled.'
+    usage:
+      - '&7[&bPvPLevels&7] &cUsage: /pvplevels generate confirm'
+    confirm:
+      - '&7[&bPvPLevels&7] &cNothing to confirm run the command as a player'
+    engine:
+      - '&7[&bPvPLevels&7] &cJavaScript engine not found.'
+    generate:
+      - '&7[&bPvPLevels&7] &cYou cannot generate levels right now already one is already calculating...'
   only-player:
     - '&7[&bPvPLevels&7] &cYou can only use this command as a player!'
   save:

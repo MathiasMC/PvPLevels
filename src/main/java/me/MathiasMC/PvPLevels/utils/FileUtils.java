@@ -84,6 +84,22 @@ public class FileUtils {
         admin = YamlConfiguration.loadConfiguration(adminFile);
     }
 
+    public void saveLevels() {
+        try {
+            levels.save(levelsFile);
+        } catch (IOException e) {
+            plugin.getTextUtils().exception(e.getStackTrace(), e.getMessage());
+        }
+    }
+
+    public void saveExecute() {
+        try {
+            execute.save(executeFile);
+        } catch (IOException e) {
+            plugin.getTextUtils().exception(e.getStackTrace(), e.getMessage());
+        }
+    }
+
     public File getFolder(final String path) {
         final File file = new File(path);
         if (!file.exists()) {

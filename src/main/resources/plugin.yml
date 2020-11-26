@@ -38,6 +38,7 @@ permissions:
       pvplevels.admin.xp: true
       pvplevels.admin.level: true
       pvplevels.admin.multiplier: true
+      pvplevels.admin.generate: true
   pvplevels.player.help:
     default: "op"
     description: "Access to use help"
@@ -86,3 +87,6 @@ permissions:
   pvplevels.admin.multiplier:
     default: "op"
     description: "Access to use multiplier"
+  pvplevels.admin.generate:
+    default: "op"
+    description: "Access to use generate"

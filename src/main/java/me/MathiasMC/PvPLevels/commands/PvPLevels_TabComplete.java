@@ -176,6 +176,17 @@ public class PvPLevels_TabComplete implements TabCompleter {
                     }
                 }
             }
+            if (player.hasPermission("pvplevels.admin.generate")) {
+                if (args.length == 1) {
+                    commands.add("generate");
+                } else if (args.length > 1 && args[0].equalsIgnoreCase("generate")){
+                    if (args.length == 2) {
+                        commands.add("group");
+                    } else if (args.length == 3) {
+                        commands.add("amount");
+                    }
+                }
+            }
             StringUtil.copyPartialMatches(args[args.length - 1], commands, list);
             Collections.sort(list);
             return list;

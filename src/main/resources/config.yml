@@ -115,6 +115,78 @@ excluded:
 spawners:
   - zombie
 
+# Generate command
+generate:
+  # Set to false if you have a level setup finished so you cannot by accident erase the levels.yml
+  use: true
+
+  start: 75
+
+  # This is for {random} placeholder
+  # You can also use [min_max] to calculate random number while calculations is running.
+  random:
+    min: 1
+    max: 2
+
+  # The math used to calculate xp
+  math: '{lastXP} + [50_800] * {random}.{level}'
+
+  percent:
+
+    # If under or equal percent use that for inserting. (you can add more if you want) (Must contain 100)
+    20:
+      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      suffix: ''
+      group: 'Bad'
+      execute: '{group}'
+    50:
+      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      suffix: ''
+      group: 'Better'
+      execute: '{group}'
+    80:
+      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      suffix: ''
+      group: 'Good'
+      execute: '{group}'
+    100:
+      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      suffix: ''
+      group: 'Pro'
+      execute: '{group}'
+
+  get:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &6{xp_need} &eto level &c{level_next}'
+  item:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp&7) &6{xp_need} &eto level &c{level_next}'
+  boost:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}'
+  both:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp & {multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}'
+  lose:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou have lost &6{lost} &cXP'
+  up:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}'
+  down:
+    - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}'
+
+  # This section is for inserting commands into a specific level (if it contains) and a name for the execute group must be unique.
+  levels:
+    20:
+      up:
+        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}'
+        - 'pvplevels broadcast null &e{player} is now the level {level_next}'
+      down:
+        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}'
+      execute: '{group}20'
+    60:
+      up:
+        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}'
+        - 'pvplevels broadcast null &e{player} is now the level {level_next}'
+      down:
+        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}'
+      execute: '{group}60'
+
 xp:
   default:
     player:

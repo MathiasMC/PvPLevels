@@ -4,6 +4,7 @@ import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.gui.AdminGUI;
 import me.MathiasMC.PvPLevels.gui.ProfilesGUI;
+import me.MathiasMC.PvPLevels.utils.GenerateThread;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -854,6 +855,85 @@ public class PvPLevels_Command implements CommandExecutor {
                         } else {
                             if (type.equalsIgnoreCase("player")) {
                                 for (String message : plugin.getFileUtils().language.getStringList("multiplier.permission")) {
+                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                }
+                            }
+                        }
+                    } else if (args[0].equalsIgnoreCase("generate")) {
+                        unknown = false;
+                        if (sender.hasPermission("pvplevels.admin.generate")) {
+                            if (plugin.getFileUtils().config.getBoolean("generate.use")) {
+                                if (!plugin.isGenerate) {
+                                    if (type.equalsIgnoreCase("player")) {
+                                        if (args.length > 2) {
+                                            if (plugin.getCalculateManager().isString(args[1])) {
+                                                if (plugin.getCalculateManager().isLong(args[2]) && Long.parseLong(args[2]) > 0) {
+                                                    plugin.generateGroup = args[1];
+                                                    plugin.generateAmount = Long.parseLong(args[2]);
+                                                    for (String message : plugin.getFileUtils().language.getStringList("generate.group")) {
+                                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                    }
+                                                } else {
+                                                    for (String message : plugin.getFileUtils().language.getStringList("generate.number")) {
+                                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                    }
+                                                }
+                                            } else {
+                                                for (String message : plugin.getFileUtils().language.getStringList("generate.valid")) {
+                                                    plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                                }
+                                            }
+                                        } else {
+                                            for (String message : plugin.getFileUtils().language.getStringList("generate.usage")) {
+                                                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                            }
+                                        }
+                                    } else {
+                                        if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {
+                                            if (plugin.generateGroup != null && plugin.generateAmount != 0) {
+                                                if (plugin.getScriptEngine() != null) {
+                                                    new GenerateThread(plugin, plugin.generateGroup, plugin.generateAmount, plugin.getFileUtils().config.getLong("start-level")).start();
+                                                } else {
+                                                    for (String message : plugin.getFileUtils().language.getStringList("console.generate.engine")) {
+                                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                    }
+                                                }
+                                            } else {
+                                                for (String message : plugin.getFileUtils().language.getStringList("console.generate.confirm")) {
+                                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                                }
+                                            }
+                                        } else {
+                                            for (String message : plugin.getFileUtils().language.getStringList("console.generate.usage")) {
+                                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (type.equalsIgnoreCase("player")) {
+                                        for (String message : plugin.getFileUtils().language.getStringList("generate.generate")) {
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                        }
+                                    } else {
+                                        for (String message : plugin.getFileUtils().language.getStringList("console.generate.generate")) {
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (type.equalsIgnoreCase("player")) {
+                                    for (String message : plugin.getFileUtils().language.getStringList("generate.use")) {
+                                        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
+                                    }
+                                } else {
+                                    for (String message : plugin.getFileUtils().language.getStringList("console.generate.use")) {
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                    }
+                                }
+                            }
+                        } else {
+                            if (type.equalsIgnoreCase("player")) {
+                                for (String message : plugin.getFileUtils().language.getStringList("generate.permission")) {
                                     plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName())));
                                 }
                             }
