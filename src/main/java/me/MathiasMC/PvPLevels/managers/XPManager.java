@@ -56,6 +56,17 @@ public class XPManager {
             if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + killer.getName() + " cannot get stats currently, is in the excluded list."); }
             return;
         }
+
+        if (entityPlayer) {
+            playerConnect.setXpType(entity.getName());
+            if (plugin.getKillSessionManager().hasSession(killer, (Player) entity)) {
+                if (plugin.isDebug()) {
+                    plugin.getTextUtils().debug("[XP] " + killer.getName() + " are still in the kill session.");
+                }
+                return;
+            }
+        }
+
         getXP(killer, entity, null);
         if (entityPlayer) {
             final Player killed = (Player) entity;
@@ -113,12 +124,6 @@ public class XPManager {
         String pathKey;
         if (entity != null) {
             final String entityUUID = entity.getUniqueId().toString();
-            if (entity instanceof Player && plugin.getKillSessionManager().hasSession(player, (Player) entity)) {
-                if (plugin.isDebug()) {
-                    plugin.getTextUtils().debug("[XP] " + player.getName() + " are still in the kill session.");
-                }
-                return;
-            }
             if (plugin.spawners.contains(entityUUID)) {
                 if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + player.getName() + " could not get xp from " + entity.getName()); }
                 return;
