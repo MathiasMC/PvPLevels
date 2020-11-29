@@ -24,16 +24,15 @@ public class BlockBreak implements Listener {
         final Player player = e.getPlayer();
         final PlayerConnect playerConnect = plugin.getPlayerConnect(player.getUniqueId().toString());
         if (!plugin.getXPManager().isMaxLevel(playerConnect)) {
-            if (!plugin.blocksList.contains(location)) {
-                final Material material = e.getBlock().getType();
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                    if (e.getBlock().getLocation().getBlock().getType().equals(Material.AIR)) {
+            final Material material = e.getBlock().getType();
+            plugin.getServer().getScheduler().runTask(plugin, () -> {
+                if (e.getBlock().getLocation().getBlock().getType().equals(Material.AIR)) {
+                    if (!plugin.blocksList.contains(location)) {
                         plugin.getXPManager().getXP(player, null, material);
                     }
-                }, 2L);
-            } else {
-                plugin.blocksList.remove(location);
-            }
+                    plugin.blocksList.remove(location);
+                }
+            });
         }
     }
 }
