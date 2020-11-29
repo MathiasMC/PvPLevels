@@ -21,9 +21,8 @@ public class KillSessionManager {
 
     private final Map<String, String> killsessiontime = new HashMap<>();
 
-    public boolean check(Entity entity, Entity killer) {
+    public boolean hasSession(final Player killer, final Player entity) {
         if (plugin.getFileUtils().config.getBoolean("kill-session.use")) {
-            if (entity instanceof Player) {
                 boolean returning = false;
                 boolean check = false;
                 Player killed = (Player) entity;
@@ -53,7 +52,6 @@ public class KillSessionManager {
                     killsession.get(attacker).add(killed.getUniqueId().toString() + ";1");
                 }
                 return returning;
-            }
         }
         return false;
     }
@@ -71,20 +69,20 @@ public class KillSessionManager {
                         plugin.getServer().getScheduler().cancelTask(Integer.parseInt(split[0]));
                         killsessiontime.remove(killed.getUniqueId().toString() + "=" + attacker);
                         killsession.remove(attacker);
-                        sendMessage(killer, killed, "remove");
+                        sendMessage(killer, "remove");
                     }
                 }
             },0L, 20L);
             killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, id + "=" + plugin.getFileUtils().config.getInt("kill-session.time"));
-            sendMessage(killer, killed, "get");
+            sendMessage(killer, "get");
         } else {
-            sendMessage(killer, killed, "abuse");
+            sendMessage(killer, "abuse");
         }
     }
 
-    private void sendMessage(final Entity killer, final Player killed, final String path) {
-        for (String command : plugin.getFileUtils().config.getStringList("kill-session." + path)) {
-            plugin.getServer().dispatchCommand(plugin.consoleSender, command.replace("{player}", killer.getName()).replace("{killed}", killed.getName()).replace("{amount}", String.valueOf(plugin.getFileUtils().config.getInt("kill-session.amount"))));
+    private void sendMessage(final Entity killer, final String path) {
+        if (killer instanceof Player) {
+            plugin.getXPManager().sendCommands((Player) killer, plugin.getFileUtils().config.getStringList("kill-session." + path));
         }
     }
 }

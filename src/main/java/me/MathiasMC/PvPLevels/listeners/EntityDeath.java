@@ -20,11 +20,8 @@ public class EntityDeath implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntity(EntityDeathEvent e) {
-        final LivingEntity livingEntity = e.getEntity();
-        if (livingEntity == null) {
-            return;
-        }
-        final String uuid = livingEntity.getUniqueId().toString();
+        final LivingEntity entity = e.getEntity();
+        final String uuid = entity.getUniqueId().toString();
         if (plugin.lastDamagers.containsKey(uuid)) {
             final Player target = plugin.getServer().getPlayer(UUID.fromString(plugin.lastDamagers.get(uuid)));
             if (target != null && target.isOnline()) {
@@ -33,6 +30,6 @@ public class EntityDeath implements Listener {
             plugin.lastDamagers.remove(uuid);
             return;
         }
-        plugin.getXPManager().entityCheck(livingEntity, livingEntity.getKiller());
+        plugin.getXPManager().entityCheck(entity, entity.getKiller());
     }
 }

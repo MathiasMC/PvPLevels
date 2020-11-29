@@ -14,49 +14,38 @@ public class PlayerKillEvent extends Event implements Cancellable {
 
     private boolean cancelled = false;
 
-    private final Player killer;
-
     private final Player player;
 
-    private final PlayerConnect killerPlayerConnect;
+    private final Player killed;
 
     private final PlayerConnect playerConnect;
 
-    public PlayerKillEvent(Player killer, Player player, PlayerConnect killerPlayerConnect, PlayerConnect playerConnect) {
+    public PlayerKillEvent(final Player player, final Player killed, final PlayerConnect playerConnect) {
         this.plugin = PvPLevels.getInstance();
-        this.killer = killer;
         this.player = player;
-        this.killerPlayerConnect = killerPlayerConnect;
+        this.killed = killed;
         this.playerConnect = playerConnect;
-    }
-
-    public Player getKiller() {
-        return this.killer;
     }
 
     public Player getPlayer() {
         return this.player;
     }
 
-    public PlayerConnect getKillerPlayerConnect() {
-        return this.killerPlayerConnect;
+    public Player getKilled() {
+        return this.killed;
     }
 
     public PlayerConnect getPlayerConnect() {
         return this.playerConnect;
     }
 
-    public boolean inWorld() {
-        return plugin.getXPManager().world(killer, plugin.getFileUtils().config, "kills." + killerPlayerConnect.getGroup());
-    }
-
     public void execute() {
-        killerPlayerConnect.setKills(killerPlayerConnect.getKills() + 1);
-        final String path = "kills." + killerPlayerConnect.getGroup() + "." + killerPlayerConnect.getKills();
+        playerConnect.setKills(playerConnect.getKills() + 1);
+        final String path = "kills." + playerConnect.getGroup() + "." + playerConnect.getKills();
         if (plugin.getFileUtils().config.contains(path)) {
-            plugin.getXPManager().sendCommands(killer, path, plugin.getFileUtils().config, "", 0, 0, 0, 0);
+            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().config.getStringList(path));
         } else {
-            plugin.getXPManager().sendCommands(killer, "kills." + killerPlayerConnect.getGroup() + ".get", plugin.getFileUtils().config, "", 0, 0, 0, 0);
+            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().config.getStringList("kills." + playerConnect.getGroup() + ".get"));
         }
     }
 

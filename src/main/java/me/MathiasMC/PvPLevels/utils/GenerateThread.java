@@ -42,7 +42,7 @@ public class GenerateThread extends Thread {
         final int percent25 = (int) (size * (25.0f / 100.0f));
         final int percent50 = (int) (size * (50.0f / 100.0f));
         final int percent75 = (int) (size * (75.0f / 100.0f));
-        final int random = plugin.getCalculateManager().randomNumber(config.getInt("generate.random.min"), config.getInt("generate.random.max"));
+        final long random = plugin.getCalculateManager().randomNumber(config.getLong("generate.random.min"), config.getLong("generate.random.max"));
         boolean startUP = false;
         levels.set(group + ".execute", group);
         execute.set(group + ".xp.get", config.getStringList("generate.get"));
@@ -62,11 +62,11 @@ public class GenerateThread extends Thread {
                     lastXP = config.getLong("generate.start");
                     startUP = false;
                 }
-                int randomNumber = 0;
+                long randomNumber = 0;
                 final String Srandom = getRandom(math);
                 if (Srandom != null) {
                     final String[] split = Srandom.split("_");
-                    randomNumber = plugin.getCalculateManager().randomNumber(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+                    randomNumber = plugin.getCalculateManager().randomNumber(Long.parseLong(split[0]), Long.parseLong(split[1]));
                 }
                 final Object object = plugin.getScriptEngine().eval(math.replace("{lastXP}", String.valueOf(lastXP)).replace("{level}", String.valueOf(i)).replace("{random}", String.valueOf(random)).replace("[" + Srandom + "]", String.valueOf(randomNumber)));
                 for (Map.Entry<Integer, Integer> s : mapList.entrySet()) {

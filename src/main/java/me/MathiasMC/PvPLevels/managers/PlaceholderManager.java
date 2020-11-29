@@ -17,9 +17,9 @@ public class PlaceholderManager {
     public long[] getDurability(final ItemStack itemStack) {
         if (itemStack != null && isValid(itemStack.getType().name())) {
             short max = itemStack.getType().getMaxDurability();
-            return new long[] {max - itemStack.getDurability(), max};
+            return new long[]{max - itemStack.getDurability(), max};
         }
-        return new long[] {0, 0};
+        return new long[]{0, 0};
     }
 
     private boolean isValid(final String name) {
@@ -57,8 +57,21 @@ public class PlaceholderManager {
         }
         final String uuid = offlinePlayer.getUniqueId().toString();
         final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
-
-        message = message
+        if (message.contains("{source}")) {
+            String source = "";
+            if (offlinePlayer.isOnline()) {
+                final Player player = (Player) offlinePlayer;
+                final String killerName = plugin.getXPManager().getKillerName(player);
+                if (player.getLastDamageCause() != null) {
+                    source = player.getLastDamageCause().getCause().toString();
+                    if (killerName != null) {
+                        source = killerName;
+                    }
+                }
+            }
+            message = message.replace("{source}", source);
+        }
+        return message
                 .replace("{player}", offlinePlayer.getName())
                 .replace("{uuid}", uuid)
                 .replace("{level_group}", plugin.getStatsManager().getGroup(offlinePlayer))
@@ -78,9 +91,14 @@ public class PlaceholderManager {
                 .replace("{xp_progress}", String.valueOf(plugin.getStatsManager().getXPProgress(playerConnect)))
                 .replace("{xp_progress_style}", String.valueOf(plugin.getStatsManager().getXPProgressStyle(playerConnect, "xp-progress-style")))
                 .replace("{xp_progress_style_2}", String.valueOf(plugin.getStatsManager().getXPProgressStyle(playerConnect, "xp-progress-style-2")))
-                .replace("{date}", plugin.getStatsManager().getTime("date", playerConnect.getTime().getTime()))
-                .replace("{time}", plugin.getStatsManager().getTime("time", playerConnect.getTime().getTime()))
-                .replace("{group}", playerConnect.getGroup());
-        return message;
+                .replace("{time}", plugin.getStatsManager().getTime(System.currentTimeMillis() - playerConnect.getTime().getTime()))
+                .replace("{group}", playerConnect.getGroup())
+                .replace("{xp_type}", plugin.getStatsManager().getType(playerConnect))
+                .replace("{xp_get}", plugin.getStatsManager().getGet(playerConnect))
+                .replace("{xp_lost}", plugin.getStatsManager().getLost(playerConnect))
+                .replace("{xp_item}", plugin.getStatsManager().getItem(playerConnect))
+                .replace("{xp_multiplier}", plugin.getStatsManager().getMultiplier(playerConnect))
+                .replace("{xp_multiplier_time}", plugin.getStatsManager().getMultiplierTime(playerConnect))
+                .replace("{xp_multiplier_time_left}", plugin.getStatsManager().getMultiplierTimeLeft(playerConnect));
     }
 }

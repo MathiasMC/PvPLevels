@@ -14,7 +14,7 @@ public class BlockPlace implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlace(BlockPlaceEvent e) {
         final String uuid = e.getPlayer().getUniqueId().toString();
         if (plugin.getFileUtils().config.contains("xp." + plugin.getPlayerConnect(uuid).getGroup() + "." + e.getBlock().getType().name().toLowerCase())) {

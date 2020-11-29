@@ -43,7 +43,7 @@ public class CalculateManager {
         return text.matches("^[a-zA-Z]*$");
     }
 
-    public int randomNumber(int min, int max) {
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+    public long randomNumber(long min, long max) {
+        return ThreadLocalRandom.current().nextLong(min, max + 1);
     }
 }

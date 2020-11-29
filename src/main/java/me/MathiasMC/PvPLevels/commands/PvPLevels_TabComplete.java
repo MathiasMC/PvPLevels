@@ -181,6 +181,7 @@ public class PvPLevels_TabComplete implements TabCompleter {
                     commands.add("generate");
                 } else if (args.length > 1 && args[0].equalsIgnoreCase("generate")){
                     if (args.length == 2) {
+                        commands.add("default");
                         commands.add("group");
                     } else if (args.length == 3) {
                         commands.add("amount");

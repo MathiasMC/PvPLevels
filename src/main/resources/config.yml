@@ -9,8 +9,11 @@
 # Check for updates on startup?
 update-check: true
 
-# Level validator (check setup for errors)
-level-validator: true
+# Debug info (Require server restart)
+debug: false
+
+# Check for blocks and get xp if type found. (disable block break, place event) (Require server restart)
+blocks: true
 
 # Database settings
 mysql:
@@ -48,25 +51,23 @@ mysql:
     # be useful for deleting player data from a databases of other plugins.
     commands: []
 
-# Stop players from farming xp from killing the same player
+# Stop players from farming xp from killing the same player.
 kill-session:
 
   use: true
 
-  # Amount of times a player must kill another player to get in the kill session
+  # Amount of times a player must kill another player to get in the kill session.
   amount: 4
 
-  # Amount of time (in seconds) a player is in the kill session
+  # Amount of time (in seconds) a player is in the kill session.
   time: 150
 
   get:
-    - pvplevels message {player} &7[&bPvPLevels&7] &eYou have been put in
-        a kill session for killing {killed} {amount} times
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have been put into kill session for killing &b{xp_type} &7repeatedly.'
   abuse:
-    - kick {player} You cannot kill the same player so many times
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You are still in the kill session for killing &b{xp_type} &7repeatedly.'
   remove:
-    - pvplevels message {player} &7[&bPvPLevels&7] &eYou have been removed
-        from the kill session
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You are no longer in the kill session for killing &b{xp_type}&7.'
 
 top:
   name: '&cNone'
@@ -92,19 +93,7 @@ xp-progress-style-2:
     color: '&c'
   amount: 20
 
-multiplier:
-  format: HH' hours 'mm' minutes 'ss' seconds'
-  zone: Europe/Copenhagen
-
-time:
-  format: HH.mm.ss
-  zone: Europe/Copenhagen
-
-date:
-  format: dd.MM.yyyy
-  zone: Europe/Copenhagen
-
-# Start level of new players
+# Start level of new players (Require server restart)
 start-level: 0
 
 # List of players that will not get kills/deaths/xp
@@ -135,207 +124,374 @@ generate:
 
     # If under or equal percent use that for inserting. (you can add more if you want) (Must contain 100)
     20:
-      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      prefix: '&7[&b{group}&7] &7[&b{level}&7]'
       suffix: ''
       group: 'Bad'
       execute: '{group}'
     50:
-      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      prefix: '&7[&b{group}&7] &7[&b{level}&7]'
       suffix: ''
       group: 'Better'
       execute: '{group}'
     80:
-      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      prefix: '&7[&b{group}&7] &7[&b{level}&7]'
       suffix: ''
       group: 'Good'
       execute: '{group}'
     100:
-      prefix: '&e[&7{group}&e] &f[&a{level}&f]'
+      prefix: '&7[&b{group}&7] &7[&b{level}&7]'
       suffix: ''
       group: 'Pro'
       execute: '{group}'
 
   get:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &6{xp_need} &eto level &c{level_next}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
   item:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp&7) &6{xp_need} &eto level &c{level_next}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Item multiplier &bx{xp_item} &7was applied.'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
   boost:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Multiplier &bx{xp_multiplier} &7was applied.'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
   both:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp & {multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Multiplier &bx{xp_multiplier} &7and Item multiplier &bx{xp_item} &7was applied.'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
   lose:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou have lost &6{lost} &cXP'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost &b{xp_lost} &7xp.'
   up:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}'
+    - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
   down:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
 
   # This section is for inserting commands into a specific level (if it contains) and a name for the execute group must be unique.
   levels:
     20:
       up:
-        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}'
-        - 'pvplevels broadcast null &e{player} is now the level {level_next}'
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have leveled up to Level &b{level_next}&7.'
+        - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
       down:
-        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}'
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
       execute: '{group}20'
     60:
       up:
-        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}'
-        - 'pvplevels broadcast null &e{player} is now the level {level_next}'
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have leveled up to Level &b{level_next}&7.'
+        - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
       down:
-        - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}'
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
       execute: '{group}60'
 
 xp:
   default:
+    # lowercase entity names
     player:
 
       # Get more xp with an specific item (PlaceholderAPI support)
-      items:
-        bow:
-          name: '&eBow'
-          lores:
-            - '&aTest lore'
-          min: 5
-          max: 10
-        iron_sword:
-          name: '&eIron Sword'
-          lores:
-            - '&aTest lore'
-          min: 5
-          max: 10
+      #items:
+      #  bow:
+      #    name: '&eBow'
+      #    lores:
+      #      - '&aTest lore'
+      #    min: 5
+      #    max: 10
+      #  iron_sword:
+      #    name: '&eIron Sword'
+      #    lores:
+      #      - '&aTest lore'
+      #    min: 5
+      #    max: 10
 
-      min: 5
-      max: 5
-      worlds:
-        - world
+      # if has custom name test give another amount of xp
+      # you can still use color codes on entity just not use it here
+      # This can be used for custom mobs
+      # match string of customName
+      # supports PlaceholderAPI
+      #name:
+      #  'test':
+      #    min: 7
+      #    max: 7
+
+      min: 3
+      max: 15
+      # worlds section to allow only in certain worlds
+      #worlds:
+      #  - world
+
+      # xp lose, remove this section to disable.
       xp-lose:
-        min: 5
+        min: 6
         max: 20
 
-    zombie:
-
-      # if has custom name test give another amount of xp
-      # you can still use color codes on entity just not use it here
-      # match string of customName
-      # supports PlaceholderAPI
-      name:
-        'test':
-          min: 7
-          max: 7
-
-      min: 5
+    bat:
+      min: 1
+      max: 3
+    bee:
+      min: 2
+      max: 4
+    blaze:
+      min: 1
+      max: 3
+    cat:
+      min: 1
+      max: 3
+    cave_spider:
+      min: 2
       max: 5
-      worlds:
-        - world
-      xp-lose:
-        min: 2
-        max: 2
-
+    chicken:
+      min: 3
+      max: 6
+    cod:
+      min: 1
+      max: 3
+    cow:
+      min: 3
+      max: 6
+    creeper:
+      min: 4
+      max: 7
+    dolphin:
+      min: 1
+      max: 3
+    donkey:
+      min: 1
+      max: 5
+    drowned:
+      min: 1
+      max: 9
+    elder_guardian:
+      min: 4
+      max: 12
+    ender_dragon:
+      min: 8
+      max: 30
+    enderman:
+      min: 3
+      max: 7
+    endermite:
+      min: 2
+      max: 8
+    evoker:
+      min: 4
+      max: 14
+    fox:
+      min: 2
+      max: 4
+    ghast:
+      min: 2
+      max: 6
+    giant:
+      min: 2
+      max: 8
+    guardian:
+      min: 1
+      max: 14
+    hoglin:
+      min: 1
+      max: 7
+    horse:
+      min: 1
+      max: 4
+    husk:
+      min: 1
+      max: 4
+    illusioner:
+      min: 1
+      max: 5
+    iron_golem:
+      min: 1
+      max: 7
+    llama:
+      min: 1
+      max: 4
+    magma_cube:
+      min: 1
+      max: 8
+    mule:
+      min: 1
+      max: 4
+    mushroom_cow:
+      min: 1
+      max: 7
+    ocelot:
+      min: 1
+      max: 4
+    panda:
+      min: 2
+      max: 8
+    parrot:
+      min: 1
+      max: 2
+    phantom:
+      min: 1
+      max: 10
+    pig:
+      min: 4
+      max: 7
+    piglin:
+      min: 1
+      max: 4
+    piglin_brute:
+      min: 2
+      max: 7
+    pillager:
+      min: 3
+      max: 5
+    polar_bear:
+      min: 3
+      max: 6
+    pufferfish:
+      min: 1
+      max: 4
+    rabbit:
+      min: 1
+      max: 4
+    ravager:
+      min: 1
+      max: 2
+    salmon:
+      min: 1
+      max: 2
+    sheep:
+      min: 3
+      max: 7
+    shulker:
+      min: 1
+      max: 12
+    silverfish:
+      min: 1
+      max: 6
     skeleton:
-
-      # if has custom name test give another amount of xp
-      # you can still use color codes on entity just not use it here
-      # match string of customName
-      # supports PlaceholderAPI
-      name:
-        'test':
-          min: 7
-          max: 7
-
-      # Get more xp with an specific item (PlaceholderAPI support)
-      items:
-        bow:
-          name: '&eBow'
-          lores:
-            - '&aTest lore'
-          min: 5
-          max: 10
-        iron_sword:
-          name: '&eIron Sword'
-          lores:
-            - '&aTest lore'
-          min: 5
-          max: 10
-
-      min: 5
+      min: 2
+      max: 14
+    skeleton_horse:
+      min: 1
+      max: 14
+    slime:
+      min: 1
+      max: 10
+    snowman:
+      min: 1
       max: 5
-      worlds:
-        - world
-      xp-lose:
-        min: 2
-        max: 2
+    spider:
+      min: 4
+      max: 8
+    squid:
+      min: 1
+      max: 4
+    stray:
+      min: 1
+      max: 5
+    strider:
+      min: 1
+      max: 7
+    trader_llama:
+      min: 1
+      max: 5
+    tropical_fish:
+      min: 1
+      max: 4
+    turtle:
+      min: 1
+      max: 4
+    vex:
+      min: 1
+      max: 9
+    villager:
+      min: 1
+      max: 16
+    vindicator:
+      min: 1
+      max: 11
+    wandering_trader:
+      min: 1
+      max: 8
+    witch:
+      min: 1
+      max: 7
+    wither:
+      min: 1
+      max: 20
+    wither_skeleton:
+      min: 1
+      max: 22
+    wolf:
+      min: 1
+      max: 5
+    zoglin:
+      min: 1
+      max: 7
+    zombie:
+      min: 1
+      max: 15
+    zombie_horse:
+      min: 1
+      max: 6
+    zombie_villager:
+      min: 1
+      max: 18
+    zombified_piglin:
+      min: 1
+      max: 7
 
     coal_ore:
-
-      # Get more xp with an specific item (PlaceholderAPI support)
-      items:
-        diamond_pickaxe:
-          name: '&eDiamond Pickaxe'
-          lores:
-            - '&aTest lore'
-          min: 5
-          max: 10
-
-      min: 5
+      min: 2
       max: 5
-      worlds:
-        - world
+    iron_ore:
+      min: 2
+      max: 7
+    gold_ore:
+      min: 2
+      max: 10
 
+    # All is used if not found other xp-lose use this (remove all section to disable)
     all:
       xp-lose:
         min: 2
         max: 2
 
+# If you dont use you can just remove this section.
 kills:
   default:
-    worlds:
-      - world
-    get:
-      - pvplevels message {player} &7[&bPvPLevels&7] &e+1 kill
+    # worlds section to allow only in certain worlds
+    #worlds:
+    #  - world
+    get: []
     5:
-      - pvplevels message {player} &7[&bPvPLevels&7] &e+You have reached 5 kills
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have reached &b5 &7kills.'
     10:
-      - pvplevels message {player} &7[&bPvPLevels&7] &e+You have reached 10 kills
-    50:
-      - pvplevels message {player} &7[&bPvPLevels&7] &e+You have reached 50 kills
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have reached &b10 &7kills.'
 
+# If you dont use you can just remove this section.
 deaths:
   default:
     only-player: false
-    worlds:
-      - world
+    # worlds section to allow only in certain worlds
+    #worlds:
+    #  - world
     player:
-      - pvplevels message {player} &7[&bPvPLevels&7] &e+1 deaths killed by {source}
-      - pvplevels reset killstreak {player} {source}
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{source} &7has murdered you!'
+      - 'pvplevels reset killstreak {player}'
     other:
-      - pvplevels message {player} &7[&bPvPLevels&7] &e+1 deaths killed by {source}
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have been slammed by &b{source}&7!'
+      - 'pvplevels reset killstreak {player}'
 
+# If you dont use you can just remove this section.
 killstreak:
   default:
-    worlds:
-      - world
-    get:
-      - pvplevels message {player} &7[&bPvPLevels&7] &e+1 killStreak
+    # worlds section to allow only in certain worlds
+    #worlds:
+    #  - world
+    get: []
     5:
       top:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have got a new top killstreak of 5
+        - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7got a top killstreak of &b5&7.'
       get:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have reached a killstreak of 5
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have reached a killstreak of &b5&7.'
       lost:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have lost a killstreak of 5 from {target}
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a killstreak of &b{killstreak} &7from &b{source}&7.'
     10:
       top:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have got a new top killstreak of 10
+        - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7got a top killstreak of &b10&7.'
       get:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have reached a killstreak of 10
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have reached a killstreak of &b10&7.'
       lost:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have lost a killstreak of 10 from {target}
-    20:
-      top:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have got a new top killstreak of 20
-      get:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have reached a killstreak of 20
-      lost:
-        - pvplevels message {player} &7[&bPvPLevels&7] &eYou have lost a killstreak of 20 from {target}
+        - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a killstreak of &b{killstreak} &7from &b{source}&7.'

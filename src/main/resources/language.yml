@@ -7,483 +7,435 @@
 #                                         #
 command:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   unknown:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUnknown sub command &f{command}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Unknown sub command &b{command}'
   message:
     - |-
-      pvplevels message {player} &c&m---------------------------------------------
-      &7&l> &bPvPLevels created by &eMathiasMC
-      &7&l> &bVersion: &e{version}
-      &7&l> &f/pvplevels help for list of commands
-      &7&l> &2Any ideas for the plugin or need help?
-      &7&l> &2Contact me on spigot
-      &c&m---------------------------------------------
+      pvplevels message {player} &7&m---------------------------------------------
+      &f&l» &f&lPvP&b&lLevels &7created by &bMathiasMC
+      &f&l» &7Version - &b{version}
+      &f&l» &b/pvplevels help &7for list of commands
+      &f&l» &9Any ideas for the plugin or need help?
+      &f&l» &9Contact me on spigot.
+      &7&m---------------------------------------------
 help:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   player:
-    - 'pvplevels message {player} &c&m---------------------------------------------'
-    - 'pvplevels message {player} &7&l> &f/pvplevels profiles'
-    - 'pvplevels message {player} &7&l> &f/pvplevels stats <player>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
-    - 'pvplevels message {player} &c&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------'
+    - 'pvplevels message {player} &f&l» &b/pvplevels stats <player>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
+    - 'pvplevels message {player} &7&m---------------------------------------------'
   admin:
-    - 'pvplevels message {player} &c&m---------------------------------------------'
-    - 'pvplevels message {player} &7&l> &f/pvplevels save'
-    - 'pvplevels message {player} &7&l> &f/pvplevels reload'
-    - 'pvplevels message {player} &7&l> &f/pvplevels broadcast <null/permission> <text>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels message <player> <text>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels actionbar <player> <seconds> <text>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels group set/reset <player> <groupName (set)>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels xp/level <player> <+-amount>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels admin'
-    - 'pvplevels message {player} &7&l> &f/pvplevels profiles'
-    - 'pvplevels message {player} &7&l> &f/pvplevels stats <player>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels multiplier <player> <1.8> <seconds>'
-    - 'pvplevels message {player} &7&l> &f/pvplevels generate <group> <amount>'
-    - 'pvplevels message {player} &c&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------'
+    - 'pvplevels message {player} &f&l» &b/pvplevels save'
+    - 'pvplevels message {player} &f&l» &b/pvplevels reload'
+    - 'pvplevels message {player} &f&l» &b/pvplevels broadcast <null/permission> <text>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels message <player> <text>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels actionbar <player> <seconds> <text>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels group set/reset <player> <groupName (set)>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels xp/level <player> <+-amount>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels stats <player>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels multiplier <player> <3> <seconds>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels generate <group> <amount>'
+    - 'pvplevels message {player} &7&m---------------------------------------------'
 reload:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   all:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eReloaded all configs'
-  validator:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eReloaded all configs &7(&cvalidator not passed, check console for infomation&7)'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Reloaded all configs'
 generate:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   use:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThis command is not enabled.'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7This command is not enabled.'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels generate <group> <amount>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels generate <group> <amount>'
   valid:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a valid group name [a-zA-Z]'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a valid group name [a-zA-Z]'
   number:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a number!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   generate:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou cannot generate levels right now already one is already calculating...'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You cannot generate levels right now, one is already calculating...'
   group:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &aNow you must confirm by using the console /pvplevels generate confirm'
-admin:
-  permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
-  deleted:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eDeleted data for player: {target}'
-  online:
-    - 'kick {target} Your profile was deleted.'
-profiles:
-  permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Now you must confirm by using the console &b/pvplevels generate confirm'
 save:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   message:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &aSaved cached data to the database!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Saved cached data to the database!'
 message:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels message <player> <text>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels message <player> <text>'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
 broadcast:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels broadcast <null/permission> <text>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels broadcast <null/permission> <text>'
 actionbar:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels actionbar <player> <seconds> <text>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels actionbar <player> <seconds> <text>'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   number:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a number!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
 group:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels group set/reset'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set/reset'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   valid:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a valid group name/not found in levels.yml! [a-zA-Z]'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a valid group name/not found in &blevels.yml&7! [a-zA-Z]'
   reset:
     usage:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels group reset <player>'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group reset <player>'
     message:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} group is reset back to the default group!'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7group is reset back to the default group!'
   set:
     usage:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels group set <player> <groupName>'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set <player> <groupName>'
     message:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} group is now set to {group}'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7group is now set to &b{group}&7.'
 reset:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels reset <killstreak, stats> <player>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset <killstreak, stats> <player>'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   found:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot found!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not found!'
   kills:
     reset:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} kills is now reset.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7kills is now reset.'
     target:
-      - 'pvplevels message {target} &7[&bPvPLevels&7] &eYour kills has been reset.'
+      - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7Your kills has been reset.'
   deaths:
     reset:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} deaths is now reset.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7deaths is now reset.'
     target:
-      - 'pvplevels message {target} &7[&bPvPLevels&7] &eYour deaths has been reset.'
+      - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7Your deaths has been reset.'
   xp:
     reset:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} xp is now reset.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7xp is now reset.'
     target:
-      - 'pvplevels message {target} &7[&bPvPLevels&7] &eYour xp has been reset.'
+      - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7Your xp has been reset.'
   level:
     reset:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} level is now reset.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7level is now reset.'
     target:
-      - 'pvplevels message {target} &7[&bPvPLevels&7] &eYour level has been reset.'
+      - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7Your level has been reset.'
   killstreak:
     reset:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} killstreak is now reset.'
-    target:
-      - 'pvplevels message {target} &7[&bPvPLevels&7] &eYour killstreak has been reset.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7killstreak is now reset.'
+    target: []
   stats:
     usage:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels reset stats <player> <resetGroup>'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset stats <player> <resetGroup>'
     reset:
-      - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} stats is now reset.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7stats is now reset.'
     target:
-      - 'pvplevels message {target} &7[&bPvPLevels&7] &eYour stats has been reset.'
+      - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7Your stats has been reset.'
 xp:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels xp <player> <+-amount>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels xp <player> <+-amount>'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   number:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a number!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   set:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} {xp} xp'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have sent &b{xp} &7xp to &b{target}&7.'
   target:
-    - 'pvplevels message {target} &7[&bPvPLevels&7] &e{xp} xp'
+    - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7You have received &b{xp} &7xp.'
 level:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels level <player> <+-amount>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels level <player> <+-amount>'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   number:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a number!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   found:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot found in levels.yml or out of bounds.'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not found in &blevels.yml &7or out of bounds.'
   set:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &e{target} level is set to {level}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have set level &b{level} &7to &b{target}&7.'
   target:
-    - 'pvplevels message {target} &7[&bPvPLevels&7] &eYour level is set to {level}'
+    - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7You have received &b{level} &7level.'
 multiplier:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels <player> <1.8> <seconds>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels <player> <3> <seconds>'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   double:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a double!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a double!'
   number:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cNot a number!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   got:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eYou have started an &6{multiplier} &emultiplier for &6{target} &b{time}'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have started an &bx{xp_multiplier} &7multiplier for &b{target}&7, for &b{time}&7.'
   target:
-    - 'pvplevels message {target} &7[&bPvPLevels&7] &eStarted an &6{multiplier} &emultiplier for &b{time}'
+    - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7You have got an &bx{xp_multiplier} &7multiplier for &b{time}&7.'
   lost:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYour multiplier &6{multiplier} multiplier &chas run out'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Your &bx{xp_multiplier} &7multiplier has run out.'
   join:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &eStarted your multiplier again.'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Your &bx{xp_multiplier} &7multiplier is now started again.'
 stats:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   online:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cThe player is not online!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   message:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lPvPStats&7]'
-    - '&eOwn stats:'
-    - '&eKills: &7> &6{kills}'
-    - '&eDeaths: &7> &6{deaths}'
-    - '&eXP: &7> &6{xp}'
-    - '&eLevel: &7> &6{level}'
-    - '&eKDR: &7> &6{kdr}'
-    - '&eKill Factor: &7> &6{kill_factor}'
-    - '&eKillStreak: &7> &6{killstreak}'
-    - '&eTop KillStreak: &7> &6{killstreak_top}'
-    - '&eXP Required: &7> &6{xp_required}'
-    - '&eXP Progress: &7> &6{xp_progress}%'
-    - '&6{xp_progress_style}'
-    - '&eGroup &7> &6{level_group}'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lPvP&b&lStats'
+    - '&7Own stats:'
+    - '&7Kills: &f&l» &b{kills}'
+    - '&7Deaths: &f&l» &b{deaths}'
+    - '&7XP: &f&l» &b{xp}'
+    - '&7Level: &f&l» &b{level}'
+    - '&7KDR: &f&l» &b{kdr}'
+    - '&7Kill Factor: &f&l» &b{kill_factor}'
+    - '&7KillStreak: &f&l» &b{killstreak}'
+    - '&7Top KillStreak: &f&l» &b{killstreak_top}'
+    - '&7XP Required: &f&l» &b{xp_required}'
+    - '&7XP Progress: &f&l» &b{xp_progress}%'
+    - '&b{xp_progress_style}'
+    - '&7Group &f&l» &b{level_group}'
+    - '&7&m---------------------------------------------'
   target:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lPvPStats&7]'
-    - '&eName: {player}'
-    - '&eKills: &7> &6{kills}'
-    - '&eDeaths: &7> &6{deaths}'
-    - '&eXP: &7> &6{xp}'
-    - '&eLevel: &7> &6{level}'
-    - '&eKDR: &7> &6{kdr}'
-    - '&eKill Factor: &7> &6{kill_factor}'
-    - '&eKillStreak: &7> &6{killstreak}'
-    - '&eTop KillStreak: &7> &6{killstreak_top}'
-    - '&eXP Required: &7> &6{xp_required}'
-    - '&eXP Progress: &7> &6{xp_progress}%'
-    - '&6{xp_progress_style}'
-    - '&eGroup &7> &6{level_group}'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lPvP&b&lStats'
+    - '&7Own stats:'
+    - '&7Kills: &f&l» &b{kills}'
+    - '&7Deaths: &f&l» &b{deaths}'
+    - '&7XP: &f&l» &b{xp}'
+    - '&7Level: &f&l» &b{level}'
+    - '&7KDR: &f&l» &b{kdr}'
+    - '&7Kill Factor: &f&l» &b{kill_factor}'
+    - '&7KillStreak: &f&l» &b{killstreak}'
+    - '&7Top KillStreak: &f&l» &b{killstreak_top}'
+    - '&7XP Required: &f&l» &b{xp_required}'
+    - '&7XP Progress: &f&l» &b{xp_progress}%'
+    - '&b{xp_progress_style}'
+    - '&7Group &f&l» &b{level_group}'
+    - '&7&m---------------------------------------------'
 top:
   permission:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cYou dont have access to use this command!'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&bPvPLevels&7] &cUsage: /pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
   kills:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lTop Kills&7]'
-    - '&7[&a1&7] &e%pvplevels_top_1_kills_name% &6 > &b%pvplevels_top_1_kills%'
-    - '&7[&a2&7] &e%pvplevels_top_2_kills_name% &6 > &b%pvplevels_top_2_kills%'
-    - '&7[&a3&7] &e%pvplevels_top_3_kills_name% &6 > &b%pvplevels_top_3_kills%'
-    - '&7[&a4&7] &e%pvplevels_top_4_kills_name% &6 > &b%pvplevels_top_4_kills%'
-    - '&7[&a5&7] &e%pvplevels_top_5_kills_name% &6 > &b%pvplevels_top_5_kills%'
-    - '&7[&a6&7] &e%pvplevels_top_6_kills_name% &6 > &b%pvplevels_top_6_kills%'
-    - '&7[&a7&7] &e%pvplevels_top_7_kills_name% &6 > &b%pvplevels_top_7_kills%'
-    - '&7[&a8&7] &e%pvplevels_top_8_kills_name% &6 > &b%pvplevels_top_8_kills%'
-    - '&7[&a9&7] &e%pvplevels_top_9_kills_name% &6 > &b%pvplevels_top_9_kills%'
-    - '&7[&a10&7] &e%pvplevels_top_10_kills_name% &6 > &b%pvplevels_top_10_kills%'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lTop&b&lKills'
+    - '&7[&b1&7] &b%pvplevels_top_1_kills_name% &f&l» &b%pvplevels_top_1_kills%'
+    - '&7[&b2&7] &b%pvplevels_top_2_kills_name% &f&l» &b%pvplevels_top_2_kills%'
+    - '&7[&b3&7] &b%pvplevels_top_3_kills_name% &f&l» &b%pvplevels_top_3_kills%'
+    - '&7&m---------------------------------------------'
   deaths:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lTop Deaths&7]'
-    - '&7[&a1&7] &e%pvplevels_top_1_deaths_name% &6 > &b%pvplevels_top_1_deaths%'
-    - '&7[&a2&7] &e%pvplevels_top_2_deaths_name% &6 > &b%pvplevels_top_2_deaths%'
-    - '&7[&a3&7] &e%pvplevels_top_3_deaths_name% &6 > &b%pvplevels_top_3_deaths%'
-    - '&7[&a4&7] &e%pvplevels_top_4_deaths_name% &6 > &b%pvplevels_top_4_deaths%'
-    - '&7[&a5&7] &e%pvplevels_top_5_deaths_name% &6 > &b%pvplevels_top_5_deaths%'
-    - '&7[&a6&7] &e%pvplevels_top_6_deaths_name% &6 > &b%pvplevels_top_6_deaths%'
-    - '&7[&a7&7] &e%pvplevels_top_7_deaths_name% &6 > &b%pvplevels_top_7_deaths%'
-    - '&7[&a8&7] &e%pvplevels_top_8_deaths_name% &6 > &b%pvplevels_top_8_deaths%'
-    - '&7[&a9&7] &e%pvplevels_top_9_deaths_name% &6 > &b%pvplevels_top_9_deaths%'
-    - '&7[&a10&7] &e%pvplevels_top_10_deaths_name% &6 > &b%pvplevels_top_10_deaths%'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lTop&b&lDeaths'
+    - '&7[&b1&7] &b%pvplevels_top_1_deaths_name% &f&l» &b%pvplevels_top_1_deaths%'
+    - '&7[&b2&7] &b%pvplevels_top_2_deaths_name% &f&l» &b%pvplevels_top_2_deaths%'
+    - '&7[&b3&7] &b%pvplevels_top_3_deaths_name% &f&l» &b%pvplevels_top_3_deaths%'
+    - '&7&m---------------------------------------------'
   xp:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lTop XP&7]'
-    - '&7[&a1&7] &e%pvplevels_top_1_xp_name% &6 > &b%pvplevels_top_1_xp%'
-    - '&7[&a2&7] &e%pvplevels_top_2_xp_name% &6 > &b%pvplevels_top_2_xp%'
-    - '&7[&a3&7] &e%pvplevels_top_3_xp_name% &6 > &b%pvplevels_top_3_xp%'
-    - '&7[&a4&7] &e%pvplevels_top_4_xp_name% &6 > &b%pvplevels_top_4_xp%'
-    - '&7[&a5&7] &e%pvplevels_top_5_xp_name% &6 > &b%pvplevels_top_5_xp%'
-    - '&7[&a6&7] &e%pvplevels_top_6_xp_name% &6 > &b%pvplevels_top_6_xp%'
-    - '&7[&a7&7] &e%pvplevels_top_7_xp_name% &6 > &b%pvplevels_top_7_xp%'
-    - '&7[&a8&7] &e%pvplevels_top_8_xp_name% &6 > &b%pvplevels_top_8_xp%'
-    - '&7[&a9&7] &e%pvplevels_top_9_xp_name% &6 > &b%pvplevels_top_9_xp%'
-    - '&7[&a10&7] &e%pvplevels_top_10_xp_name% &6 > &b%pvplevels_top_10_xp%'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lTop&b&lXP'
+    - '&7[&b1&7] &b%pvplevels_top_1_xp_name% &f&l» &b%pvplevels_top_1_xp%'
+    - '&7[&b2&7] &b%pvplevels_top_2_xp_name% &f&l» &b%pvplevels_top_2_xp%'
+    - '&7[&b3&7] &b%pvplevels_top_3_xp_name% &f&l» &b%pvplevels_top_3_xp%'
+    - '&7&m---------------------------------------------'
   level:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lTop Level&7]'
-    - '&7[&a1&7] &e%pvplevels_top_1_level_name% &6 > &b%pvplevels_top_1_level%'
-    - '&7[&a2&7] &e%pvplevels_top_2_level_name% &6 > &b%pvplevels_top_2_level%'
-    - '&7[&a3&7] &e%pvplevels_top_3_level_name% &6 > &b%pvplevels_top_3_level%'
-    - '&7[&a4&7] &e%pvplevels_top_4_level_name% &6 > &b%pvplevels_top_4_level%'
-    - '&7[&a5&7] &e%pvplevels_top_5_level_name% &6 > &b%pvplevels_top_5_level%'
-    - '&7[&a6&7] &e%pvplevels_top_6_level_name% &6 > &b%pvplevels_top_6_level%'
-    - '&7[&a7&7] &e%pvplevels_top_7_level_name% &6 > &b%pvplevels_top_7_level%'
-    - '&7[&a8&7] &e%pvplevels_top_8_level_name% &6 > &b%pvplevels_top_8_level%'
-    - '&7[&a9&7] &e%pvplevels_top_9_level_name% &6 > &b%pvplevels_top_9_level%'
-    - '&7[&a10&7] &e%pvplevels_top_10_level_name% &6 > &b%pvplevels_top_10_level%'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lTop&b&lLevel'
+    - '&7[&b1&7] &b%pvplevels_top_1_level_name% &f&l» &b%pvplevels_top_1_level%'
+    - '&7[&b2&7] &b%pvplevels_top_2_level_name% &f&l» &b%pvplevels_top_2_level%'
+    - '&7[&b3&7] &b%pvplevels_top_3_level_name% &f&l» &b%pvplevels_top_3_level%'
+    - '&7&m---------------------------------------------'
   killstreak:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lCurrent Top KillStreak&7]'
-    - '&7[&a1&7] &e%pvplevels_top_1_killstreak_name% &6 > &b%pvplevels_top_1_killstreak%'
-    - '&7[&a2&7] &e%pvplevels_top_2_killstreak_name% &6 > &b%pvplevels_top_2_killstreak%'
-    - '&7[&a3&7] &e%pvplevels_top_3_killstreak_name% &6 > &b%pvplevels_top_3_killstreak%'
-    - '&7[&a4&7] &e%pvplevels_top_4_killstreak_name% &6 > &b%pvplevels_top_4_killstreak%'
-    - '&7[&a5&7] &e%pvplevels_top_5_killstreak_name% &6 > &b%pvplevels_top_5_killstreak%'
-    - '&7[&a6&7] &e%pvplevels_top_6_killstreak_name% &6 > &b%pvplevels_top_6_killstreak%'
-    - '&7[&a7&7] &e%pvplevels_top_7_killstreak_name% &6 > &b%pvplevels_top_7_killstreak%'
-    - '&7[&a8&7] &e%pvplevels_top_8_killstreak_name% &6 > &b%pvplevels_top_8_killstreak%'
-    - '&7[&a9&7] &e%pvplevels_top_9_killstreak_name% &6 > &b%pvplevels_top_9_killstreak%'
-    - '&7[&a10&7] &e%pvplevels_top_10_killstreak_name% &6 > &b%pvplevels_top_10_killstreak%'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lCurrentTop&b&lKillStreak'
+    - '&7[&b1&7] &b%pvplevels_top_1_killstreak_name% &f&l» &b%pvplevels_top_1_killstreak%'
+    - '&7[&b2&7] &b%pvplevels_top_2_killstreak_name% &f&l» &b%pvplevels_top_2_killstreak%'
+    - '&7[&b3&7] &b%pvplevels_top_3_killstreak_name% &f&l» &b%pvplevels_top_3_killstreak%'
+    - '&7&m---------------------------------------------'
   killstreak_top:
-    - '&c&m---------------------------------------------'
-    - '&7[&b&lAll Time Top KillStreak&7]'
-    - '&7[&a1&7] &e%pvplevels_top_1_killstreak_top_name% &6 > &b%pvplevels_top_1_killstreak_top%'
-    - '&7[&a2&7] &e%pvplevels_top_2_killstreak_top_name% &6 > &b%pvplevels_top_2_killstreak_top%'
-    - '&7[&a3&7] &e%pvplevels_top_3_killstreak_top_name% &6 > &b%pvplevels_top_3_killstreak_top%'
-    - '&7[&a4&7] &e%pvplevels_top_4_killstreak_top_name% &6 > &b%pvplevels_top_4_killstreak_top%'
-    - '&7[&a5&7] &e%pvplevels_top_5_killstreak_top_name% &6 > &b%pvplevels_top_5_killstreak_top%'
-    - '&7[&a6&7] &e%pvplevels_top_6_killstreak_top_name% &6 > &b%pvplevels_top_6_killstreak_top%'
-    - '&7[&a7&7] &e%pvplevels_top_7_killstreak_top_name% &6 > &b%pvplevels_top_7_killstreak_top%'
-    - '&7[&a8&7] &e%pvplevels_top_8_killstreak_top_name% &6 > &b%pvplevels_top_8_killstreak_top%'
-    - '&7[&a9&7] &e%pvplevels_top_9_killstreak_top_name% &6 > &b%pvplevels_top_9_killstreak_top%'
-    - '&7[&a10&7] &e%pvplevels_top_10_killstreak_top_name% &6 > &b%pvplevels_top_10_killstreak_top%'
-    - '&c&m---------------------------------------------'
+    - '&7&m---------------------------------------------'
+    - '&f&lAllTime&b&lTopKillStreak'
+    - '&7[&b1&7] &b%pvplevels_top_1_killstreak_top_name% &f&l» &b%pvplevels_top_1_killstreak_top%'
+    - '&7[&b2&7] &b%pvplevels_top_2_killstreak_top_name% &f&l» &b%pvplevels_top_2_killstreak_top%'
+    - '&7[&b3&7] &b%pvplevels_top_3_killstreak_top_name% &f&l» &b%pvplevels_top_3_killstreak_top%'
+    - '&7&m---------------------------------------------'
 console:
   command:
     unknown:
-      - '&7[&bPvPLevels&7] &cUnknown sub command &f{command}'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Unknown sub command &b{command}&7.'
     message:
       - |-
-
-        &c&m---------------------------------------------
-        &7&l> &bPvPLevels created by &eMathiasMC
-        &7&l> &bVersion: &e{version}
-        &7&l> &f/pvplevels help for list of commands
-        &7&l> &2Any ideas for the plugin or need help?
-        &7&l> &2Contact me on spigot
-        &c&m---------------------------------------------
+        &7&m---------------------------------------------
+        &f&l» &f&lPvP&b&lLevels &7created by &bMathiasMC
+        &f&l» &7Version - &b{version}
+        &f&l» &b/pvplevels help &7for list of commands
+        &f&l» &9Any ideas for the plugin or need help?
+        &f&l» &9Contact me on spigot.
+        &7&m---------------------------------------------
   help:
     message:
-      - '&c&m---------------------------------------------'
-      - '&7&l> &f/pvplevels save'
-      - '&7&l> &f/pvplevels reload'
-      - '&7&l> &f/pvplevels broadcast <null/permission> <text>'
-      - '&7&l> &f/pvplevels message <player> <text>'
-      - '&7&l> &f/pvplevels actionbar <player> <seconds> <text>'
-      - '&7&l> &f/pvplevels group set/reset <player> <groupName (set)>'
-      - '&7&l> &f/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
-      - '&7&l> &f/pvplevels xp/level <player> <+-amount>'
-      - '&7&l> &f/pvplevels admin'
-      - '&7&l> &f/pvplevels profiles'
-      - '&7&l> &f/pvplevels stats <player>'
-      - '&7&l> &f/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
-      - '&7&l> &f/pvplevels multiplier <player> <1.8> <seconds>'
-      - '&7&l> &f/pvplevels generate <group> <amount>'
-      - '&c&m---------------------------------------------'
+      - '&7&m---------------------------------------------'
+      - '&f&l» &b/pvplevels save'
+      - '&f&l» &b/pvplevels reload'
+      - '&f&l» &b/pvplevels broadcast <null/permission> <text>'
+      - '&f&l» &b/pvplevels message <player> <text>'
+      - '&f&l» &b/pvplevels actionbar <player> <seconds> <text>'
+      - '&f&l» &b/pvplevels group set/reset <player> <groupName (set)>'
+      - '&f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
+      - '&f&l» &b/pvplevels xp/level <player> <+-amount>'
+      - '&f&l» &b/pvplevels stats <player>'
+      - '&f&l» &b/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
+      - '&f&l» &b/pvplevels multiplier <player> <3> <seconds>'
+      - '&f&l» &b/pvplevels generate <group> <amount>'
+      - '&7&m---------------------------------------------'
   reload:
     all:
-      - '&7[&bPvPLevels&7] &eReloaded all configs'
-    validator:
-      - '&7[&bPvPLevels&7] &eReloaded all configs &7(&cvalidator not passed&7)'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Reloaded all configs'
   generate:
     use:
-      - '&7[&bPvPLevels&7] &cThis command is not enabled.'
+      - '&7[&f&lP&b&lL&7] &f&l» &7This command is not enabled.'
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels generate confirm'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels generate confirm'
     confirm:
-      - '&7[&bPvPLevels&7] &cNothing to confirm run the command as a player'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Nothing to confirm run the command as a player.'
     engine:
-      - '&7[&bPvPLevels&7] &cJavaScript engine not found.'
+      - '&7[&f&lP&b&lL&7] &f&l» &7JavaScript engine not found.'
     generate:
-      - '&7[&bPvPLevels&7] &cYou cannot generate levels right now already one is already calculating...'
-  only-player:
-    - '&7[&bPvPLevels&7] &cYou can only use this command as a player!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7You cannot generate levels right now, one is already calculating...'
   save:
     message:
-      - '&7[&bPvPLevels&7] &aSaved cached data to the database!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Saved cached data to the database!'
   message:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels message <player> <text>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels message <player> <text>'
     online:
-      - '&7[&bPvPLevels&7] &cThe player is not online!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   broadcast:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels broadcast <null/permission> <text>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels broadcast <null/permission> <text>'
   actionbar:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels actionbar <player> <seconds> <text>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels actionbar <player> <seconds> <text>'
     online:
-      - '&7[&bPvPLevels&7] &cThe player is not online!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     number:
-      - '&7[&bPvPLevels&7] &cNot a number!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   group:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels group set/reset'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set/reset'
     online:
-      - '&7[&bPvPLevels&7] &cThe player is not online!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     valid:
-      - '&7[&bPvPLevels&7] &cNot a valid group name/not found in levels.yml! [a-zA-Z]'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not a valid group name/not found in &blevels.yml&7! [a-zA-Z]'
     reset:
       usage:
-        - '&7[&bPvPLevels&7] &cUsage: /pvplevels group reset <player>'
+        - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group reset <player>'
       message:
-        - '&7[&bPvPLevels&7] &e{target} group is reset back to the default group!'
+        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7group is reset back to the default group!'
     set:
       usage:
-        - '&7[&bPvPLevels&7] &cUsage: /pvplevels group set <player> <groupName>'
+        - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set <player> <groupName>'
       message:
-        - '&7[&bPvPLevels&7] &e{target} group is now set to {group}'
+        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7group is now set to &b{group}&7.'
   reset:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels reset <killstreak, stats> <player>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset <killstreak, stats> <player>'
     online:
-      - '&7[&bPvPLevels&7] &cThe player is not online!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     found:
-      - '&7[&bPvPLevels&7] &cNot found!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not found!'
     kills:
       reset:
-        - '&7[&bPvPLevels&7] &e{target} kills is now reset.'
+        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7kills is now reset.'
     deaths:
       reset:
-        - '&7[&bPvPLevels&7] &e{target} deaths is now reset.'
+        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7deaths is now reset.'
     xp:
       reset:
-        - '&7[&bPvPLevels&7] &e{target} xp is now reset.'
+        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7xp is now reset.'
     level:
       reset:
-        - '&7[&bPvPLevels&7] &e{target} level is now reset.'
+        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7level is now reset.'
     killstreak:
-      reset:
-        - '&7[&bPvPLevels&7] &e{target} killstreak is now reset.'
+      reset: []
     stats:
       usage:
-        - '&7[&bPvPLevels&7] &cUsage: /pvplevels reset stats <player> <resetGroup>'
+        - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset stats <player> <resetGroup>'
       reset:
-        - '&7[&bPvPLevels&7] &e{target} stats is now reset.'
+        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7stats is now reset.'
   xp:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels xp <player> <+-amount>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels xp <player> <+-amount>'
     online:
-      - '&7[&bPvPLevels&7] &cThe player is not online!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     number:
-      - '&7[&bPvPLevels&7] &cNot a number!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
     set:
-      - '&7[&bPvPLevels&7] &e{target} {xp} xp'
+      - '&7[&f&lP&b&lL&7] &f&l» &7You have sent &b{xp} &7xp to &b{target}&7.'
   level:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels level <player> <+-amount>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels level <player> <+-amount>'
     online:
-      - '&7[&bPvPLevels&7] &cThe player is not online!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     number:
-      - '&7[&bPvPLevels&7] &cNot a number!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
     found:
-      - '&7[&bPvPLevels&7] &cNot found in levels.yml or out of bounds.'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not found in &blevels.yml &7or out of bounds.'
     set:
-      - '&7[&bPvPLevels&7] &e{target} level is set to {level}'
+      - '&7[&f&lP&b&lL&7] &f&l» &7You have set level &b{level} &7to &b{target}&7.'
   multiplier:
     usage:
-      - '&7[&bPvPLevels&7] &cUsage: /pvplevels <player> <1.8> <seconds>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels <player> <3> <seconds>'
     online:
-      - '&7[&bPvPLevels&7] &cThe player is not online!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     double:
-      - '&7[&bPvPLevels&7] &cNot a double!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not a double!'
     number:
-      - '&7[&bPvPLevels&7] &cNot a number!'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
     got:
-      - '&7[&bPvPLevels&7] &eStarted an &6{multiplier} &emultiplier for &6{target} &b{time}'
+      - '&7[&f&lP&b&lL&7] &f&l» &7You have started an &bx{xp_multiplier} &7multiplier for &b{target}&7, for &b{time}&7.'
 
-# This section is for placeholders for entity names (Remove section "translate" to just use default names)
+# This section is for placeholders
 translate:
+  xp:
+    multiplier:
+      none: 'None'
+      time: '0'
+      left: '0'
+    type: 'None'
+    get: '0'
+    lost: '0'
+    item: '0'
+  time:
+    second: Second
+    seconds: Seconds
+    minute: Minute
+    minutes: Minutes
+    hour: Hour
+    hours: Hours
+    day: Day
+    days: Days
   entity:
     BAT: Bat
     BEE: Bee
@@ -554,6 +506,7 @@ translate:
     ZOMBIE_VILLAGER: Zombie villager
     ZOMBIE: Zombie
     ZOMBIFIED_PIGLIN: Zombified piglin
+    ARROW: Skeleton
   blocks:
     ANCIENT_DEBRIS: Ancient debris
     COAL_ORE: Coal ore

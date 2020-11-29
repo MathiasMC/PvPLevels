@@ -2,13 +2,12 @@ package me.MathiasMC.PvPLevels.api.events;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerDeathEvent extends Event implements Cancellable {
+public class PlayerKillStreakTopEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final PvPLevels plugin;
@@ -17,14 +16,14 @@ public class PlayerDeathEvent extends Event implements Cancellable {
 
     private final Player player;
 
-    private final Entity entity;
+    private final Player killed;
 
     private final PlayerConnect playerConnect;
 
-    public PlayerDeathEvent(final Player player, final Entity entity, final PlayerConnect playerConnect) {
+    public PlayerKillStreakTopEvent(final Player player, final Player killed, final PlayerConnect playerConnect) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
-        this.entity = entity;
+        this.killed = killed;
         this.playerConnect = playerConnect;
     }
 
@@ -32,25 +31,12 @@ public class PlayerDeathEvent extends Event implements Cancellable {
         return this.player;
     }
 
-    public Entity getEntity() {
-        return this.entity;
+    public Player getKilled() {
+        return this.killed;
     }
 
     public PlayerConnect getPlayerConnect() {
         return this.playerConnect;
-    }
-
-    public void execute() {
-        playerConnect.setDeaths(playerConnect.getDeaths() + 1);
-        if (entity != null) {
-            for (String command : plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".player")) {
-                plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.getPlaceholderManager().replacePlaceholders(player, false, command));
-            }
-        } else {
-            for (String command : plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other")) {
-                plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.getPlaceholderManager().replacePlaceholders(player, false, command));
-            }
-        }
     }
 
     @Override

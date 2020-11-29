@@ -30,6 +30,10 @@ public class PvPLevelsAPI {
         getPlayerConnect(uuid);
     }
 
+    public void deletePlayerConnect(final String uuid) {
+        plugin.database.delete(uuid);
+    }
+
     public Set<String> listPlayerConnect() {
         return plugin.listPlayerConnect();
     }
@@ -58,8 +62,12 @@ public class PvPLevelsAPI {
         return plugin.getCalculateManager();
     }
 
-    public ItemStackManager getItemStackManager() {
-        return plugin.getItemStackManager();
+    public long getStartLevel() {
+        return plugin.getStartLevel();
+    }
+
+    public boolean isDebug() {
+        return plugin.isDebug();
     }
 
     public static PvPLevelsAPI getInstance() {

@@ -9,32 +9,39 @@
 default:
   xp:
     get:
-      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &6{xp_need} &eto level &c{level_next}
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
     item:
-      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp&7) &6{xp_need} &eto level &c{level_next}
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Item multiplier &bx{xp_item} &7was applied.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
     boost:
-      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Multiplier &bx{xp_multiplier} &7was applied.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
     both:
-      - pvplevels message {player} &7[&bPvPLevels&7] &c{type} &e+&6{xp} &eXP &7(&a{item_boost} item boost xp & {multiplier} multiplier boost&7) &6{xp_need} &eto level &c{level_next}
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Multiplier &bx{xp_multiplier} &7and Item multiplier &bx{xp_item} &7was applied.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
     lose:
-      - pvplevels message {player} &7[&bPvPLevels&7] &cYou have lost &6{lost} &cXP
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost &b{xp_lost} &7xp.'
   level:
     up:
-      - pvplevels message {player} &7[&bPvPLevels&7] &eYou are now level {level_next}
+      - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
     down:
-      - pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}
-
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
 default-last:
   xp:
-    get: []
-    item: []
-    boost: []
-    both: []
+    get:
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You cannot receive more xp, you have reached max level.'
+    item:
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You cannot receive more xp, you have reached max level.'
+    boost:
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You cannot receive more xp, you have reached max level.'
+    both:
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You cannot receive more xp, you have reached max level.'
     lose:
-      - pvplevels message {player} &7[&bPvPLevels&7] &cYou have lost &6{lost} &cXP
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost &b{xp_lost} &7xp.'
   level:
     up:
-      - pvplevels message {player} &7[&bPvPLevels&7] &eYou are now the last level {level_next}
-      - pvplevels broadcast null &e{player} is now the last level {level_next}
+      - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
     down:
-      - pvplevels message {player} &7[&bPvPLevels&7] &eYou lost a level you are now {level}
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'

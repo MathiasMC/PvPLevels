@@ -5,8 +5,6 @@ import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
-import java.util.GregorianCalendar;
-
 public class PlaceholderAPI extends PlaceholderExpansion {
 
     private PvPLevels plugin;
@@ -93,10 +91,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return String.valueOf(plugin.getStatsManager().getXPProgressStyle(playerConnect, "xp-progress-style-2"));
         }
         if(identifier.equals("time")){
-            return String.valueOf(plugin.getStatsManager().getTime("time", playerConnect.getTime().getTime()));
-        }
-        if(identifier.equals("date")){
-            return String.valueOf(plugin.getStatsManager().getTime("date", playerConnect.getTime().getTime()));
+            return String.valueOf(plugin.getStatsManager().getTime(System.currentTimeMillis() - playerConnect.getTime().getTime()));
         }
         if(identifier.equals("group")) {
             return playerConnect.getGroup();
@@ -110,26 +105,26 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(identifier.equals("level_suffix")) {
             return plugin.getStatsManager().getSuffix(player);
         }
+        if (identifier.equals("xp_type")) {
+            return plugin.getStatsManager().getType(playerConnect);
+        }
+        if (identifier.equals("xp_get")) {
+            return plugin.getStatsManager().getGet(playerConnect);
+        }
+        if (identifier.equals("xp_lost")) {
+            return plugin.getStatsManager().getLost(playerConnect);
+        }
+        if (identifier.equals("xp_item")) {
+            return plugin.getStatsManager().getItem(playerConnect);
+        }
         if(identifier.equals("multiplier")) {
-            if (playerConnect.getMultiplier() != 0D) {
-                return String.valueOf(playerConnect.getMultiplier());
-            } else {
-                return String.valueOf(1);
-            }
+            return plugin.getStatsManager().getMultiplier(playerConnect);
         }
         if(identifier.equals("multiplier_time")) {
-            if (playerConnect.getMultiplierTime() != 0D) {
-                return plugin.getStatsManager().getTime("multiplier", (new GregorianCalendar(0, 0,0,0,0, playerConnect.getMultiplierTime()).getTime().getTime()));
-            } else {
-                return String.valueOf(0);
-            }
+            return plugin.getStatsManager().getMultiplierTime(playerConnect);
         }
         if(identifier.equals("multiplier_time_left")) {
-            if (playerConnect.getMultiplierTime() != 0D) {
-                return plugin.getStatsManager().getTime("multiplier", (new GregorianCalendar(0, 0,0,0,0, playerConnect.getMultiplierTimeLeft()).getTime().getTime()));
-            } else {
-                return String.valueOf(0);
-            }
+            return plugin.getStatsManager().getMultiplierTimeLeft(playerConnect);
         }
         if (identifier.equals("helmet_remaining_durability")) {
             return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getHelmet())[0]);

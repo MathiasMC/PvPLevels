@@ -6,73 +6,46 @@
 #           contact me on spigot          #
 #                                         #
 default:
-  # executor for get xp and lose xp
+  # executor for get xp section in execute.yml
   execute: default
   '0':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    prefix: '&7[&bDefault&7] [&b0&7]'
     suffix: ''
     group: 'Bad'
     execute: default
     # Dont touch xp must be 0 for start level (if start-level is 1 you can remove this section)
     xp: 0
   '1':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    prefix: '&7[&bDefault&7] [&b1&7]'
     suffix: ''
-    group: 'Bad'
+    group: 'Good'
     execute: default
     # If start-level is 1 xp must be 0
-    xp: 45
+    xp: 75
   '2':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
-    suffix: ''
-    group: 'Bad'
-    execute: default
-    xp: 90
-  '3':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    prefix: '&7[&bDefault&7] [&b2&7]'
     suffix: ''
     group: 'Better'
     execute: default
     xp: 150
+  '3':
+    prefix: '&7[&bDefault&7] [&b3&7]'
+    suffix: ''
+    group: 'Super'
+    execute: default
+    xp: 300
   '4':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
-    suffix: ''
-    group: 'Better'
-    execute: default
-    xp: 240
-  '5':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
-    suffix: ''
-    group: 'Better'
-    execute: default
-    xp: 275
-  '6':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
-    suffix: ''
-    group: 'Good'
-    execute: default
-    xp: 320
-  '7':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
-    suffix: ''
-    group: 'Good'
-    execute: default
-    xp: 390
-  '8':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
-    suffix: ''
-    group: 'Good'
-    execute: default
-    xp: 430
-  '9':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    prefix: '&7[&bDefault&7] [&b4&7]'
     suffix: ''
     group: 'Pro'
     execute: default
-    xp: 500
-  '10':
-    prefix: '&e[&7Default&e] &f[&a{level}&f]'
+    xp: 400
+  '5':
+    prefix: '&7[&bDefault&7] [&b5&7]'
     suffix: ''
-    group: 'Super'
+    group: 'Master'
+    # override top executor for get xp section in execute.yml
+    override: default-last
+    # The execute: executor (this is only the level.up and level.down)
     execute: default-last
-    xp: 600
+    xp: 500

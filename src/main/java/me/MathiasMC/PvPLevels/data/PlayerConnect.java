@@ -33,6 +33,14 @@ public class PlayerConnect {
 
     private int save;
 
+    private String xpType = "";
+
+    private long xpLast = 0;
+
+    private long xpLost = 0;
+
+    private long xpItem = 0;
+
     public PlayerConnect(String uuid) {
         this.uuid = uuid;
         final String[] data = PvPLevels.getInstance().database.getValues(uuid);
@@ -54,39 +62,39 @@ public class PlayerConnect {
         this.group = group;
     }
 
-    public void setKills(final Long kills) {
+    public void setKills(final long kills) {
         this.kills = kills;
     }
 
-    public void setDeaths(final Long deaths) {
+    public void setDeaths(final long deaths) {
         this.deaths = deaths;
     }
 
-    public void setXp(final Long xp) {
+    public void setXp(final long xp) {
         this.xp = xp;
     }
 
-    public void setLevel(final Long level) {
+    public void setLevel(final long level) {
         this.level = level;
     }
 
-    public void setKillstreak(final Long killstreak) {
+    public void setKillstreak(final long killstreak) {
         this.killstreak = killstreak;
     }
 
-    public void setKillstreakTop(final Long killstreak_top) {
+    public void setKillstreakTop(final long killstreak_top) {
         this.killstreakTop = killstreak_top;
     }
 
-    public void setMultiplier(final Double multiplier) {
+    public void setMultiplier(final double multiplier) {
         this.multiplier = multiplier;
     }
 
-    public void setMultiplierTime(final Integer multiplier_time) {
+    public void setMultiplierTime(final int multiplier_time) {
         this.multiplierTime = multiplier_time;
     }
 
-    public void setMultiplierTimeLeft(final Integer multiplier_time_left) {
+    public void setMultiplierTimeLeft(final int multiplier_time_left) {
         this.multiplierTimeLeft = multiplier_time_left;
     }
 
@@ -96,6 +104,22 @@ public class PlayerConnect {
 
     public void setSave(final int save) {
         this.save = save;
+    }
+
+    public void setXpType(final String xpType) {
+        this.xpType = xpType;
+    }
+
+    public void setXpLast(final long xpLast) {
+        this.xpLast = xpLast;
+    }
+
+    public void setLost(final long xpLost) {
+        this.xpLost = xpLost;
+    }
+
+    public void setItem(final long xpItem) {
+        this.xpItem = xpItem;
     }
 
     public String getGroup() {
@@ -140,6 +164,22 @@ public class PlayerConnect {
 
     public Timestamp getTime() {
         return this.time;
+    }
+
+    public String getXpType() {
+        return this.xpType;
+    }
+
+    public long getXpLast() {
+        return this.xpLast;
+    }
+
+    public long getXpLost() {
+        return this.xpLost;
+    }
+
+    public long getXpItem() {
+        return this.xpItem;
     }
 
     public int getSave() {

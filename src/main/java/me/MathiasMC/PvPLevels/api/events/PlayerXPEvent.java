@@ -1,8 +1,8 @@
 package me.MathiasMC.PvPLevels.api.events;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
-import me.MathiasMC.PvPLevels.api.Type;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -17,70 +17,90 @@ public class PlayerXPEvent extends Event implements Cancellable {
 
     private final Player player;
 
+    private final Entity entity;
+
     private final PlayerConnect playerConnect;
 
-    private int add;
+    private long xp;
 
-    private String pathType;
+    private final long item;
+
+    private final double multiplier;
 
     private String entityType;
 
-    private int itemBoost;
+    private String key;
 
-    private double multiplier;
-
-    private Type type;
-
-    public PlayerXPEvent(Player player, PlayerConnect playerConnect, int add, String pathType, String entityType, int itemBoost, double multiplier, Type type) {
+    public PlayerXPEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long xp, final long item, final double multiplier, final String entityType, final String key) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
+        this.entity = entity;
         this.playerConnect = playerConnect;
-        this.add = add;
-        this.pathType = pathType;
-        this.entityType = entityType;
-        this.itemBoost = itemBoost;
+        this.xp = xp;
+        this.item = item;
         this.multiplier = multiplier;
-        this.type = type;
+        this.entityType = entityType;
+        this.key = key;
     }
 
     public Player getPlayer() {
         return this.player;
     }
 
+    public Entity getEntity() {
+        return this.entity;
+    }
+
     public PlayerConnect getPlayerConnect() {
         return this.playerConnect;
     }
 
-    public int getAdd() {
-        return this.add;
+    public long getXp() {
+        return this.xp;
     }
 
-    public String getPathType() {
-        return this.pathType;
-    }
-
-    public String getEntityType() {
-        return this.entityType;
-    }
-
-    public int getItemBoost() {
-        return this.itemBoost;
+    public long getItem() {
+        return this.item;
     }
 
     public double getMultiplier() {
         return this.multiplier;
     }
 
-    public Type getType() {
-        return this.type;
+    public String getEntityType() {
+        return this.entityType;
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public void setXp(final long xp) {
+        this.xp = xp;
+    }
+
+    public void setEntityType(final String entityType) {
+        this.entityType = entityType;
+    }
+
+    public void setKey(final String key) {
+        this.key = key;
     }
 
     public void execute() {
-        final long xp = playerConnect.getXp() + add;
-        playerConnect.setXp(xp);
-        final boolean getLevel = plugin.getXPManager().getLevel(player, playerConnect);
+        if (!plugin.getXPManager().isMaxLevel(playerConnect)) {
+            playerConnect.setXp(playerConnect.getXp() + xp);
+        }
+        playerConnect.setXpLast(xp);
+        playerConnect.setItem(item);
+        playerConnect.setXpType(entityType);
+        final boolean getLevel = plugin.getXPManager().getLevel(player, entity, playerConnect);
         if (!getLevel) {
-            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp." + pathType, plugin.getFileUtils().execute, entityType, add, 0, itemBoost, multiplier);
+            if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override")) {
+                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp." + key));
+            } else {
+                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override") + ".xp." + key));
+            }
         }
         if (playerConnect.getSave() >= plugin.getFileUtils().config.getInt("mysql.save")) {
             playerConnect.save();

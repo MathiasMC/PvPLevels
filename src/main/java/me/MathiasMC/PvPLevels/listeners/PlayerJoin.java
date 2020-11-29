@@ -2,9 +2,9 @@ package me.MathiasMC.PvPLevels.listeners;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -16,15 +16,12 @@ public class PlayerJoin implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
-        final String uuid = player.getUniqueId().toString();
-        final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
+        final PlayerConnect playerConnect = plugin.getPlayerConnect(player.getUniqueId().toString());
         if (playerConnect.getMultiplier() != 0) {
-            for (String message : plugin.getFileUtils().language.getStringList("multiplier.join")) {
-                plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", player.getName())));
-            }
+            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().language.getStringList("multiplier.join"));
             plugin.multipliers.add(player);
         }
     }

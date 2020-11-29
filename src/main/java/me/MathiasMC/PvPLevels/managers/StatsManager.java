@@ -8,8 +8,8 @@ import org.bukkit.OfflinePlayer;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class StatsManager {
 
@@ -23,7 +23,7 @@ public class StatsManager {
         if (playerConnect.getDeaths() > 0L) {
             final DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
             decimalFormat.applyPattern("#.##");
-            return decimalFormat.format(Double.valueOf(playerConnect.getKills()) / Double.valueOf(playerConnect.getDeaths()));
+            return decimalFormat.format((double) playerConnect.getKills() / (double) playerConnect.getDeaths());
         } else if (playerConnect.getDeaths() == 0L) {
             return String.valueOf(playerConnect.getKills());
         }
@@ -34,13 +34,13 @@ public class StatsManager {
         if (playerConnect.getKills() > 0L) {
             final DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(new Locale("en", "UK"));
             decimalFormat.applyPattern("#.##");
-            return decimalFormat.format(Double.valueOf(playerConnect.getKills()) / (Double.valueOf(playerConnect.getKills()) + Double.valueOf(playerConnect.getDeaths())));
+            return decimalFormat.format((double) playerConnect.getKills() / ((double) playerConnect.getKills() + (double) playerConnect.getDeaths()));
         }
         return String.valueOf(0L);
     }
 
     public Long getXPRequired(final PlayerConnect playerConnect, final boolean next) {
-        Long level;
+        long level;
         if (!next) {
             level = playerConnect.getLevel();
         } else {
@@ -97,7 +97,7 @@ public class StatsManager {
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(offlinePlayer, true, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix")));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(offlinePlayer,  true, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix")));
     }
 
     public String getGroup(final OfflinePlayer offlinePlayer) {
@@ -106,7 +106,7 @@ public class StatsManager {
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(offlinePlayer, true, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".group")));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(offlinePlayer,  true, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".group")));
     }
 
     public String getTopValue(final String type, final int number, final boolean key, final boolean reverse) {
@@ -134,12 +134,8 @@ public class StatsManager {
         final Set<String> listPlayerConnect = plugin.listPlayerConnect();
         for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
             final String uuid = offlinePlayer.getUniqueId().toString();
-            PlayerConnect playerConnect = null;
-            if (!listPlayerConnect.contains(uuid) && offlinePlayer.isOnline()) {
-                playerConnect = plugin.getPlayerConnect(uuid);
-            }
             if (!excluded.contains(uuid) && listPlayerConnect.contains(uuid)) {
-                playerConnect = plugin.getPlayerConnect(uuid);
+                PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
                 switch (type) {
                     case "kills":
                         unsorted.put(offlinePlayer, playerConnect.getKills());
@@ -208,9 +204,95 @@ public class StatsManager {
         }
     }
 
-    public String getTime(final String path, final long time) {
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(plugin.getFileUtils().config.getString(path + ".format"));
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(plugin.getFileUtils().config.getString(path + ".zone")));
-        return simpleDateFormat.format(new Date(time));
+    public String getType(final PlayerConnect playerConnect) {
+        final String type = playerConnect.getXpType();
+        if (type.length() == 0) {
+            return plugin.getFileUtils().language.getString("translate.xp.type");
+        }
+        return type;
     }
+
+    public String getGet(final PlayerConnect playerConnect) {
+        final long type = playerConnect.getXpLast();
+        if (type == 0) {
+            return plugin.getFileUtils().language.getString("translate.xp.get");
+        }
+        return String.valueOf(type);
+    }
+
+    public String getLost(final PlayerConnect playerConnect) {
+        final long type = playerConnect.getXpLost();
+        if (type == 0) {
+            return plugin.getFileUtils().language.getString("translate.xp.lost");
+        }
+        return String.valueOf(type);
+    }
+
+    public String getItem(final PlayerConnect playerConnect) {
+        final long type = playerConnect.getXpItem();
+        if (type == 0) {
+            return plugin.getFileUtils().language.getString("translate.xp.item");
+        }
+        return String.valueOf(type);
+    }
+
+    public String getMultiplier(final PlayerConnect playerConnect) {
+        final double multiplier = playerConnect.getMultiplier();
+        if (multiplier == 0D) {
+            return plugin.getFileUtils().language.getString("translate.xp.multiplier.none");
+        }
+        return String.valueOf(multiplier);
+    }
+
+    public String getMultiplierTime(final PlayerConnect playerConnect) {
+        final int multiplier = playerConnect.getMultiplierTime();
+        if (multiplier == 0) {
+            return plugin.getFileUtils().language.getString("translate.xp.multiplier.time");
+        }
+        return String.valueOf(getTime(multiplier * 1000));
+    }
+
+    public String getMultiplierTimeLeft(final PlayerConnect playerConnect) {
+        final int multiplier = playerConnect.getMultiplierTimeLeft();
+        if (multiplier == 0) {
+            return plugin.getFileUtils().language.getString("translate.xp.multiplier.left");
+        }
+        return String.valueOf(getTime(multiplier * 1000));
+    }
+
+    public String getTime(long millis){
+        String time = "";
+        final long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+        final long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+        final long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        final long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+        if (days > 1) {
+            time += days + " " + plugin.getFileUtils().language.getString("translate.time.days") + " ";
+        } else if (days == 1) {
+            time += days + " " + plugin.getFileUtils().language.getString("translate.time.day") + " ";
+        }
+        if (hours > 1) {
+            time += hours + " " + plugin.getFileUtils().language.getString("translate.time.hours") + " ";
+        } else if (hours == 1) {
+            time += hours + " " + plugin.getFileUtils().language.getString("translate.time.hour") + " ";
+        }
+        if (minutes > 1) {
+            time += minutes + " " + plugin.getFileUtils().language.getString("translate.time.minutes") + " ";
+        } else if (minutes == 1) {
+            time += minutes + " " + plugin.getFileUtils().language.getString("translate.time.minute") + " ";
+        }
+        if (seconds > 1) {
+            time += seconds + " " + plugin.getFileUtils().language.getString("translate.time.seconds");
+        } else if (seconds == 1) {
+            time += seconds + " " + plugin.getFileUtils().language.getString("translate.time.second");
+        }
+        if (time.endsWith(" ")) {
+            return time.replaceAll("\\s+$", "");
+        }
+        return time;
+    }
+
 }
