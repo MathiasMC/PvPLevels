@@ -109,6 +109,7 @@ generate:
   # Set to false if you have a level setup finished so you cannot by accident erase the levels.yml
   use: true
 
+  # Start xp of level system
   start: 75
 
   # This is for {random} placeholder
