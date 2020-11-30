@@ -76,7 +76,7 @@ public class XPManager {
     }
 
     public void getKillStreak(final Player player, final Player killed, final PlayerConnect playerConnect) {
-        final PlayerKillStreakEvent playerKillStreakEvent = new PlayerKillStreakEvent(player, killed, playerConnect);
+        final PlayerKillStreakEvent playerKillStreakEvent = new PlayerKillStreakEvent(player, killed, playerConnect, (playerConnect.getKillstreak() + 1));
         plugin.getServer().getPluginManager().callEvent(playerKillStreakEvent);
         if (playerKillStreakEvent.isCancelled()) {
             return;
@@ -93,7 +93,7 @@ public class XPManager {
                 return;
             }
         }
-        final PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, entity, playerConnect);
+        final PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, entity, playerConnect, (playerConnect.getDeaths() + 1));
         plugin.getServer().getPluginManager().callEvent(playerDeathEvent);
         if (playerDeathEvent.isCancelled()) {
             return;
@@ -105,7 +105,7 @@ public class XPManager {
     }
 
     public void getKill(final Player player, final Player killed, final PlayerConnect playerConnect) {
-        final PlayerKillEvent playerKillEvent = new PlayerKillEvent(player, killed, playerConnect);
+        final PlayerKillEvent playerKillEvent = new PlayerKillEvent(player, killed, playerConnect, (playerConnect.getKills() + 1));
         plugin.getServer().getPluginManager().callEvent(playerKillEvent);
         if (playerKillEvent.isCancelled()) {
             return;
@@ -179,12 +179,16 @@ public class XPManager {
             }
             xp = (int) (xp * multiplier);
         }
-        final PlayerXPEvent playerXPEvent = new PlayerXPEvent(player, entity, playerConnect, xp, item, multiplier, entityType, key);
-        plugin.getServer().getPluginManager().callEvent(playerXPEvent);
-        if (playerXPEvent.isCancelled()) {
+        final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(player, entity, playerConnect, (playerConnect.getXp() + xp));
+        playerGetXPEvent.setKey(key);
+        playerConnect.setItem(item);
+        playerConnect.setXpType(entityType);
+        playerConnect.setXpLast(xp);
+        plugin.getServer().getPluginManager().callEvent(playerGetXPEvent);
+        if (playerGetXPEvent.isCancelled()) {
             return;
         }
-        playerXPEvent.execute();
+        playerGetXPEvent.execute();
     }
 
     public void loseXP(final Player player, final Entity killer, final PlayerConnect playerConnect) {
@@ -197,11 +201,12 @@ public class XPManager {
         if (xp < plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + plugin.getStartLevel() + ".xp")) {
             return;
         }
-        final PlayerLoseXPEvent playerLoseXPEvent = new PlayerLoseXPEvent(player, killer, playerConnect, xp);
-        if (playerLoseXPEvent.isCancelled()) {
+        final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(player, killer, playerConnect, (playerConnect.getXp() - xp));
+        playerConnect.setLost(xp);
+        if (playerLostXPEvent.isCancelled()) {
             return;
         }
-        playerLoseXPEvent.execute();
+        playerLostXPEvent.execute();
     }
 
     public boolean loseLevel(final Player player, final Entity entity, final PlayerConnect playerConnect) {

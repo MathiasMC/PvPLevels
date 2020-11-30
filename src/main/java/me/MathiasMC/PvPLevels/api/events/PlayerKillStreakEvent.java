@@ -22,11 +22,12 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
 
     private long killstreak;
 
-    public PlayerKillStreakEvent(final Player player, final Player killed, final PlayerConnect playerConnect) {
+    public PlayerKillStreakEvent(final Player player, final Player killed, final PlayerConnect playerConnect, final long killstreak) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
         this.killed = killed;
         this.playerConnect = playerConnect;
+        this.killstreak = killstreak;
     }
 
     public Player getPlayer() {
@@ -50,15 +51,14 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
     }
 
     public void execute() {
-        final long killStreak = playerConnect.getKillstreak() + 1;
-        playerConnect.setKillstreak(killStreak);
+        playerConnect.setKillstreak(killstreak);
         String path = "killstreak." + playerConnect.getGroup() + ".get";
-        final String getPath = "killstreak." + playerConnect.getGroup() + "." + playerConnect.getKillstreak() + ".get";
-        if (killStreak > playerConnect.getKillstreakTop()) {
-            final PlayerKillStreakTopEvent playerKillStreakTopEvent = new PlayerKillStreakTopEvent(player, killed, playerConnect);
+        final String getPath = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".get";
+        if (killstreak > playerConnect.getKillstreakTop()) {
+            final PlayerKillStreakTopEvent playerKillStreakTopEvent = new PlayerKillStreakTopEvent(player, killed, playerConnect, killstreak);
             plugin.getServer().getPluginManager().callEvent(playerKillStreakTopEvent);
             if (!playerKillStreakTopEvent.isCancelled()) {
-                path = "killstreak." + playerConnect.getGroup() + "." + playerConnect.getKillstreak() + ".top";
+                path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".top";
             }
         } else if (plugin.getFileUtils().config.contains(getPath)) {
             path = getPath;

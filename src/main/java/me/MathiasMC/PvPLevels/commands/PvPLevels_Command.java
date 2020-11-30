@@ -1,6 +1,10 @@
 package me.MathiasMC.PvPLevels.commands;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
+import me.MathiasMC.PvPLevels.api.events.PlayerLevelDownEvent;
+import me.MathiasMC.PvPLevels.api.events.PlayerLevelUPEvent;
+import me.MathiasMC.PvPLevels.api.events.PlayerLostXPEvent;
+import me.MathiasMC.PvPLevels.api.events.PlayerGetXPEvent;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.utils.GenerateThread;
 import net.md_5.bungee.api.ChatMessageType;
@@ -13,10 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class PvPLevels_Command implements CommandExecutor {
 
@@ -569,31 +570,22 @@ public class PvPLevels_Command implements CommandExecutor {
                                             set = playerConnect.getXp() - Long.parseLong(args[2].replace("-", ""));
                                             plus = false;
                                         }
-                                        long number = plugin.getFileUtils().config.getLong("start-level");
-                                        for (long integer : xpList(playerConnect)) {
-                                            if (set >= integer && integer != 0) {
-                                                number++;
-                                            }
-                                        }
-                                        if (set >= 0) {
-                                            final Set<String> stringList = plugin.getFileUtils().levels.getConfigurationSection(playerConnect.getGroup()).getKeys(false);
-                                            stringList.remove("execute");
-                                            final Set<Integer> list = stringList.stream().map(Integer::parseInt).collect(Collectors.toSet());
-                                            final long maxXP = plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + Collections.max(list) + ".xp");
-                                            playerConnect.setXp(Math.min(set, maxXP));
-                                        } else {
-                                            playerConnect.setXp(0L);
-                                        }
-                                        if (playerConnect.getLevel() != number) {
+                                        if (set >= plugin.getStartLevel()) {
                                             if (plus) {
-                                                playerConnect.setLevel(number - 1);
-                                                playerConnect.setXpType("");
-                                                playerConnect.setXpLast(0);
-                                                plugin.getXPManager().sendCommands(target, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + number + ".execute") + ".level.up"));
-                                                playerConnect.setLevel(number);
+                                                if (set != plugin.getStartLevel()) {
+                                                    playerConnect.setXpType("");
+                                                    playerConnect.setXpLast(0);
+                                                    final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(target, null, playerConnect, set);
+                                                    playerGetXPEvent.execute();
+                                                } else {
+                                                    playerConnect.setLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
+                                                    final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
+                                                    playerLostXPEvent.execute();
+                                                }
                                             } else {
-                                                playerConnect.setLevel(number);
-                                                plugin.getXPManager().sendCommands(target, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + number + ".execute") + ".level.down"));
+                                                playerConnect.setLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
+                                                final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
+                                                playerLostXPEvent.execute();
                                             }
                                         }
                                         if (type.equalsIgnoreCase("player")) {
@@ -657,19 +649,23 @@ public class PvPLevels_Command implements CommandExecutor {
                                     if (plugin.getCalculateManager().isLong(args[2])) {
                                         final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         long set = Long.parseLong(args[2]);
+                                        boolean plus = true;
                                         if (args[2].contains("+")) {
                                             set = playerConnect.getLevel() + Long.parseLong(args[2].replace("+", ""));
                                         } else if (args[2].contains("-")) {
+                                            plus = false;
                                             set = playerConnect.getLevel() - Long.parseLong(args[2].replace("-", ""));
                                         }
-                                        if (set >= plugin.getFileUtils().config.getLong("start-level") && plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + set)) {
-                                            playerConnect.setLevel(set - 1);
-                                            playerConnect.setXpType("");
-                                            playerConnect.setXpLast(0);
-                                            plugin.getXPManager().sendCommands(target, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + set + ".execute") + ".level.up"));
-                                            playerConnect.setLevel(set);
-                                            playerConnect.setXp(plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + set + ".xp"));
-                                            playerConnect.save();
+                                        if (set >= plugin.getStartLevel() && plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + set)) {
+                                            if (plus) {
+                                                final PlayerLevelUPEvent playerLevelUPEvent = new PlayerLevelUPEvent(target, null, playerConnect, set);
+                                                playerLevelUPEvent.setXp();
+                                                playerLevelUPEvent.execute();
+                                            } else {
+                                                final PlayerLevelDownEvent playerLevelDownEvent = new PlayerLevelDownEvent(target, null, playerConnect, set);
+                                                playerLevelDownEvent.setXp();
+                                                playerLevelDownEvent.execute();
+                                            }
                                             if (type.equalsIgnoreCase("player")) {
                                                 for (String message : plugin.getFileUtils().language.getStringList("level.set")) {
                                                     plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{target}", target.getName()).replace("{level}", String.valueOf(set)).replace("{player}", sender.getName())));

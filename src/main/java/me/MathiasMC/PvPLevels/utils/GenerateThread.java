@@ -76,7 +76,7 @@ public class GenerateThread extends Thread {
                     }
                 }
                 if (config.contains("generate.levels." + i)) {
-                    final String executeS = config.getString("generate.levels." + i + ".execute").replace("{group}", group);
+                    final String executeS = config.getString("generate.levels." + i + ".execute").replace("{group}", group).replace("{level}", String.valueOf(i));
                     levels.set(group + "." + i + ".execute", executeS);
                     execute.set(executeS + ".xp.lose", config.getStringList("generate.lose"));
                     execute.set(executeS + ".level.up", config.getStringList("generate.levels." + i + ".up"));

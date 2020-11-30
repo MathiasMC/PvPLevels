@@ -20,11 +20,14 @@ public class PlayerKillStreakTopEvent extends Event implements Cancellable {
 
     private final PlayerConnect playerConnect;
 
-    public PlayerKillStreakTopEvent(final Player player, final Player killed, final PlayerConnect playerConnect) {
+    private long killstreak;
+
+    public PlayerKillStreakTopEvent(final Player player, final Player killed, final PlayerConnect playerConnect, final long killstreak) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
         this.killed = killed;
         this.playerConnect = playerConnect;
+        this.killstreak = killstreak;
     }
 
     public Player getPlayer() {
@@ -37,6 +40,10 @@ public class PlayerKillStreakTopEvent extends Event implements Cancellable {
 
     public PlayerConnect getPlayerConnect() {
         return this.playerConnect;
+    }
+
+    public long getKillstreak() {
+        return this.killstreak;
     }
 
     @Override

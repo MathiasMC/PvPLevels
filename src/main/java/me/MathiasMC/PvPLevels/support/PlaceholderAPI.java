@@ -126,42 +126,6 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         if(identifier.equals("multiplier_time_left")) {
             return plugin.getStatsManager().getMultiplierTimeLeft(playerConnect);
         }
-        if (identifier.equals("helmet_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getHelmet())[0]);
-        }
-        if (identifier.equals("helmet_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getHelmet())[1]);
-        }
-        if (identifier.equals("chestplate_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getChestplate())[0]);
-        }
-        if (identifier.equals("chestplate_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getChestplate())[1]);
-        }
-        if (identifier.equals("leggings_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getLeggings())[0]);
-        }
-        if (identifier.equals("leggings_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getLeggings())[1]);
-        }
-        if (identifier.equals("boots_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getBoots())[0]);
-        }
-        if (identifier.equals("boots_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getBoots())[1]);
-        }
-        if (identifier.equals("item_in_mainhand_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, true))[0]);
-        }
-        if (identifier.equals("item_in_mainhand_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, true))[1]);
-        }
-        if (identifier.equals("item_in_offhand_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, false))[0]);
-        }
-        if (identifier.equals("item_in_offhand_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, false))[1]);
-        }
         if(identifier.equals("top_1_kills_name")){
             return plugin.getStatsManager().getTopValue("kills", 0, true, true);
         }
@@ -521,6 +485,42 @@ public class PlaceholderAPI extends PlaceholderExpansion {
         }
         if(identifier.equals("top_10_killstreak_top")){
             return plugin.getStatsManager().getTopValue("killstreak_top", 9, false, true);
+        }
+        if (identifier.equals("helmet_remaining_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getHelmet())[0]);
+        }
+        if (identifier.equals("helmet_max_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getHelmet())[1]);
+        }
+        if (identifier.equals("chestplate_remaining_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getChestplate())[0]);
+        }
+        if (identifier.equals("chestplate_max_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getChestplate())[1]);
+        }
+        if (identifier.equals("leggings_remaining_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getLeggings())[0]);
+        }
+        if (identifier.equals("leggings_max_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getLeggings())[1]);
+        }
+        if (identifier.equals("boots_remaining_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getBoots())[0]);
+        }
+        if (identifier.equals("boots_max_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getBoots())[1]);
+        }
+        if (identifier.equals("item_in_mainhand_remaining_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, true))[0]);
+        }
+        if (identifier.equals("item_in_mainhand_max_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, true))[1]);
+        }
+        if (identifier.equals("item_in_offhand_remaining_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, false))[0]);
+        }
+        if (identifier.equals("item_in_offhand_max_durability")) {
+            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, false))[1]);
         }
         return null;
     }

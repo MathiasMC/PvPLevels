@@ -51,13 +51,17 @@ public class PlayerLevelDownEvent extends Event implements Cancellable {
         this.level = level;
     }
 
+    public void setXp() {
+        playerConnect.setXp(plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + level + ".xp"));
+    }
+
     public void execute() {
         playerConnect.setLevel(level);
         playerConnect.save();
-        if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override")) {
+        if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".override")) {
             plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".execute") + ".level.down"));
         } else {
-            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override") + ".level.down"));
+            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".override") + ".level.down"));
         }
     }
 

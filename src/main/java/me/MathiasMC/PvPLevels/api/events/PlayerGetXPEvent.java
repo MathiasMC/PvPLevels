@@ -8,7 +8,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerLoseXPEvent extends Event implements Cancellable {
+public class PlayerGetXPEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final PvPLevels plugin;
@@ -23,7 +23,9 @@ public class PlayerLoseXPEvent extends Event implements Cancellable {
 
     private long xp;
 
-    public PlayerLoseXPEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long xp) {
+    private String key;
+
+    public PlayerGetXPEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long xp) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
         this.entity = entity;
@@ -47,25 +49,37 @@ public class PlayerLoseXPEvent extends Event implements Cancellable {
         return this.xp;
     }
 
-    public void setXp(final int xp) {
+    public String getKey() {
+        return this.key;
+    }
+
+    public void setXp(final long xp) {
         this.xp = xp;
     }
 
+    public void setKey(final String key) {
+        this.key = key;
+    }
+
     public void execute() {
-        final long set = playerConnect.getXp() - xp;
-        if (set < 0) {
-            return;
+        if (!plugin.getXPManager().isMaxLevel(playerConnect)) {
+            playerConnect.setXp(xp);
         }
-        playerConnect.setXp(set);
-        playerConnect.setLost(xp);
-        final boolean loseLevel = plugin.getXPManager().loseLevel(player, entity, playerConnect);
-        if (!loseLevel) {
+        playerConnect.setXpLast(xp);
+        final boolean getLevel = plugin.getXPManager().getLevel(player, entity, playerConnect);
+        if (!getLevel) {
             if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override")) {
-                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp.lose"));
+                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp." + key));
             } else {
-                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override") + ".xp.lose"));
+                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override") + ".xp." + key));
             }
         }
+        if (playerConnect.getSave() >= plugin.getFileUtils().config.getInt("mysql.save")) {
+            playerConnect.save();
+            playerConnect.setSave(0);
+            return;
+        }
+        playerConnect.setSave(playerConnect.getSave() + 1);
     }
 
     @Override

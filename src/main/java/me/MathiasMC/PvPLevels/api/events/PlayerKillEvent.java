@@ -20,11 +20,14 @@ public class PlayerKillEvent extends Event implements Cancellable {
 
     private final PlayerConnect playerConnect;
 
-    public PlayerKillEvent(final Player player, final Player killed, final PlayerConnect playerConnect) {
+    private long kills;
+
+    public PlayerKillEvent(final Player player, final Player killed, final PlayerConnect playerConnect, final long kills) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
         this.killed = killed;
         this.playerConnect = playerConnect;
+        this.kills = kills;
     }
 
     public Player getPlayer() {
@@ -39,9 +42,17 @@ public class PlayerKillEvent extends Event implements Cancellable {
         return this.playerConnect;
     }
 
+    public long getKills() {
+        return this.kills;
+    }
+
+    public void setKills(final long kills) {
+        this.kills = kills;
+    }
+
     public void execute() {
-        playerConnect.setKills(playerConnect.getKills() + 1);
-        final String path = "kills." + playerConnect.getGroup() + "." + playerConnect.getKills();
+        playerConnect.setKills(kills);
+        final String path = "kills." + playerConnect.getGroup() + "." + kills;
         if (plugin.getFileUtils().config.contains(path)) {
             plugin.getXPManager().sendCommands(player, plugin.getFileUtils().config.getStringList(path));
         } else {

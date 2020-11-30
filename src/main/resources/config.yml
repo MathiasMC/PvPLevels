@@ -171,14 +171,14 @@ generate:
         - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
       down:
         - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
-      execute: '{group}20'
+      execute: '{group}{level}'
     60:
       up:
         - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have leveled up to Level &b{level_next}&7.'
         - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
       down:
         - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
-      execute: '{group}60'
+      execute: '{group}{level}'
 
 xp:
   default:

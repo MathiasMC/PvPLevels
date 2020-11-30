@@ -8,7 +8,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class PlayerDeathEvent extends Event implements Cancellable {
+public class PlayerLostXPEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final PvPLevels plugin;
@@ -21,14 +21,14 @@ public class PlayerDeathEvent extends Event implements Cancellable {
 
     private final PlayerConnect playerConnect;
 
-    private long deaths;
+    private long xp;
 
-    public PlayerDeathEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long deaths) {
+    public PlayerLostXPEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long xp) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
         this.entity = entity;
         this.playerConnect = playerConnect;
-        this.deaths = deaths;
+        this.xp = xp;
     }
 
     public Player getPlayer() {
@@ -43,23 +43,25 @@ public class PlayerDeathEvent extends Event implements Cancellable {
         return this.playerConnect;
     }
 
-    public long getDeaths() {
-        return this.deaths;
+    public long getXp() {
+        return this.xp;
     }
 
-    public void setDeaths(final long deaths) {
-        this.deaths = deaths;
+    public void setXp(final int xp) {
+        this.xp = xp;
     }
 
     public void execute() {
-        playerConnect.setDeaths(deaths);
-        if (entity != null) {
-            for (String command : plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".player")) {
-                plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.getPlaceholderManager().replacePlaceholders(player, false, command));
-            }
-        } else {
-            for (String command : plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other")) {
-                plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.getPlaceholderManager().replacePlaceholders(player, false, command));
+        if (xp < 0) {
+            return;
+        }
+        playerConnect.setXp(xp);
+        final boolean loseLevel = plugin.getXPManager().loseLevel(player, entity, playerConnect);
+        if (!loseLevel) {
+            if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override")) {
+                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp.lose"));
+            } else {
+                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override") + ".xp.lose"));
             }
         }
     }
