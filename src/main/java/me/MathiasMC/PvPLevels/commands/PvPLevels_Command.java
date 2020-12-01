@@ -574,7 +574,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             if (plus) {
                                                 if (set != plugin.getStartLevel()) {
                                                     playerConnect.setXpType("");
-                                                    playerConnect.setXpLast(0);
+                                                    playerConnect.setXpLast(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                     final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(target, null, playerConnect, set);
                                                     playerGetXPEvent.execute();
                                                 } else {

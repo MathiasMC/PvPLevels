@@ -65,7 +65,6 @@ public class PlayerGetXPEvent extends Event implements Cancellable {
         if (!plugin.getXPManager().isMaxLevel(playerConnect)) {
             playerConnect.setXp(xp);
         }
-        playerConnect.setXpLast(xp);
         final boolean getLevel = plugin.getXPManager().getLevel(player, entity, playerConnect);
         if (!getLevel) {
             if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override")) {
