@@ -67,9 +67,9 @@ public class PlayerLevelDownEvent extends Event implements Cancellable {
         playerConnect.setLevel(level);
         playerConnect.save();
         if (commands == null) {
-            final String path = playerConnect.getGroup() + "." + level + ".override";
+            final String path = playerConnect.getGroup() + "." + (level + 1) + ".override";
             if (!plugin.getFileUtils().levels.contains(path)) {
-                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".execute") + ".level.down"));
+                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + (level + 1) + ".execute") + ".level.down"));
             } else {
                 setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".level.down"));
             }
