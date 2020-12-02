@@ -25,23 +25,19 @@ public class XPManager {
         this.plugin = plugin;
     }
 
-    public void entityCheck(final Entity entity, final Player killer) {
+    public void entityCheck(final Player killer, final Entity entity) {
         final String entityUUID = entity.getUniqueId().toString();
         boolean entityPlayer = false;
         if (entity instanceof Player) {
             entityPlayer = true;
             final Player player = (Player) entity;
             final PlayerConnect playerConnect = plugin.getPlayerConnect(entityUUID);
-            if (!player.hasPermission("pvplevels.group." + playerConnect.getGroup())) {
-                if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + player.getName() + " does not have access to get xp " + "pvplevels.group." + playerConnect.getGroup()); }
-                return;
-            }
-            if (plugin.getFileUtils().config.getStringList("excluded").contains(entityUUID)) {
-                if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + killer.getName() + " cannot get stats currently, is in the excluded list."); }
-                return;
-            }
-            loseXP(player, killer, playerConnect);
-            getDeath(player, killer, playerConnect);
+            if (player.hasPermission("pvplevels.group." + playerConnect.getGroup())) {
+                if (!plugin.getFileUtils().config.getStringList("excluded").contains(entityUUID)) {
+                    loseXP(player, killer, playerConnect);
+                    getDeath(player, killer, playerConnect);
+                } else if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + killer.getName() + " cannot get stats currently, is in the excluded list."); }
+            } else if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + player.getName() + " does not have access to get xp " + "pvplevels.group." + playerConnect.getGroup()); }
         }
         if (killer == null) {
             return;
@@ -181,7 +177,7 @@ public class XPManager {
         }
         final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(player, entity, playerConnect, (playerConnect.getXp() + xp));
         playerGetXPEvent.setKey(key);
-        playerConnect.setItem(item);
+        playerConnect.setXpItem(item);
         playerConnect.setXpType(entityType);
         playerConnect.setXpLast(xp);
         plugin.getServer().getPluginManager().callEvent(playerGetXPEvent);
@@ -202,7 +198,7 @@ public class XPManager {
             return;
         }
         final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(player, killer, playerConnect, (playerConnect.getXp() - xp));
-        playerConnect.setLost(xp);
+        playerConnect.setXpLost(xp);
         if (playerLostXPEvent.isCancelled()) {
             return;
         }

@@ -8,6 +8,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.List;
+
 public class PlayerLostXPEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -22,6 +24,8 @@ public class PlayerLostXPEvent extends Event implements Cancellable {
     private final PlayerConnect playerConnect;
 
     private long xp;
+
+    private List<String> commands = null;
 
     public PlayerLostXPEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long xp) {
         this.plugin = PvPLevels.getInstance();
@@ -51,6 +55,10 @@ public class PlayerLostXPEvent extends Event implements Cancellable {
         this.xp = xp;
     }
 
+    public void setCommands(final List<String> commands) {
+        this.commands = commands;
+    }
+
     public void execute() {
         if (xp < 0) {
             return;
@@ -58,11 +66,15 @@ public class PlayerLostXPEvent extends Event implements Cancellable {
         playerConnect.setXp(xp);
         final boolean loseLevel = plugin.getXPManager().loseLevel(player, entity, playerConnect);
         if (!loseLevel) {
-            if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override")) {
-                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp.lose"));
-            } else {
-                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override") + ".xp.lose"));
+            if (commands == null) {
+                final String path = playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override";
+                if (!plugin.getFileUtils().levels.contains(path)) {
+                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp.lose"));
+                } else {
+                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".xp.lose"));
+                }
             }
+            plugin.getXPManager().sendCommands(player, commands);
         }
     }
 

@@ -25,11 +25,11 @@ public class EntityDeath implements Listener {
         if (plugin.lastDamagers.containsKey(uuid)) {
             final Player target = plugin.getServer().getPlayer(UUID.fromString(plugin.lastDamagers.get(uuid)));
             if (target != null && target.isOnline()) {
-                plugin.getXPManager().entityCheck(e.getEntity(), target);
+                plugin.getXPManager().entityCheck(target, e.getEntity());
             }
             plugin.lastDamagers.remove(uuid);
             return;
         }
-        plugin.getXPManager().entityCheck(entity, entity.getKiller());
+        plugin.getXPManager().entityCheck(entity.getKiller(), entity);
     }
 }

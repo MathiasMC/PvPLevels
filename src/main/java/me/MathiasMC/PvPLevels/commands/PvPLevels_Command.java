@@ -1,10 +1,7 @@
 package me.MathiasMC.PvPLevels.commands;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
-import me.MathiasMC.PvPLevels.api.events.PlayerLevelDownEvent;
-import me.MathiasMC.PvPLevels.api.events.PlayerLevelUPEvent;
-import me.MathiasMC.PvPLevels.api.events.PlayerLostXPEvent;
-import me.MathiasMC.PvPLevels.api.events.PlayerGetXPEvent;
+import me.MathiasMC.PvPLevels.api.events.*;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.utils.GenerateThread;
 import net.md_5.bungee.api.ChatMessageType;
@@ -484,19 +481,18 @@ public class PvPLevels_Command implements CommandExecutor {
                                     } else if (args[1].equalsIgnoreCase("level")) {
                                         final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         triggerReset(type, sender, target, "level", playerConnect.getLevel());
-                                        playerConnect.setLevel(plugin.getFileUtils().config.getLong("start-level"));
+                                        playerConnect.setLevel(plugin.getStartLevel());
                                         playerConnect.setXp(0L);
                                     } else if (args[1].equalsIgnoreCase("killstreak")) {
                                         final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         triggerReset(type, sender, target, "killstreak", playerConnect.getKillstreak());
-                                        playerConnect.setKillstreak(0L);
                                     } else if (args[1].equalsIgnoreCase("stats")) {
                                         if (args.length == 4) {
                                             final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                             playerConnect.setKills(0L);
                                             playerConnect.setDeaths(0L);
                                             playerConnect.setXp(0L);
-                                            playerConnect.setLevel(plugin.getFileUtils().config.getLong("start-level"));
+                                            playerConnect.setLevel(plugin.getStartLevel());
                                             playerConnect.setKillstreak(0L);
                                             playerConnect.setKillstreakTop(0L);
                                             if (Boolean.parseBoolean(args[2])) {
@@ -578,12 +574,12 @@ public class PvPLevels_Command implements CommandExecutor {
                                                     final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(target, null, playerConnect, set);
                                                     playerGetXPEvent.execute();
                                                 } else {
-                                                    playerConnect.setLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
+                                                    playerConnect.setXpLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                     final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
                                                     playerLostXPEvent.execute();
                                                 }
                                             } else {
-                                                playerConnect.setLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
+                                                playerConnect.setXpLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                 final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
                                                 playerLostXPEvent.execute();
                                             }
@@ -909,23 +905,12 @@ public class PvPLevels_Command implements CommandExecutor {
         return true;
     }
 
-    private ArrayList<Long> xpList(final PlayerConnect playerConnect) {
-        final ArrayList<Long> xp = new ArrayList<>();
-        for (String level : plugin.getFileUtils().levels.getConfigurationSection(playerConnect.getGroup()).getKeys(false)) {
-            if (!level.equalsIgnoreCase("execute")) {
-                xp.add(plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + level + ".xp"));
-            }
-        }
-        return xp;
-    }
-
     private void triggerReset(final String type, final CommandSender sender, final Player target, String path, final long set) {
         final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
-        playerConnect.save();
         if (path.contains("killstreak")) {
             if (plugin.getFileUtils().config.contains("killstreak." + playerConnect.getGroup())) {
                 ArrayList<Integer> list = new ArrayList<>();
-                final long killstreak = playerConnect.getKillstreak();
+                long killstreak = playerConnect.getKillstreak();
                 for (String select : plugin.getFileUtils().config.getConfigurationSection("killstreak." + playerConnect.getGroup()).getKeys(false)) {
                     if (!select.equalsIgnoreCase("worlds") && !select.equalsIgnoreCase("get")) {
                         if (killstreak >= Integer.parseInt(select)) {
@@ -934,11 +919,16 @@ public class PvPLevels_Command implements CommandExecutor {
                     }
                 }
                 if (!list.isEmpty()) {
-                    plugin.getXPManager().sendCommands(target, plugin.getFileUtils().config.getStringList("killstreak." + playerConnect.getGroup() + "." + +list.get(list.size() - 1) + ".lost"));
+                    killstreak = list.get(list.size() - 1);
+                }
+                final PlayerLostKillStreakEvent playerLostKillStreakEvent = new PlayerLostKillStreakEvent(target, playerConnect, killstreak);
+                plugin.getServer().getPluginManager().callEvent(playerLostKillStreakEvent);
+                if (!playerLostKillStreakEvent.isCancelled()) {
+                    playerLostKillStreakEvent.execute();
                 }
             }
-            path = "killstreak";
         }
+        playerConnect.save();
         if (type.equalsIgnoreCase("player")) {
             for (String message : plugin.getFileUtils().language.getStringList("reset." + path + ".reset")) {
                 plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', message.replace("{player}", sender.getName()).replace("{target}", target.getName())));

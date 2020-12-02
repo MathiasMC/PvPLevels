@@ -8,6 +8,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.List;
+
 public class PlayerGetXPEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -24,6 +26,8 @@ public class PlayerGetXPEvent extends Event implements Cancellable {
     private long xp;
 
     private String key;
+
+    private List<String> commands = null;
 
     public PlayerGetXPEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long xp) {
         this.plugin = PvPLevels.getInstance();
@@ -61,17 +65,25 @@ public class PlayerGetXPEvent extends Event implements Cancellable {
         this.key = key;
     }
 
+    public void setCommands(final List<String> commands) {
+        this.commands = commands;
+    }
+
     public void execute() {
         if (!plugin.getXPManager().isMaxLevel(playerConnect)) {
             playerConnect.setXp(xp);
         }
         final boolean getLevel = plugin.getXPManager().getLevel(player, entity, playerConnect);
         if (!getLevel) {
-            if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override")) {
-                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp." + key));
-            } else {
-                plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override") + ".xp." + key));
+            if (commands == null) {
+                final String path = playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override";
+                if (!plugin.getFileUtils().levels.contains(path)) {
+                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp." + key));
+                } else {
+                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".xp." + key));
+                }
             }
+            plugin.getXPManager().sendCommands(player, commands);
         }
         if (playerConnect.getSave() >= plugin.getFileUtils().config.getInt("mysql.save")) {
             playerConnect.save();

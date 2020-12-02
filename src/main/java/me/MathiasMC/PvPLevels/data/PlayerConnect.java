@@ -25,13 +25,13 @@ public class PlayerConnect {
 
     private double multiplier;
 
-    private int multiplierTime;
+    private long multiplierTime;
 
-    private int multiplierTimeLeft;
+    private long multiplierTimeLeft;
 
     private Timestamp time;
 
-    private int save;
+    private long save;
 
     private String xpType = "";
 
@@ -56,70 +56,6 @@ public class PlayerConnect {
         this.multiplierTime = Integer.parseInt(split[1]);
         this.multiplierTimeLeft = Integer.parseInt(split[2]);
         this.time = Timestamp.valueOf(data[8]);
-    }
-
-    public void setGroup(final String group) {
-        this.group = group;
-    }
-
-    public void setKills(final long kills) {
-        this.kills = kills;
-    }
-
-    public void setDeaths(final long deaths) {
-        this.deaths = deaths;
-    }
-
-    public void setXp(final long xp) {
-        this.xp = xp;
-    }
-
-    public void setLevel(final long level) {
-        this.level = level;
-    }
-
-    public void setKillstreak(final long killstreak) {
-        this.killstreak = killstreak;
-    }
-
-    public void setKillstreakTop(final long killstreak_top) {
-        this.killstreakTop = killstreak_top;
-    }
-
-    public void setMultiplier(final double multiplier) {
-        this.multiplier = multiplier;
-    }
-
-    public void setMultiplierTime(final int multiplier_time) {
-        this.multiplierTime = multiplier_time;
-    }
-
-    public void setMultiplierTimeLeft(final int multiplier_time_left) {
-        this.multiplierTimeLeft = multiplier_time_left;
-    }
-
-    public void setTime() {
-        this.time = new Timestamp(new Date().getTime());
-    }
-
-    public void setSave(final int save) {
-        this.save = save;
-    }
-
-    public void setXpType(final String xpType) {
-        this.xpType = xpType;
-    }
-
-    public void setXpLast(final long xpLast) {
-        this.xpLast = xpLast;
-    }
-
-    public void setLost(final long xpLost) {
-        this.xpLost = xpLost;
-    }
-
-    public void setItem(final long xpItem) {
-        this.xpItem = xpItem;
     }
 
     public String getGroup() {
@@ -154,11 +90,11 @@ public class PlayerConnect {
         return this.multiplier;
     }
 
-    public int getMultiplierTime() {
+    public long getMultiplierTime() {
         return this.multiplierTime;
     }
 
-    public int getMultiplierTimeLeft() {
+    public long getMultiplierTimeLeft() {
         return this.multiplierTimeLeft;
     }
 
@@ -182,8 +118,72 @@ public class PlayerConnect {
         return this.xpItem;
     }
 
-    public int getSave() {
+    public long getSave() {
         return this.save;
+    }
+
+    public void setGroup(final String group) {
+        this.group = group;
+    }
+
+    public void setKills(final long kills) {
+        this.kills = kills;
+    }
+
+    public void setDeaths(final long deaths) {
+        this.deaths = deaths;
+    }
+
+    public void setXp(final long xp) {
+        this.xp = xp;
+    }
+
+    public void setLevel(final long level) {
+        this.level = level;
+    }
+
+    public void setKillstreak(final long killstreak) {
+        this.killstreak = killstreak;
+    }
+
+    public void setKillstreakTop(final long killstreak_top) {
+        this.killstreakTop = killstreak_top;
+    }
+
+    public void setMultiplier(final double multiplier) {
+        this.multiplier = multiplier;
+    }
+
+    public void setMultiplierTime(final long multiplierTime) {
+        this.multiplierTime = multiplierTime;
+    }
+
+    public void setMultiplierTimeLeft(final long multiplierTimeLeft) {
+        this.multiplierTimeLeft = multiplierTimeLeft;
+    }
+
+    public void setTime() {
+        this.time = new Timestamp(new Date().getTime());
+    }
+
+    public void setSave(final long save) {
+        this.save = save;
+    }
+
+    public void setXpType(final String xpType) {
+        this.xpType = xpType;
+    }
+
+    public void setXpLast(final long xpLast) {
+        this.xpLast = xpLast;
+    }
+
+    public void setXpLost(final long xpLost) {
+        this.xpLost = xpLost;
+    }
+
+    public void setXpItem(final long xpItem) {
+        this.xpItem = xpItem;
     }
 
     public void save() {

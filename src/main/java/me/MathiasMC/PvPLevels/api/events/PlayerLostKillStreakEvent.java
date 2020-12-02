@@ -2,7 +2,6 @@ package me.MathiasMC.PvPLevels.api.events;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -10,7 +9,7 @@ import org.bukkit.event.HandlerList;
 
 import java.util.List;
 
-public class PlayerLevelUPEvent extends Event implements Cancellable {
+public class PlayerLostKillStreakEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final PvPLevels plugin;
@@ -19,62 +18,50 @@ public class PlayerLevelUPEvent extends Event implements Cancellable {
 
     private final Player player;
 
-    private final Entity entity;
-
     private final PlayerConnect playerConnect;
 
-    private long level;
+    private long killstreak;
 
     private List<String> commands = null;
 
-    public PlayerLevelUPEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long level) {
+    public PlayerLostKillStreakEvent(final Player player, final PlayerConnect playerConnect, final long killstreak) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
-        this.entity = entity;
         this.playerConnect = playerConnect;
-        this.level = level;
+        this.killstreak = killstreak;
     }
 
     public Player getPlayer() {
         return this.player;
     }
 
-    public Entity getEntity() {
-        return this.entity;
-    }
-
     public PlayerConnect getPlayerConnect() {
         return this.playerConnect;
     }
 
-    public long getLevel() {
-        return this.level;
+    public long getKillstreak() {
+        return this.killstreak;
     }
 
-    public void setLevel(final long level) {
-        this.level = level;
+    public void setKillstreak(final long killstreak) {
+        this.killstreak = killstreak;
     }
 
     public void setCommands(final List<String> commands) {
         this.commands = commands;
     }
 
-    public void setXp() {
-        playerConnect.setXp(plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + level + ".xp"));
-    }
-
     public void execute() {
         if (commands == null) {
-            final String path = playerConnect.getGroup() + "." + level + ".override";
-            if (!plugin.getFileUtils().levels.contains(path)) {
-                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".execute") + ".level.up"));
-            } else {
-                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".level.up"));
+            final String path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".lost";
+            if (!plugin.getFileUtils().config.contains(path)) {
+                playerConnect.setKillstreak(0L);
+                return;
             }
+            setCommands(plugin.getFileUtils().config.getStringList(path));
         }
         plugin.getXPManager().sendCommands(player, commands);
-        playerConnect.setLevel(level);
-        playerConnect.save();
+        playerConnect.setKillstreak(0L);
     }
 
     @Override
@@ -96,3 +83,4 @@ public class PlayerLevelUPEvent extends Event implements Cancellable {
         return handlers;
     }
 }
+

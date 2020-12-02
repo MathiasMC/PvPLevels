@@ -245,7 +245,7 @@ public class StatsManager {
     }
 
     public String getMultiplierTime(final PlayerConnect playerConnect) {
-        final int multiplier = playerConnect.getMultiplierTime();
+        final long multiplier = playerConnect.getMultiplierTime();
         if (multiplier == 0) {
             return plugin.getFileUtils().language.getString("translate.xp.multiplier.time");
         }
@@ -253,7 +253,7 @@ public class StatsManager {
     }
 
     public String getMultiplierTimeLeft(final PlayerConnect playerConnect) {
-        final int multiplier = playerConnect.getMultiplierTimeLeft();
+        final long multiplier = playerConnect.getMultiplierTimeLeft();
         if (multiplier == 0) {
             return plugin.getFileUtils().language.getString("translate.xp.multiplier.left");
         }

@@ -7,6 +7,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.List;
+
 public class PlayerKillStreakTopEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -21,6 +23,8 @@ public class PlayerKillStreakTopEvent extends Event implements Cancellable {
     private final PlayerConnect playerConnect;
 
     private long killstreak;
+
+    private List<String> commands = null;
 
     public PlayerKillStreakTopEvent(final Player player, final Player killed, final PlayerConnect playerConnect, final long killstreak) {
         this.plugin = PvPLevels.getInstance();
@@ -44,6 +48,26 @@ public class PlayerKillStreakTopEvent extends Event implements Cancellable {
 
     public long getKillstreak() {
         return this.killstreak;
+    }
+
+    public void setKillstreak(final long killstreak) {
+        this.killstreak = killstreak;
+    }
+
+    public void setCommands(final List<String> commands) {
+        this.commands = commands;
+    }
+
+    public void execute() {
+        playerConnect.setKillstreakTop(killstreak);
+        if (commands == null) {
+            final String path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".top";
+            if (!plugin.getFileUtils().config.contains(path)) {
+                return;
+            }
+            setCommands(plugin.getFileUtils().config.getStringList(path));
+        }
+        plugin.getXPManager().sendCommands(player, commands);
     }
 
     @Override

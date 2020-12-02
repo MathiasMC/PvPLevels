@@ -8,6 +8,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.List;
+
 public class PlayerDeathEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -22,6 +24,8 @@ public class PlayerDeathEvent extends Event implements Cancellable {
     private final PlayerConnect playerConnect;
 
     private long deaths;
+
+    private List<String> commands = null;
 
     public PlayerDeathEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long deaths) {
         this.plugin = PvPLevels.getInstance();
@@ -51,17 +55,20 @@ public class PlayerDeathEvent extends Event implements Cancellable {
         this.deaths = deaths;
     }
 
+    public void setCommands(final List<String> commands) {
+        this.commands = commands;
+    }
+
     public void execute() {
         playerConnect.setDeaths(deaths);
-        if (entity != null) {
-            for (String command : plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".player")) {
-                plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.getPlaceholderManager().replacePlaceholders(player, false, command));
-            }
-        } else {
-            for (String command : plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other")) {
-                plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.getPlaceholderManager().replacePlaceholders(player, false, command));
+        if (commands == null) {
+            if (entity != null) {
+                setCommands(plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".player"));
+            } else {
+                setCommands(plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other"));
             }
         }
+        plugin.getXPManager().sendCommands(player, commands);
     }
 
     @Override

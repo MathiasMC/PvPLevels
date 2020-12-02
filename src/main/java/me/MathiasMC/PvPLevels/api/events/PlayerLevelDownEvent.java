@@ -8,6 +8,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.List;
+
 public class PlayerLevelDownEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -22,6 +24,8 @@ public class PlayerLevelDownEvent extends Event implements Cancellable {
     private final PlayerConnect playerConnect;
 
     private long level;
+
+    private List<String> commands = null;
 
     public PlayerLevelDownEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long level) {
         this.plugin = PvPLevels.getInstance();
@@ -51,6 +55,10 @@ public class PlayerLevelDownEvent extends Event implements Cancellable {
         this.level = level;
     }
 
+    public void setCommands(final List<String> commands) {
+        this.commands = commands;
+    }
+
     public void setXp() {
         playerConnect.setXp(plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + level + ".xp"));
     }
@@ -58,11 +66,15 @@ public class PlayerLevelDownEvent extends Event implements Cancellable {
     public void execute() {
         playerConnect.setLevel(level);
         playerConnect.save();
-        if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".override")) {
-            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".execute") + ".level.down"));
-        } else {
-            plugin.getXPManager().sendCommands(player, plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".override") + ".level.down"));
+        if (commands == null) {
+            final String path = playerConnect.getGroup() + "." + level + ".override";
+            if (!plugin.getFileUtils().levels.contains(path)) {
+                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".execute") + ".level.down"));
+            } else {
+                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".level.down"));
+            }
         }
+        plugin.getXPManager().sendCommands(player, commands);
     }
 
     @Override

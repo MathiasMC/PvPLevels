@@ -7,6 +7,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.List;
+
 public class PlayerKillStreakEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -21,6 +23,8 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
     private final PlayerConnect playerConnect;
 
     private long killstreak;
+
+    private List<String> commands = null;
 
     public PlayerKillStreakEvent(final Player player, final Player killed, final PlayerConnect playerConnect, final long killstreak) {
         this.plugin = PvPLevels.getInstance();
@@ -50,20 +54,30 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
         this.killstreak = killstreak;
     }
 
+    public void setCommands(final List<String> commands) {
+        this.commands = commands;
+    }
+
     public void execute() {
         playerConnect.setKillstreak(killstreak);
-        String path = "killstreak." + playerConnect.getGroup() + ".get";
-        final String getPath = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".get";
-        if (killstreak > playerConnect.getKillstreakTop()) {
-            final PlayerKillStreakTopEvent playerKillStreakTopEvent = new PlayerKillStreakTopEvent(player, killed, playerConnect, killstreak);
-            plugin.getServer().getPluginManager().callEvent(playerKillStreakTopEvent);
-            if (!playerKillStreakTopEvent.isCancelled()) {
-                path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".top";
+        if (commands == null) {
+            if (killstreak > playerConnect.getKillstreakTop()) {
+                final PlayerKillStreakTopEvent playerKillStreakTopEvent = new PlayerKillStreakTopEvent(player, killed, playerConnect, killstreak);
+                plugin.getServer().getPluginManager().callEvent(playerKillStreakTopEvent);
+                if (playerKillStreakTopEvent.isCancelled()) {
+                    return;
+                }
+                playerKillStreakTopEvent.execute();
+                return;
             }
-        } else if (plugin.getFileUtils().config.contains(getPath)) {
-            path = getPath;
+            final String path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".get";
+            if (plugin.getFileUtils().config.contains(path)) {
+                setCommands(plugin.getFileUtils().config.getStringList(path));
+            } else {
+                setCommands(plugin.getFileUtils().config.getStringList("killstreak." + playerConnect.getGroup() + ".get"));
+            }
         }
-        plugin.getXPManager().sendCommands(player, plugin.getFileUtils().config.getStringList(path));
+        plugin.getXPManager().sendCommands(player, commands);
     }
 
     @Override

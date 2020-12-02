@@ -119,7 +119,7 @@ public class PvPLevels extends JavaPlugin {
                     final OfflinePlayer offlinePlayer = iterator.next();
                     if (offlinePlayer.isOnline()) {
                         final PlayerConnect playerConnect = getPlayerConnect(offlinePlayer.getUniqueId().toString());
-                        int left = playerConnect.getMultiplierTimeLeft();
+                        long left = playerConnect.getMultiplierTimeLeft();
                         if (left > 0) {
                             left--;
                             playerConnect.setMultiplierTimeLeft(left);
