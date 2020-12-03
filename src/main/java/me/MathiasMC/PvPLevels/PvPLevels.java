@@ -6,6 +6,7 @@ import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.data.Purge;
 import me.MathiasMC.PvPLevels.listeners.*;
 import me.MathiasMC.PvPLevels.managers.*;
+import me.MathiasMC.PvPLevels.support.ActionBar_1_8;
 import me.MathiasMC.PvPLevels.support.PlaceholderAPI;
 import me.MathiasMC.PvPLevels.utils.FileUtils;
 import me.MathiasMC.PvPLevels.utils.MetricsLite;
@@ -38,6 +39,8 @@ public class PvPLevels extends JavaPlugin {
     private KillSessionManager killSessionManager;
     private StatsManager statsManager;
     private XPManager xpManager;
+
+    public ActionBar_1_8 actionBar_1_8;
 
     private final Map<String, PlayerConnect> playerConnect = new HashMap<>();
 
@@ -80,6 +83,9 @@ public class PvPLevels extends JavaPlugin {
         statsManager = new StatsManager(this);
         xpManager = new XPManager(this);
         calculateManager = new CalculateManager(this);
+        if (getServer().getVersion().contains("1.8")) {
+            actionBar_1_8 = new ActionBar_1_8(this);
+        }
 
         if (database.set()) {
             getServer().getPluginManager().registerEvents(new PlayerLogin(this), this);
