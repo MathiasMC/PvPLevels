@@ -6,10 +6,13 @@ import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.utils.GenerateThread;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_8_R3.ChatComponentText;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -285,24 +288,25 @@ public class PvPLevels_Command implements CommandExecutor {
                                         for (int i = 3; i < args.length; i++) {
                                             sb.append(args[i]).append(" ");
                                         }
-                                        try {
-                                            int seconds = Integer.parseInt(args[2]);
-                                            new BukkitRunnable() {
-                                                int time = 0;
+                                        int seconds = Integer.parseInt(args[2]);
+                                        new BukkitRunnable() {
+                                            int time = 0;
 
-                                                @Override
-                                                public void run() {
-                                                    if (time >= seconds) {
-                                                        this.cancel();
-                                                    } else {
-                                                        time++;
+                                            @Override
+                                            public void run() {
+                                                if (time >= seconds) {
+                                                    this.cancel();
+                                                } else {
+                                                    time++;
+                                                    if (!plugin.getServer().getVersion().contains("1.8")) {
                                                         target.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, sb.toString().trim()))));
+                                                    } else {
+                                                        final PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, sb.toString().trim()))), (byte)2);
+                                                        ((CraftPlayer) target).getHandle().playerConnection.sendPacket(packet);
                                                     }
                                                 }
-                                            }.runTaskTimer(plugin, 0, 20);
-                                        } catch (NoSuchMethodError exception) {
-                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThis command is not supported in this version."));
-                                        }
+                                            }
+                                        }.runTaskTimer(plugin, 0, 20);
                                     } else {
                                         if (type.equalsIgnoreCase("player")) {
                                             for (String message : plugin.getFileUtils().language.getStringList("actionbar.number")) {
