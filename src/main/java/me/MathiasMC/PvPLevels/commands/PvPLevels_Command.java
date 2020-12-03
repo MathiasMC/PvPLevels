@@ -252,10 +252,10 @@ public class PvPLevels_Command implements CommandExecutor {
                                     }
                                     String text = sb.toString().trim();
                                     if (!text.contains("\\n")) {
-                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
+                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, text)));
                                     } else {
                                         for (String message : text.split(Pattern.quote("\\n"))) {
-                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, message)));
                                         }
                                     }
                                 } else {
