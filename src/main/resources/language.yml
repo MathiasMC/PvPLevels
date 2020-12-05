@@ -179,7 +179,7 @@ multiplier:
   permission:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels <player> <3> <seconds>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels multiplier <player> <3> <seconds>'
   online:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   double:
@@ -398,7 +398,7 @@ console:
       - '&7[&f&lP&b&lL&7] &f&l» &7You have set level &b{level} &7to &b{target}&7.'
   multiplier:
     usage:
-      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels <player> <3> <seconds>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels multiplier <player> <3> <seconds>'
     online:
       - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     double:
