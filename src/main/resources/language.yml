@@ -35,7 +35,7 @@ help:
     - 'pvplevels message {player} &f&l» &b/pvplevels message <player> <text>'
     - 'pvplevels message {player} &f&l» &b/pvplevels actionbar <player> <seconds> <text>'
     - 'pvplevels message {player} &f&l» &b/pvplevels group set/reset <player> <groupName (set)>'
-    - 'pvplevels message {player} &f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
+    - 'pvplevels message {player} &f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <player> <resetGroup (stats)>'
     - 'pvplevels message {player} &f&l» &b/pvplevels xp/level <player> <+-amount>'
     - 'pvplevels message {player} &f&l» &b/pvplevels stats <player>'
     - 'pvplevels message {player} &f&l» &b/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
@@ -111,7 +111,7 @@ reset:
   permission:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset <killstreak, stats> <player>'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset <kills, deaths, level, killstreak, stats> <player> <resetGroup (stats)>'
   online:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   found:
@@ -294,7 +294,7 @@ console:
       - '&f&l» &b/pvplevels message <player> <text>'
       - '&f&l» &b/pvplevels actionbar <player> <seconds> <text>'
       - '&f&l» &b/pvplevels group set/reset <player> <groupName (set)>'
-      - '&f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <resetGroup (stats)>'
+      - '&f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <player> <resetGroup (stats)>'
       - '&f&l» &b/pvplevels xp/level <player> <+-amount>'
       - '&f&l» &b/pvplevels stats <player>'
       - '&f&l» &b/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
@@ -352,7 +352,7 @@ console:
         - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7group is now set to &b{group}&7.'
   reset:
     usage:
-      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset <killstreak, stats> <player>'
+      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset <kills, deaths, level, killstreak, stats> <player> <resetGroup (stats)>'
     online:
       - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     found:
