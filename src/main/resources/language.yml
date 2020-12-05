@@ -200,86 +200,78 @@ stats:
   online:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   message:
-    - '&7&m---------------------------------------------'
-    - '&f&lPvP&b&lStats'
-    - '&7Own stats:'
-    - '&7Kills: &f&l» &b{kills}'
-    - '&7Deaths: &f&l» &b{deaths}'
-    - '&7XP: &f&l» &b{xp}'
-    - '&7Level: &f&l» &b{level}'
-    - '&7KDR: &f&l» &b{kdr}'
-    - '&7Kill Factor: &f&l» &b{kill_factor}'
-    - '&7KillStreak: &f&l» &b{killstreak}'
-    - '&7Top KillStreak: &f&l» &b{killstreak_top}'
-    - '&7XP Required: &f&l» &b{xp_required}'
-    - '&7XP Progress: &f&l» &b{xp_progress}%'
-    - '&b{xp_progress_style}'
-    - '&7Group &f&l» &b{level_group}'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lPvP&b&lStats\n
+&7Own stats:\n
+&7Kills: &f&l» &b{kills}\n
+&7Deaths: &f&l» &b{deaths}\n
+&7XP: &f&l» &b{xp}\n
+&7Level: &f&l» &b{level}\n
+&7KDR: &f&l» &b{kdr}\n
+&7Kill Factor: &f&l» &b{kill_factor}\n
+&7KillStreak: &f&l» &b{killstreak}\n
+&7Top KillStreak: &f&l» &b{killstreak_top}\n
+&7XP Required: &f&l» &b{xp_required}\n
+&7XP Progress: &f&l» &b{xp_progress}%\n
+&b{xp_progress_style}\n
+&7Group &f&l» &b{level_group}\n&7&m---------------------------------------------'
   target:
-    - '&7&m---------------------------------------------'
-    - '&f&lPvP&b&lStats'
-    - '&7Own stats:'
-    - '&7Kills: &f&l» &b{kills}'
-    - '&7Deaths: &f&l» &b{deaths}'
-    - '&7XP: &f&l» &b{xp}'
-    - '&7Level: &f&l» &b{level}'
-    - '&7KDR: &f&l» &b{kdr}'
-    - '&7Kill Factor: &f&l» &b{kill_factor}'
-    - '&7KillStreak: &f&l» &b{killstreak}'
-    - '&7Top KillStreak: &f&l» &b{killstreak_top}'
-    - '&7XP Required: &f&l» &b{xp_required}'
-    - '&7XP Progress: &f&l» &b{xp_progress}%'
-    - '&b{xp_progress_style}'
-    - '&7Group &f&l» &b{level_group}'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lPvP&b&lStats\n
+&7Stats: &f&l» &b{target}\n
+&7Kills: &f&l» &b{kills}\n
+&7Deaths: &f&l» &b{deaths}\n
+&7XP: &f&l» &b{xp}\n
+&7Level: &f&l» &b{level}\n
+&7KDR: &f&l» &b{kdr}\n
+&7Kill Factor: &f&l» &b{kill_factor}\n
+&7KillStreak: &f&l» &b{killstreak}\n
+&7Top KillStreak: &f&l» &b{killstreak_top}\n
+&7XP Required: &f&l» &b{xp_required}\n
+&7XP Progress: &f&l» &b{xp_progress}%\n
+&b{xp_progress_style}\n
+&7Group &f&l» &b{level_group}\n&7&m---------------------------------------------'
 top:
   permission:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels top <kills, deaths, xp, level, killstreak, killstreak_top>'
   kills:
-    - '&7&m---------------------------------------------'
-    - '&f&lTop&b&lKills'
-    - '&7[&b1&7] &b%pvplevels_top_1_kills_name% &f&l» &b%pvplevels_top_1_kills%'
-    - '&7[&b2&7] &b%pvplevels_top_2_kills_name% &f&l» &b%pvplevels_top_2_kills%'
-    - '&7[&b3&7] &b%pvplevels_top_3_kills_name% &f&l» &b%pvplevels_top_3_kills%'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lTop&b&lKills\n
+&7[&b1&7] &b%pvplevels_top_1_kills_name% &f&l» &b%pvplevels_top_1_kills%\n
+&7[&b2&7] &b%pvplevels_top_2_kills_name% &f&l» &b%pvplevels_top_2_kills%\n
+&7[&b3&7] &b%pvplevels_top_3_kills_name% &f&l» &b%pvplevels_top_3_kills%\n&7&m---------------------------------------------'
   deaths:
-    - '&7&m---------------------------------------------'
-    - '&f&lTop&b&lDeaths'
-    - '&7[&b1&7] &b%pvplevels_top_1_deaths_name% &f&l» &b%pvplevels_top_1_deaths%'
-    - '&7[&b2&7] &b%pvplevels_top_2_deaths_name% &f&l» &b%pvplevels_top_2_deaths%'
-    - '&7[&b3&7] &b%pvplevels_top_3_deaths_name% &f&l» &b%pvplevels_top_3_deaths%'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lTop&b&lDeaths\n
+&7[&b1&7] &b%pvplevels_top_1_deaths_name% &f&l» &b%pvplevels_top_1_deaths%\n
+&7[&b2&7] &b%pvplevels_top_2_deaths_name% &f&l» &b%pvplevels_top_2_deaths%\n
+&7[&b3&7] &b%pvplevels_top_3_deaths_name% &f&l» &b%pvplevels_top_3_deaths%\n&7&m---------------------------------------------'
   xp:
-    - '&7&m---------------------------------------------'
-    - '&f&lTop&b&lXP'
-    - '&7[&b1&7] &b%pvplevels_top_1_xp_name% &f&l» &b%pvplevels_top_1_xp%'
-    - '&7[&b2&7] &b%pvplevels_top_2_xp_name% &f&l» &b%pvplevels_top_2_xp%'
-    - '&7[&b3&7] &b%pvplevels_top_3_xp_name% &f&l» &b%pvplevels_top_3_xp%'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lTop&b&lXP\n
+&7[&b1&7] &b%pvplevels_top_1_xp_name% &f&l» &b%pvplevels_top_1_xp%\n
+&7[&b2&7] &b%pvplevels_top_2_xp_name% &f&l» &b%pvplevels_top_2_xp%\n
+&7[&b3&7] &b%pvplevels_top_3_xp_name% &f&l» &b%pvplevels_top_3_xp%\n&7&m---------------------------------------------'
   level:
-    - '&7&m---------------------------------------------'
-    - '&f&lTop&b&lLevel'
-    - '&7[&b1&7] &b%pvplevels_top_1_level_name% &f&l» &b%pvplevels_top_1_level%'
-    - '&7[&b2&7] &b%pvplevels_top_2_level_name% &f&l» &b%pvplevels_top_2_level%'
-    - '&7[&b3&7] &b%pvplevels_top_3_level_name% &f&l» &b%pvplevels_top_3_level%'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lTop&b&lLevel\n
+&7[&b1&7] &b%pvplevels_top_1_level_name% &f&l» &b%pvplevels_top_1_level%\n
+&7[&b2&7] &b%pvplevels_top_2_level_name% &f&l» &b%pvplevels_top_2_level%\n
+&7[&b3&7] &b%pvplevels_top_3_level_name% &f&l» &b%pvplevels_top_3_level%\n&7&m---------------------------------------------'
   killstreak:
-    - '&7&m---------------------------------------------'
-    - '&f&lCurrentTop&b&lKillStreak'
-    - '&7[&b1&7] &b%pvplevels_top_1_killstreak_name% &f&l» &b%pvplevels_top_1_killstreak%'
-    - '&7[&b2&7] &b%pvplevels_top_2_killstreak_name% &f&l» &b%pvplevels_top_2_killstreak%'
-    - '&7[&b3&7] &b%pvplevels_top_3_killstreak_name% &f&l» &b%pvplevels_top_3_killstreak%'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lCurrentTop&b&lKillStreak\n
+&7[&b1&7] &b%pvplevels_top_1_killstreak_name% &f&l» &b%pvplevels_top_1_killstreak%\n
+&7[&b2&7] &b%pvplevels_top_2_killstreak_name% &f&l» &b%pvplevels_top_2_killstreak%\n
+&7[&b3&7] &b%pvplevels_top_3_killstreak_name% &f&l» &b%pvplevels_top_3_killstreak%\n&7&m---------------------------------------------'
   killstreak_top:
-    - '&7&m---------------------------------------------'
-    - '&f&lAllTime&b&lTopKillStreak'
-    - '&7[&b1&7] &b%pvplevels_top_1_killstreak_top_name% &f&l» &b%pvplevels_top_1_killstreak_top%'
-    - '&7[&b2&7] &b%pvplevels_top_2_killstreak_top_name% &f&l» &b%pvplevels_top_2_killstreak_top%'
-    - '&7[&b3&7] &b%pvplevels_top_3_killstreak_top_name% &f&l» &b%pvplevels_top_3_killstreak_top%'
-    - '&7&m---------------------------------------------'
+    - 'pvplevels message {player} &7&m---------------------------------------------\n
+&f&lAllTime&b&lTopKillStreak\n
+&7[&b1&7] &b%pvplevels_top_1_killstreak_top_name% &f&l» &b%pvplevels_top_1_killstreak_top%\n
+&7[&b2&7] &b%pvplevels_top_2_killstreak_top_name% &f&l» &b%pvplevels_top_2_killstreak_top%\n
+&7[&b3&7] &b%pvplevels_top_3_killstreak_top_name% &f&l» &b%pvplevels_top_3_killstreak_top%\n&7&m---------------------------------------------'
 console:
   command:
     unknown:
