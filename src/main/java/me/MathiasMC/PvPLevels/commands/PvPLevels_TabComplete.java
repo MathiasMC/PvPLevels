@@ -32,16 +32,6 @@ public class PvPLevels_TabComplete implements TabCompleter {
                     commands.add("reload");
                 }
             }
-            if (player.hasPermission("pvplevels.admin.admin")) {
-                if (args.length == 1) {
-                    commands.add("admin");
-                }
-            }
-            if (player.hasPermission("pvplevels.player.profiles")) {
-                if (args.length == 1) {
-                    commands.add("profiles");
-                }
-            }
             if (player.hasPermission("pvplevels.player.stats")) {
                 if (args.length == 1) {
                     commands.add("stats");
@@ -170,7 +160,7 @@ public class PvPLevels_TabComplete implements TabCompleter {
                     if (args.length == 2) {
                         commands.addAll(getPlayers(args[1]));
                     } else if (args.length == 3) {
-                        commands.add("1.8");
+                        commands.add("3");
                     } else if (args.length == 4) {
                         commands.add("seconds");
                     }
