@@ -67,10 +67,9 @@ public class PlaceholderManager {
                     if (killerName != null) {
                         source = killerName;
                     }
-                } else {
-                    if (plugin.getFileUtils().language.contains("translate.cause." + source)) {
-                        source = plugin.getFileUtils().language.getString("translate.cause." + source);
-                    }
+                }
+                if (plugin.getFileUtils().language.contains("translate.cause." + source)) {
+                    source = plugin.getFileUtils().language.getString("translate.cause." + source);
                 }
             }
             message = message.replace("{source}", source);

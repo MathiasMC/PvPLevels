@@ -280,12 +280,8 @@ public class XPManager {
             if (entityDamageEvent == null) {
                 return null;
             }
-            final String translate = entityDamageEvent.getCause().toString().toUpperCase().replace(" ", "_");
-            if (plugin.getFileUtils().language.contains("translate.cause." + translate)) {
-                return plugin.getFileUtils().language.getString("translate.cause." + translate);
-            }
+            return entityDamageEvent.getCause().toString().toUpperCase().replace(" ", "_");
         }
-        return null;
     }
 
     public String getType(final Entity entity) {

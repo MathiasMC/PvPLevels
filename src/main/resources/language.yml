@@ -512,6 +512,7 @@ translate:
     REDSTONE_ORE: Redstone ore
   cause:
     BLOCK_EXPLOSION: TNT explosion
+    PRIMED_TNT: TNT explosion
     CONTACT: Cactus
     CRAMMING: Mechanical pressure
     CUSTOM: Custom
