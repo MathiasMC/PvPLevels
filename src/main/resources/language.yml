@@ -187,9 +187,9 @@ multiplier:
   number:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   got:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have started an &bx{xp_multiplier} &7multiplier for &b{target}&7, for &b{time}&7.'
+    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have started an &bx{xp_multiplier} &7multiplier for &b{target}&7, for &b{xp_multiplier_time}&7.'
   target:
-    - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7You have got an &bx{xp_multiplier} &7multiplier for &b{time}&7.'
+    - 'pvplevels message {target} &7[&f&lP&b&lL&7] &f&l» &7You have got an &bx{xp_multiplier} &7multiplier for &b{xp_multiplier_time}&7.'
   lost:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Your &bx{xp_multiplier} &7multiplier has run out.'
   join:
@@ -406,7 +406,7 @@ console:
     number:
       - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
     got:
-      - '&7[&f&lP&b&lL&7] &f&l» &7You have started an &bx{xp_multiplier} &7multiplier for &b{target}&7, for &b{time}&7.'
+      - '&7[&f&lP&b&lL&7] &f&l» &7You have started an &bx{xp_multiplier} &7multiplier for &b{target}&7, for &b{xp_multiplier_time}&7.'
 
 # This section is for placeholders
 translate:
