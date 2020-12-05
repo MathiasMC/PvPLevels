@@ -460,6 +460,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                         }
                                         if (set >= plugin.getStartLevel() && plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + set)) {
                                             if (plus) {
+                                                playerConnect.setLevel(set - 1);
                                                 final PlayerLevelUPEvent playerLevelUPEvent = new PlayerLevelUPEvent(target, null, playerConnect, set);
                                                 playerLevelUPEvent.setXp();
                                                 playerLevelUPEvent.execute();
