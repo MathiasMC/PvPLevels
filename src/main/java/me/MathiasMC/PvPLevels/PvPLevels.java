@@ -6,8 +6,9 @@ import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.data.Purge;
 import me.MathiasMC.PvPLevels.listeners.*;
 import me.MathiasMC.PvPLevels.managers.*;
-import me.MathiasMC.PvPLevels.support.ActionBar_1_8;
 import me.MathiasMC.PvPLevels.support.PlaceholderAPI;
+import me.MathiasMC.PvPLevels.support.actionbar.ActionBar;
+import me.MathiasMC.PvPLevels.support.actionbar.ActionBar_1_8_R3;
 import me.MathiasMC.PvPLevels.utils.FileUtils;
 import me.MathiasMC.PvPLevels.utils.MetricsLite;
 import me.MathiasMC.PvPLevels.utils.TextUtils;
@@ -40,7 +41,7 @@ public class PvPLevels extends JavaPlugin {
     private StatsManager statsManager;
     private XPManager xpManager;
 
-    public ActionBar_1_8 actionBar_1_8;
+    public ActionBar actionBar;
 
     private final Map<String, PlayerConnect> playerConnect = new HashMap<>();
 
@@ -65,6 +66,10 @@ public class PvPLevels extends JavaPlugin {
 
     private boolean debug = false;
 
+    public int deathY = -1;
+
+    public boolean isRespawn;
+
     public void onEnable() {
         call = this;
 
@@ -84,7 +89,9 @@ public class PvPLevels extends JavaPlugin {
         xpManager = new XPManager(this);
         calculateManager = new CalculateManager(this);
         if (getServer().getVersion().contains("1.8")) {
-            actionBar_1_8 = new ActionBar_1_8(this);
+            actionBar = new ActionBar_1_8_R3(this);
+        } else {
+            actionBar = new ActionBar(this);
         }
 
         if (database.set()) {
@@ -96,6 +103,11 @@ public class PvPLevels extends JavaPlugin {
             if (fileUtils.config.getBoolean("blocks")) {
                 getServer().getPluginManager().registerEvents(new BlockBreak(this), this);
                 getServer().getPluginManager().registerEvents(new BlockPlace(this), this);
+            }
+            if (fileUtils.config.getBoolean("instant-death.use")) {
+                isRespawn = fileUtils.config.getBoolean("instant-death.respawn");
+                deathY = fileUtils.config.getInt("instant-death.y");
+                getServer().getPluginManager().registerEvents(new PlayerMove(this), this);
             }
             getServer().getPluginManager().registerEvents(new EntityDamageByEntity(this), this);
             getCommand("pvplevels").setExecutor(new PvPLevels_Command(this));
