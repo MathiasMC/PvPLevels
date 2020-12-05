@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -304,7 +305,7 @@ public class XPManager {
 
     private String getEntityKiller(final Player killed, final String group) {
         final EntityDamageEvent entityDamageEvent = killed.getLastDamageCause();
-        String entityType = null;
+        String entityType;
         if (entityDamageEvent instanceof EntityDamageByEntityEvent) {
             Entity entity = ((EntityDamageByEntityEvent) entityDamageEvent).getDamager();
             entityType = entity.getType().toString().toLowerCase();
@@ -315,6 +316,8 @@ public class XPManager {
         } else {
             if (entityDamageEvent != null) {
                 entityType = entityDamageEvent.getCause().toString().toLowerCase();
+            } else {
+                return "void";
             }
         }
         if (!plugin.getFileUtils().config.contains("xp." + group + "." + entityType)) {
