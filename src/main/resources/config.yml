@@ -15,6 +15,15 @@ debug: false
 # Check for blocks and get xp if type found. (disable block break, place event) (Require server restart)
 blocks: true
 
+# Instant death on certain y level
+instant-death:
+  # Use? (Require server restart)
+  use: true
+  # Respawn instant?
+  respawn: true
+  # Y-value for death
+  y: -1
+
 # Database settings
 mysql:
   use: false
