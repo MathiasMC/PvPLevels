@@ -83,6 +83,8 @@ top:
   value: '&cNone'
   excluded:
     - uuid
+  # Update top map every x amount of seconds. (300 = 5 minutes)
+  update: 300
 
 xp-progress-style:
   xp:
