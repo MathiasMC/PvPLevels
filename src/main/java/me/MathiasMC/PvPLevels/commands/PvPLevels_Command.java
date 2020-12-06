@@ -104,7 +104,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                     final Player target = plugin.getServer().getPlayer(args[1]);
                                     if (target != null) {
                                         for (String command : getCommands("stats.target")) {
-                                            dispatchCommand(target, command.replace("{target}", target.getName()));
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, command.replace("{player}", player.getName()).replace("{target}", target.getName()))));
                                         }
                                     } else {
                                         dispatchCommandList(player, "stats.online");
