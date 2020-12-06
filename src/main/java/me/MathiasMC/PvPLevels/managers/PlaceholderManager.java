@@ -77,9 +77,9 @@ public class PlaceholderManager {
         return message
                 .replace("{player}", offlinePlayer.getName())
                 .replace("{uuid}", uuid)
-                .replace("{level_group}", plugin.getStatsManager().getGroup(offlinePlayer))
-                .replace("{level_prefix}", plugin.getStatsManager().getPrefix(offlinePlayer))
-                .replace("{level_suffix}", plugin.getStatsManager().getSuffix(offlinePlayer))
+                .replace("{level_group}", plugin.getStatsManager().getGroup(playerConnect))
+                .replace("{level_prefix}", plugin.getStatsManager().getPrefix(playerConnect))
+                .replace("{level_suffix}", plugin.getStatsManager().getSuffix(playerConnect))
                 .replace("{kills}", String.valueOf(playerConnect.getKills()))
                 .replace("{deaths}", String.valueOf(playerConnect.getDeaths()))
                 .replace("{xp}", String.valueOf(playerConnect.getXp()))

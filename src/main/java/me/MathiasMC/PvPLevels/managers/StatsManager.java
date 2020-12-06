@@ -5,18 +5,33 @@ import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class StatsManager {
 
     private final PvPLevels plugin;
 
+    private LinkedHashMap<String, Long> topKills = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, Long> topDeaths = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, Long> topXp = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, Long> topLevel = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, Long> topKillStreak = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, Long> topKillStreakTop = new LinkedHashMap<>();
+
     public StatsManager(final PvPLevels plugin) {
         this.plugin = plugin;
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, this::updateTopMap,0, plugin.getFileUtils().config.getLong("top.update") * 20);
     }
 
     public String getKDR(final PlayerConnect playerConnect) {
@@ -82,44 +97,64 @@ public class StatsManager {
         }
     }
 
-    public String getPrefix(final OfflinePlayer offlinePlayer) {
-        final PlayerConnect playerConnect = plugin.getPlayerConnect(offlinePlayer.getUniqueId().toString());
+    public String getPrefix(final PlayerConnect playerConnect) {
         long level = playerConnect.getLevel();
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(offlinePlayer, true, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".prefix")));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".prefix"));
     }
 
-    public String getSuffix(final OfflinePlayer offlinePlayer) {
-        final PlayerConnect playerConnect = plugin.getPlayerConnect(offlinePlayer.getUniqueId().toString());
+    public String getSuffix(final PlayerConnect playerConnect) {
         long level = playerConnect.getLevel();
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(offlinePlayer,  true, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix")));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix"));
     }
 
-    public String getGroup(final OfflinePlayer offlinePlayer) {
-        final PlayerConnect playerConnect = plugin.getPlayerConnect(offlinePlayer.getUniqueId().toString());
+    public String getGroup(final PlayerConnect playerConnect) {
         long level = playerConnect.getLevel();
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(offlinePlayer,  true, plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".group")));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".group"));
     }
 
-    public String getTopValue(final String type, final int number, final boolean key, final boolean reverse) {
-        final LinkedHashMap<OfflinePlayer, Long> linkedHashMap = getTopMap(type, reverse);
+    public String getTopKills(final int number, final boolean isName) {
+        return getTop(number - 1, isName, topKills);
+    }
+
+    public String getTopDeaths(final int number, final boolean isName) {
+        return getTop(number - 1, isName, topDeaths);
+    }
+
+    public String getTopXp(final int number, final boolean isName) {
+        return getTop(number - 1, isName, topXp);
+    }
+
+    public String getTopLevel(final int number, final boolean isName) {
+        return getTop(number - 1, isName, topLevel);
+    }
+
+    public String getTopKillStreak(final int number, final boolean isName) {
+        return getTop(number - 1, isName, topKillStreak);
+    }
+
+    public String getTopKillStreakTop(final int number, final boolean isName) {
+        return getTop(number - 1, isName, topKillStreakTop);
+    }
+
+    private String getTop(final int number, final boolean key, final LinkedHashMap<String, Long> topMap) {
         if (key) {
-            final ArrayList<OfflinePlayer> map = new ArrayList<>(linkedHashMap.keySet());
+            final ArrayList<String> map = new ArrayList<>(topMap.keySet());
             if (map.size() > number) {
-                return map.get(number).getName();
+                return plugin.getServer().getOfflinePlayer(UUID.fromString(map.get(number))).getName();
             } else {
                 return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().config.getString("top.name"));
             }
         } else {
-            final ArrayList<Long> map = new ArrayList<>(linkedHashMap.values());
+            final ArrayList<Long> map = new ArrayList<>(topMap.values());
             if (map.size() > number) {
                 return String.valueOf(map.get(number));
             } else {
@@ -128,52 +163,37 @@ public class StatsManager {
         }
     }
 
-    public LinkedHashMap<OfflinePlayer, Long> getTopMap(final String type, final boolean reverse) {
-        final Map<OfflinePlayer, Long> unsorted = new HashMap<>();
+    public void updateTopMap() {
+        final Map<String, Long> unsortedKills = new HashMap<>();
+        final Map<String, Long> unsortedDeaths = new HashMap<>();
+        final Map<String, Long> unsortedXp = new HashMap<>();
+        final Map<String, Long> unsortedLevel = new HashMap<>();
+        final Map<String, Long> unsortedKillStreak = new HashMap<>();
+        final Map<String, Long> unsortedKillStreakTop = new HashMap<>();
         final List<String> excluded = plugin.getFileUtils().config.getStringList("top.excluded");
-        final Set<String> listPlayerConnect = plugin.listPlayerConnect();
         for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
             final String uuid = offlinePlayer.getUniqueId().toString();
-            if (!excluded.contains(uuid) && listPlayerConnect.contains(uuid)) {
-                PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
-                switch (type) {
-                    case "kills":
-                        unsorted.put(offlinePlayer, playerConnect.getKills());
-                        break;
-                    case "deaths":
-                        unsorted.put(offlinePlayer, playerConnect.getDeaths());
-                        break;
-                    case "xp":
-                        unsorted.put(offlinePlayer, playerConnect.getXp());
-                        break;
-                    case "level":
-                        unsorted.put(offlinePlayer, playerConnect.getLevel());
-                        break;
-                    case "killstreak":
-                        unsorted.put(offlinePlayer, playerConnect.getKillstreak());
-                        break;
-                    case "killstreak_top":
-                        unsorted.put(offlinePlayer, playerConnect.getKillstreakTop());
-                        break;
-                    case "lastseen":
-                        unsorted.put(offlinePlayer, playerConnect.getTime().getTime());
-                        break;
-                    case "kdr":
-                        unsorted.put(offlinePlayer, Long.valueOf(getKDR(playerConnect)));
-                        break;
-                    case "killfactor":
-                        unsorted.put(offlinePlayer, Long.valueOf(getKillFactor(playerConnect)));
-                        break;
-                }
+            if (!excluded.contains(uuid)) {
+                final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
+                unsortedKills.put(uuid, playerConnect.getKills());
+                unsortedDeaths.put(uuid, playerConnect.getDeaths());
+                unsortedXp.put(uuid, playerConnect.getXp());
+                unsortedLevel.put(uuid, playerConnect.getLevel());
+                unsortedKillStreak.put(uuid, playerConnect.getKillstreak());
+                unsortedKillStreakTop.put(uuid, playerConnect.getKillstreakTop());
             }
         }
-        final LinkedHashMap<OfflinePlayer, Long> sorted = new LinkedHashMap<>();
-        if (reverse) {
-            unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
-        } else {
-            unsorted.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.naturalOrder())).forEachOrdered(x -> sorted.put(x.getKey(), x.getValue()));
-        }
-        return sorted;
+        topKills = getSortedMap(unsortedKills);
+        topDeaths = getSortedMap(unsortedDeaths);
+        topXp = getSortedMap(unsortedXp);
+        topLevel = getSortedMap(unsortedLevel);
+        topKillStreak = getSortedMap(unsortedKillStreak);
+        topKillStreakTop = getSortedMap(unsortedKillStreakTop);
+    }
+
+
+    private LinkedHashMap<String, Long> getSortedMap(final Map<String, Long> map) {
+        return map.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
     }
 
     private ChatColor getChatColor(final String colorCode){

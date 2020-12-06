@@ -14,7 +14,7 @@ public class ActionBar_1_8_R3 extends ActionBar {
     }
 
     public void sendMessage(final Player player, final String message) {
-        final PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ChatColor.translateAlternateColorCodes('&', PvPLevels.getInstance().getPlaceholderManager().replacePlaceholders(player, false, message))), (byte)2);
+        final PacketPlayOutChat packet = new PacketPlayOutChat(new ChatComponentText(ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(player, false, message))), (byte)2);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     }
 }
