@@ -11,17 +11,21 @@ import java.util.regex.Pattern;
 
 public class GenerateThread extends Thread {
 
-    private final PvPLevels plugin = PvPLevels.getInstance();
+    private final PvPLevels plugin;
 
     private final String group;
     private final long amount;
     private final long startLevel;
 
-    final FileConfiguration config = plugin.getFileUtils().config;
-    final FileConfiguration levels = plugin.getFileUtils().levels;
-    final FileConfiguration execute = plugin.getFileUtils().execute;
+    final FileConfiguration config;
+    final FileConfiguration levels;
+    final FileConfiguration execute;
 
     public GenerateThread(final PvPLevels plugin, final String group, final long amount, final long startLevel) {
+        this.plugin = plugin;
+        this.config = plugin.getFileUtils().config;
+        this.levels = plugin.getFileUtils().levels;
+        this.execute = plugin.getFileUtils().execute;
         setName("PvPLevels-Thread");
         this.group = group;
         this.amount = amount;

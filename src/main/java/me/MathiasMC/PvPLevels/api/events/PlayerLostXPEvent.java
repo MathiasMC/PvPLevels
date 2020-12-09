@@ -51,7 +51,7 @@ public class PlayerLostXPEvent extends Event implements Cancellable {
         return this.xp;
     }
 
-    public void setXp(final int xp) {
+    public void setXp(final long xp) {
         this.xp = xp;
     }
 

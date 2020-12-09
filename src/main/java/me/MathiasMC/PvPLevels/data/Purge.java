@@ -13,8 +13,8 @@ public class Purge {
 
     public Purge(final PvPLevels plugin) {
         this.plugin = plugin;
-        final int interval = plugin.getFileUtils().config.getInt("mysql.purge.interval");
-        int startInterval = interval;
+        final long interval = plugin.getFileUtils().config.getInt("mysql.purge.interval");
+        long startInterval = interval;
         if (plugin.getFileUtils().config.getBoolean("mysql.purge.check-on-startup")) {
             startInterval = 1;
         }

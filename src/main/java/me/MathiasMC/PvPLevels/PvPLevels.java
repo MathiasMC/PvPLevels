@@ -41,7 +41,7 @@ public class PvPLevels extends JavaPlugin {
     private StatsManager statsManager;
     private XPManager xpManager;
 
-    public ActionBar actionBar;
+    private ActionBarManager actionBarManager;
 
     private final Map<String, PlayerConnect> playerConnect = new HashMap<>();
 
@@ -70,6 +70,20 @@ public class PvPLevels extends JavaPlugin {
 
     public boolean isRespawn;
 
+    private PlayerJoin playerJoin;
+
+    private EntityDeath entityDeath;
+
+    private EntityDamageByEntity entityDamageByEntity;
+
+    private CreatureSpawn creatureSpawn;
+
+    private BlockBreak blockBreak;
+
+    private BlockPlace blockPlace;
+
+    private PlayerMove playerMove;
+
     public void onEnable() {
         call = this;
 
@@ -87,29 +101,38 @@ public class PvPLevels extends JavaPlugin {
         killSessionManager = new KillSessionManager(this);
         statsManager = new StatsManager(this);
         xpManager = new XPManager(this);
-        calculateManager = new CalculateManager(this);
+        calculateManager = new CalculateManager();
         if (getServer().getVersion().contains("1.8")) {
-            actionBar = new ActionBar_1_8_R3(this);
+            actionBarManager = new ActionBar_1_8_R3(this);
         } else {
-            actionBar = new ActionBar(this);
+            actionBarManager = new ActionBar(this);
         }
 
         if (database.set()) {
             getServer().getPluginManager().registerEvents(new PlayerLogin(this), this);
-            getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
             getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
-            getServer().getPluginManager().registerEvents(new EntityDeath(this), this);
-            getServer().getPluginManager().registerEvents(new CreatureSpawn(this), this);
+
+            playerJoin = new PlayerJoin(this);
+            entityDeath = new EntityDeath(this);
+            entityDamageByEntity = new EntityDamageByEntity(this);
+            creatureSpawn = new CreatureSpawn(this);
+            getServer().getPluginManager().registerEvents(playerJoin, this);
+            getServer().getPluginManager().registerEvents(entityDeath, this);
+            getServer().getPluginManager().registerEvents(entityDamageByEntity, this);
+            getServer().getPluginManager().registerEvents(creatureSpawn, this);
+
             if (fileUtils.config.getBoolean("blocks")) {
-                getServer().getPluginManager().registerEvents(new BlockBreak(this), this);
-                getServer().getPluginManager().registerEvents(new BlockPlace(this), this);
+                blockBreak = new BlockBreak(this);
+                blockPlace = new BlockPlace(this);
+                getServer().getPluginManager().registerEvents(blockBreak, this);
+                getServer().getPluginManager().registerEvents(blockPlace, this);
             }
             if (fileUtils.config.getBoolean("instant-death.use")) {
                 isRespawn = fileUtils.config.getBoolean("instant-death.respawn");
                 deathY = fileUtils.config.getInt("instant-death.y");
-                getServer().getPluginManager().registerEvents(new PlayerMove(this), this);
+                playerMove = new PlayerMove(this);
+                getServer().getPluginManager().registerEvents(playerMove, this);
             }
-            getServer().getPluginManager().registerEvents(new EntityDamageByEntity(this), this);
             getCommand("pvplevels").setExecutor(new PvPLevels_Command(this));
             getCommand("pvplevels").setTabCompleter(new PvPLevels_TabComplete(this));
             new MetricsLite(this, 1174);
@@ -184,6 +207,10 @@ public class PvPLevels extends JavaPlugin {
         return this.xpManager;
     }
 
+    public ActionBarManager getActionBarManager() {
+        return this.actionBarManager;
+    }
+
     public KillSessionManager getKillSessionManager() {
         return this.killSessionManager;
     }
@@ -208,13 +235,52 @@ public class PvPLevels extends JavaPlugin {
         return this.debug;
     }
 
+    public void setDebug(final boolean debug) {
+        this.debug = debug;
+    }
+
+    public PlayerJoin getPlayerJoin() {
+        return this.playerJoin;
+    }
+
+    public EntityDeath getEntityDeath() {
+        return this.entityDeath;
+    }
+
+    public EntityDamageByEntity getEntityDamageByEntity() {
+        return this.entityDamageByEntity;
+    }
+
+    public CreatureSpawn getCreatureSpawn() {
+        return this.creatureSpawn;
+    }
+
+    public BlockBreak getBlockBreak() {
+        return this.blockBreak;
+    }
+
+    public BlockPlace getBlockPlace() {
+        return this.blockPlace;
+    }
+
+    public PlayerMove getPlayerMove() {
+        return this.playerMove;
+    }
+
     public void unloadPlayerConnect(final String uuid) {
-        playerConnect.remove(uuid);
+        PlayerConnect playerConnect= this.playerConnect.remove(uuid);
+        if (playerConnect != null) {
+            playerConnect.save();
+        }
     }
 
     public void updatePlayerConnect(final String uuid) {
         unloadPlayerConnect(uuid);
         getPlayerConnect(uuid);
+    }
+
+    public void removePlayerConnect(final String uuid) {
+        playerConnect.remove(uuid);
     }
 
     public ScriptEngine getScriptEngine() {

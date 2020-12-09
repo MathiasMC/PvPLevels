@@ -88,7 +88,7 @@ public class Database {
                             preparedStatement.setLong(3, 0L);
                             preparedStatement.setLong(4, 0L);
                             preparedStatement.setLong(5, 0L);
-                            preparedStatement.setLong(6, plugin.getFileUtils().config.getLong("start-level"));
+                            preparedStatement.setLong(6, plugin.getStartLevel());
                             preparedStatement.setLong(7, 0L);
                             preparedStatement.setLong(8, 0L);
                             preparedStatement.setString(9, "0.0 0 0");
@@ -130,6 +130,7 @@ public class Database {
                             preparedStatement = connection.prepareStatement("DELETE FROM players WHERE uuid = ?");
                             preparedStatement.setString(1, uuid);
                             preparedStatement.executeUpdate();
+                            plugin.removePlayerConnect(uuid);
                             if (plugin.isDebug()) { plugin.getTextUtils().debug("Deleting " + uuid); }
                         }
                     } catch (SQLException exception) {
@@ -225,6 +226,6 @@ public class Database {
                     plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
                 }
         }
-        return new String[] { "default", String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(plugin.getFileUtils().config.getLong("start-level")), String.valueOf(0L), String.valueOf(0L), "0.0 0 0", String.valueOf(new Timestamp(new Date().getTime())) };
+        return new String[] { "default", String.valueOf(0L), String.valueOf(0L), String.valueOf(0L), String.valueOf(plugin.getStartLevel()), String.valueOf(0L), String.valueOf(0L), "0.0 0 0", String.valueOf(new Timestamp(new Date().getTime())) };
     }
 }

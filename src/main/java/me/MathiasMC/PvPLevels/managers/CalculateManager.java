@@ -1,16 +1,8 @@
 package me.MathiasMC.PvPLevels.managers;
 
-import me.MathiasMC.PvPLevels.PvPLevels;
-
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CalculateManager {
-
-    private final PvPLevels plugin;
-
-    public CalculateManager(final PvPLevels plugin) {
-        this.plugin = plugin;
-    }
 
     public boolean isInt(final String s) {
         try {
@@ -30,7 +22,7 @@ public class CalculateManager {
         return true;
     }
 
-    public boolean isDouble(String s) {
+    public boolean isDouble(final String s) {
         try {
             Double.parseDouble(s);
         } catch(NumberFormatException e) {
@@ -43,7 +35,7 @@ public class CalculateManager {
         return text.matches("^[a-zA-Z]*$");
     }
 
-    public long randomNumber(long min, long max) {
+    public long randomNumber(final long min, final long max) {
         return ThreadLocalRandom.current().nextLong(min, max + 1);
     }
 }

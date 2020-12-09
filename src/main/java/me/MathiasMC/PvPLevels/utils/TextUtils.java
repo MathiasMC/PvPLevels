@@ -36,8 +36,8 @@ public class TextUtils {
 
     public void exception(StackTraceElement[] stackTraceElement, String text) {
         info("(!) " + prefix + " has being encountered an error, pasting below for support (!)");
-        for (int i = 0; i < stackTraceElement.length; i++) {
-            error(stackTraceElement[i].toString());
+        for (StackTraceElement traceElement : stackTraceElement) {
+            error(traceElement.toString());
         }
         info("Message: " + text);
         info(prefix + " version: " + plugin.getDescription().getVersion());

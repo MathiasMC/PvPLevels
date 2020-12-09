@@ -210,7 +210,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                                     this.cancel();
                                                 } else {
                                                     time++;
-                                                    plugin.actionBar.sendMessage(target, sb.toString().trim());
+                                                    plugin.getActionBarManager().sendMessage(target, sb.toString().trim());
                                                 }
                                             }
                                         }.runTaskTimer(plugin, 0, 20);
@@ -400,16 +400,25 @@ public class PvPLevels_Command implements CommandExecutor {
                                                     playerConnect.setXpType("");
                                                     playerConnect.setXpLast(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                     final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(target, null, playerConnect, set);
-                                                    playerGetXPEvent.execute();
+                                                    plugin.getServer().getPluginManager().callEvent(playerGetXPEvent);
+                                                    if (!playerGetXPEvent.isCancelled()) {
+                                                        playerGetXPEvent.execute();
+                                                    }
                                                 } else {
                                                     playerConnect.setXpLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                     final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
-                                                    playerLostXPEvent.execute();
+                                                    plugin.getServer().getPluginManager().callEvent(playerLostXPEvent);
+                                                    if (!playerLostXPEvent.isCancelled()) {
+                                                        playerLostXPEvent.execute();
+                                                    }
                                                 }
                                             } else {
                                                 playerConnect.setXpLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                 final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
-                                                playerLostXPEvent.execute();
+                                                plugin.getServer().getPluginManager().callEvent(playerLostXPEvent);
+                                                if (!playerLostXPEvent.isCancelled()) {
+                                                    playerLostXPEvent.execute();
+                                                }
                                             }
                                         }
                                         if (player != null) {
@@ -462,12 +471,18 @@ public class PvPLevels_Command implements CommandExecutor {
                                             if (plus) {
                                                 playerConnect.setLevel(set - 1);
                                                 final PlayerLevelUPEvent playerLevelUPEvent = new PlayerLevelUPEvent(target, null, playerConnect, set);
-                                                playerLevelUPEvent.setXp();
-                                                playerLevelUPEvent.execute();
+                                                plugin.getServer().getPluginManager().callEvent(playerLevelUPEvent);
+                                                if (!playerLevelUPEvent.isCancelled()) {
+                                                    playerLevelUPEvent.setXp();
+                                                    playerLevelUPEvent.execute();
+                                                }
                                             } else {
                                                 final PlayerLevelDownEvent playerLevelDownEvent = new PlayerLevelDownEvent(target, null, playerConnect, set);
-                                                playerLevelDownEvent.setXp();
-                                                playerLevelDownEvent.execute();
+                                                plugin.getServer().getPluginManager().callEvent(playerLevelDownEvent);
+                                                if (!playerLevelDownEvent.isCancelled()) {
+                                                    playerLevelDownEvent.setXp();
+                                                    playerLevelDownEvent.execute();
+                                                }
                                             }
                                             if (player != null) {
                                                 for (String command : getCommands("level.set")) {
