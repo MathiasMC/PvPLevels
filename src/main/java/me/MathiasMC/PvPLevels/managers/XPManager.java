@@ -253,7 +253,7 @@ public class XPManager {
         final FileConfiguration config = plugin.getFileUtils().config;
         if (config.contains(key + ".worlds")) {
             final boolean world = config.getStringList(key + ".worlds").contains(player.getWorld().getName());
-            if (!world) { plugin.getTextUtils().debug("[XP] " + player.getName() + " world " + player.getWorld().getName() + " is not in " + key + ".worlds"); }
+            if (plugin.isDebug() && !world) { plugin.getTextUtils().debug("[XP] " + player.getName() + " world " + player.getWorld().getName() + " is not in " + key + ".worlds"); }
             return world;
         }
         return true;
