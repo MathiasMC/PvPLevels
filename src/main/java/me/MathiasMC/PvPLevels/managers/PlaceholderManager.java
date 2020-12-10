@@ -57,22 +57,8 @@ public class PlaceholderManager {
         }
         final String uuid = offlinePlayer.getUniqueId().toString();
         final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
-        if (message.contains("{source}")) {
-            String source = "VOID";
-            if (offlinePlayer.isOnline()) {
-                final Player player = (Player) offlinePlayer;
-                final String killerName = plugin.getXPManager().getKillerName(player);
-                if (player.getLastDamageCause() != null) {
-                    source = player.getLastDamageCause().getCause().toString();
-                    if (killerName != null) {
-                        source = killerName;
-                    }
-                }
-                if (plugin.getFileUtils().language.contains("translate.cause." + source)) {
-                    source = plugin.getFileUtils().language.getString("translate.cause." + source);
-                }
-            }
-            message = message.replace("{source}", source);
+        if (message.contains("{source}") && offlinePlayer.isOnline()) {
+            message = message.replace("{source}", plugin.getXPManager().getSource((Player) offlinePlayer));
         }
         return message
                 .replace("{player}", offlinePlayer.getName())

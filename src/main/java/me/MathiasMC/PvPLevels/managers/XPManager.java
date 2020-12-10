@@ -200,8 +200,7 @@ public class XPManager {
     }
 
     public void loseXP(final Player player, final Entity killer, final PlayerConnect playerConnect) {
-        final String group = playerConnect.getGroup();
-        final String path = "xp." + group + "." + getEntityKiller(player, group);
+        final String path = "xp." + playerConnect.getGroup() + "." + getSourceType(player);
         if (!plugin.getFileUtils().config.contains(path + ".xp-lose")) {
             return;
         }
@@ -282,32 +281,28 @@ public class XPManager {
         }
     }
 
-    public String getKillerName(final Player killed) {
-        final EntityDamageEvent entityDamageEvent = killed.getLastDamageCause();
+    public String getSource(final Player player) {
+        String source = "VOID";
+        final EntityDamageEvent entityDamageEvent = player.getLastDamageCause();
+        if (entityDamageEvent != null) {
+            source = entityDamageEvent.getCause().toString();
+        }
         if (entityDamageEvent instanceof EntityDamageByEntityEvent) {
             final Entity entity = ((EntityDamageByEntityEvent) entityDamageEvent).getDamager();
-            final String type = getType(entity);
-            if (type != null) {
-                return type;
+            final String type = getShooter(entity);
+            if (type != null) return type;
+            final String entityType = entity.getType().toString().toUpperCase().replace(" ", "_");
+            if (plugin.getFileUtils().language.contains("translate.entity." + entityType)) {
+                return plugin.getFileUtils().language.getString("translate.entity." + entityType);
             }
-            if (entity instanceof Player) {
-                return entity.getName();
-            } else {
-                String entityType = entity.getType().toString().toUpperCase().replace(" ", "_");
-                if (plugin.getFileUtils().language.contains("translate.entity." + entityType)) {
-                    entityType = plugin.getFileUtils().language.getString("translate.entity." + entityType);
-                }
-                return entityType;
-            }
-        } else {
-            if (entityDamageEvent == null) {
-                return null;
-            }
-            return entityDamageEvent.getCause().toString().toUpperCase().replace(" ", "_");
         }
+        if (plugin.getFileUtils().language.contains("translate.cause." + source)) {
+            return plugin.getFileUtils().language.getString("translate.cause." + source);
+        }
+        return source;
     }
 
-    public String getType(final Entity entity) {
+    public String getShooter(final Entity entity) {
         ProjectileSource projectileSource = null;
         if (entity instanceof Arrow) {
             final Arrow arrow = (Arrow) entity;
@@ -321,31 +316,28 @@ public class XPManager {
         }
         if (projectileSource instanceof Player) {
             return ((Player) projectileSource).getName();
+        } else if (entity instanceof Player) {
+            return entity.getName();
         }
         return null;
     }
 
-    private String getEntityKiller(final Player killed, final String group) {
-        final EntityDamageEvent entityDamageEvent = killed.getLastDamageCause();
-        String entityType;
-        if (entityDamageEvent instanceof EntityDamageByEntityEvent) {
-            Entity entity = ((EntityDamageByEntityEvent) entityDamageEvent).getDamager();
-            entityType = entity.getType().toString().toLowerCase();
-            final String type = getType(entity);
-            if (type != null) {
-                entityType = "player";
-            }
-        } else {
-            if (entityDamageEvent != null) {
-                entityType = entityDamageEvent.getCause().toString().toLowerCase();
-            } else {
-                return "void";
-            }
-        }
-        if (!plugin.getFileUtils().config.contains("xp." + group + "." + entityType)) {
+    private String getSourceType(final Player player) {
+        if (plugin.getFileUtils().config.contains("xp." + plugin.getPlayerConnect(player.getUniqueId().toString()).getGroup() + ".all")) {
             return "all";
         }
-        return entityType;
+        final EntityDamageEvent entityDamageEvent = player.getLastDamageCause();
+        if (entityDamageEvent instanceof EntityDamageByEntityEvent) {
+            Entity entity = ((EntityDamageByEntityEvent) entityDamageEvent).getDamager();
+            if (getShooter(entity) != null) {
+                return "player";
+            } else {
+                return entity.getType().toString().toLowerCase();
+            }
+        } else if (entityDamageEvent != null) {
+            return entityDamageEvent.getCause().toString().toLowerCase();
+        }
+        return "void";
     }
 
     public long hasItem(final Player player, final String path) {
