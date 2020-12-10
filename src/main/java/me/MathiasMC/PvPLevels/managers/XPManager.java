@@ -72,7 +72,7 @@ public class XPManager {
     }
 
     public void getKillStreak(final Player player, final Player killed, final PlayerConnect playerConnect) {
-        if (!isWorld(player, playerConnect, "killstreak")) {
+        if (!isWorld(player, "killstreak." + playerConnect.getGroup())) {
             return;
         }
         final PlayerKillStreakEvent playerKillStreakEvent = new PlayerKillStreakEvent(player, killed, playerConnect, playerConnect.getKillstreak() + 1);
@@ -85,7 +85,7 @@ public class XPManager {
     }
 
     public void getDeath(final Player player, final Entity entity, final PlayerConnect playerConnect) {
-        if (!isWorld(player, playerConnect, "deaths")) {
+        if (!isWorld(player, "deaths." + playerConnect.getGroup())) {
             return;
         }
         if (plugin.getFileUtils().config.getBoolean("deaths." + playerConnect.getGroup() + ".only-player")) {
@@ -103,7 +103,7 @@ public class XPManager {
     }
 
     public void getKill(final Player player, final Player killed, final PlayerConnect playerConnect) {
-        if (!isWorld(player, playerConnect, "kills")) {
+        if (!isWorld(player, "kills." + playerConnect.getGroup())) {
             return;
         }
         final PlayerKillEvent playerKillEvent = new PlayerKillEvent(player, killed, playerConnect, playerConnect.getKills() + 1);
@@ -150,7 +150,7 @@ public class XPManager {
             if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] config.yml path " + path + " is not found."); }
             return;
         }
-        if (!isWorld(player, playerConnect, path)) {
+        if (!isWorld(player, path)) {
             return;
         }
         long xp = plugin.getCalculateManager().randomNumber(plugin.getFileUtils().config.getLong(path + ".min"), plugin.getFileUtils().config.getLong(path + ".max"));
@@ -194,6 +194,9 @@ public class XPManager {
     public void loseXP(final Player player, final Entity killer, final PlayerConnect playerConnect) {
         final String path = "xp." + playerConnect.getGroup() + "." + getSourceType(player);
         if (!plugin.getFileUtils().config.contains(path + ".xp-lose")) {
+            return;
+        }
+        if (!isWorld(player, path)) {
             return;
         }
         final long xp = plugin.getCalculateManager().randomNumber(plugin.getFileUtils().config.getLong(path + ".xp-lose.min"), plugin.getFileUtils().config.getLong(path + ".xp-lose.max"));
@@ -246,12 +249,11 @@ public class XPManager {
         return !plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + (playerConnect.getLevel() + 1));
     }
 
-    public boolean isWorld(final Player player, final PlayerConnect playerConnect, final String key) {
+    public boolean isWorld(final Player player, final String key) {
         final FileConfiguration config = plugin.getFileUtils().config;
-        final String group = playerConnect.getGroup();
-        if (config.contains(key + "." + group + ".worlds")) {
-            final boolean world = config.getStringList(key + "." + group + ".worlds").contains(player.getWorld().getName());
-            if (!world) { plugin.getTextUtils().debug("[XP] " + player.getName() + " world " + player.getWorld().getName() + " is not in " + key + "." + group + ".worlds"); }
+        if (config.contains(key + ".worlds")) {
+            final boolean world = config.getStringList(key + ".worlds").contains(player.getWorld().getName());
+            if (!world) { plugin.getTextUtils().debug("[XP] " + player.getName() + " world " + player.getWorld().getName() + " is not in " + key + ".worlds"); }
             return world;
         }
         return true;
