@@ -199,6 +199,7 @@ public class XPManager {
         }
         final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(player, killer, playerConnect, (playerConnect.getXp() - xp));
         playerConnect.setXpLost(xp);
+        plugin.getServer().getPluginManager().callEvent(playerLostXPEvent);
         if (playerLostXPEvent.isCancelled()) {
             return;
         }
