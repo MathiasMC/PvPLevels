@@ -207,7 +207,15 @@ public class PlayerConnect {
     }
 
     public boolean hasMultiplier() {
-        return PvPLevels.getInstance().multipliers.contains(uuid) && multiplier != 0D && multiplierTime != 0 && multiplierTimeLeft != 0;
+        return PvPLevels.getInstance().multipliers.contains(uuid) && multiplier != 0D && multiplierTime != 0;
+    }
+
+    public boolean extendMultiplier(final long seconds) {
+        if (hasMultiplier()) {
+            startMultiplier(multiplier, seconds);
+            return true;
+        }
+        return false;
     }
 
     public void save() {
