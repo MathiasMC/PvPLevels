@@ -50,6 +50,10 @@ public class PlayerKillEvent extends Event implements Cancellable {
         return this.kills;
     }
 
+    public List<String> getCommands() {
+        return this.commands;
+    }
+
     public void setKills(final long kills) {
         this.kills = kills;
     }

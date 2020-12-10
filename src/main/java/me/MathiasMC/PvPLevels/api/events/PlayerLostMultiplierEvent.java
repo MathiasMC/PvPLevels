@@ -2,7 +2,7 @@ package me.MathiasMC.PvPLevels.api.events;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
-import org.bukkit.entity.Entity;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -10,53 +10,57 @@ import org.bukkit.event.HandlerList;
 
 import java.util.List;
 
-public class PlayerDeathEvent extends Event implements Cancellable {
+public class PlayerLostMultiplierEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final PvPLevels plugin;
 
     private boolean cancelled = false;
 
-    private final Player player;
-
-    private final Entity entity;
+    private final OfflinePlayer offlinePlayer;
 
     private final PlayerConnect playerConnect;
 
-    private long deaths;
+    private double multiplier;
+
+    private long seconds;
 
     private List<String> commands = null;
 
-    public PlayerDeathEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long deaths) {
+    public PlayerLostMultiplierEvent(final OfflinePlayer offlinePlayer, final PlayerConnect playerConnect, final double multiplier, final long seconds) {
         this.plugin = PvPLevels.getInstance();
-        this.player = player;
-        this.entity = entity;
+        this.offlinePlayer = offlinePlayer;
         this.playerConnect = playerConnect;
-        this.deaths = deaths;
+        this.multiplier = multiplier;
+        this.seconds = seconds;
     }
 
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    public Entity getEntity() {
-        return this.entity;
+    public OfflinePlayer getOfflinePlayer() {
+        return this.offlinePlayer;
     }
 
     public PlayerConnect getPlayerConnect() {
         return this.playerConnect;
     }
 
-    public long getDeaths() {
-        return this.deaths;
+    public double getMultiplier() {
+        return this.multiplier;
+    }
+
+    public long getSeconds() {
+        return this.seconds;
     }
 
     public List<String> getCommands() {
         return this.commands;
     }
 
-    public void setDeaths(final long deaths) {
-        this.deaths = deaths;
+    public void setMultiplier(final double multiplier) {
+        this.multiplier = multiplier;
+    }
+
+    public void setSeconds(final long seconds) {
+        this.seconds = seconds;
     }
 
     public void setCommands(final List<String> commands) {
@@ -64,15 +68,10 @@ public class PlayerDeathEvent extends Event implements Cancellable {
     }
 
     public void execute() {
-        playerConnect.setDeaths(deaths);
-        if (commands == null) {
-            if (entity != null) {
-                setCommands(plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".player"));
-            } else {
-                setCommands(plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other"));
-            }
+        if (commands != null && offlinePlayer.isOnline()) {
+            plugin.getXPManager().sendCommands((Player) offlinePlayer, commands);
         }
-        plugin.getXPManager().sendCommands(player, commands);
+        playerConnect.stopMultiplier();
     }
 
     @Override

@@ -268,7 +268,7 @@ public class StatsManager {
         if (multiplier == 0) {
             return plugin.getFileUtils().language.getString("translate.xp.multiplier.time");
         }
-        return String.valueOf(getTime(multiplier * 1000));
+        return String.valueOf(getTime(multiplier));
     }
 
     public String getMultiplierTimeLeft(final PlayerConnect playerConnect) {
@@ -276,10 +276,11 @@ public class StatsManager {
         if (multiplier == 0) {
             return plugin.getFileUtils().language.getString("translate.xp.multiplier.left");
         }
-        return String.valueOf(getTime(multiplier * 1000));
+        return String.valueOf(getTime(multiplier));
     }
 
-    public String getTime(long millis){
+    public String getTime(long seconds){
+        long millis = seconds * 1000;
         String time = "";
         final long days = TimeUnit.MILLISECONDS.toDays(millis);
         millis -= TimeUnit.DAYS.toMillis(days);
@@ -287,7 +288,7 @@ public class StatsManager {
         millis -= TimeUnit.HOURS.toMillis(hours);
         final long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
-        final long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+        final long second = TimeUnit.MILLISECONDS.toSeconds(millis);
         if (days > 1) {
             time += days + " " + plugin.getFileUtils().language.getString("translate.time.days") + " ";
         } else if (days == 1) {
@@ -303,10 +304,10 @@ public class StatsManager {
         } else if (minutes == 1) {
             time += minutes + " " + plugin.getFileUtils().language.getString("translate.time.minute") + " ";
         }
-        if (seconds > 1) {
-            time += seconds + " " + plugin.getFileUtils().language.getString("translate.time.seconds");
-        } else if (seconds == 1) {
-            time += seconds + " " + plugin.getFileUtils().language.getString("translate.time.second");
+        if (second > 1) {
+            time += second + " " + plugin.getFileUtils().language.getString("translate.time.seconds");
+        } else if (second == 1) {
+            time += second + " " + plugin.getFileUtils().language.getString("translate.time.second");
         }
         if (time.endsWith(" ")) {
             return time.replaceAll("\\s+$", "");

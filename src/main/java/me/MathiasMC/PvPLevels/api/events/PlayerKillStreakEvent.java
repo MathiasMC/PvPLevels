@@ -50,6 +50,10 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
         return this.killstreak;
     }
 
+    public List<String> getCommands() {
+        return this.commands;
+    }
+
     public void setKillstreak(final long killstreak) {
         this.killstreak = killstreak;
     }

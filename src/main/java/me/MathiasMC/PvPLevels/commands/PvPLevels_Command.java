@@ -528,11 +528,18 @@ public class PvPLevels_Command implements CommandExecutor {
                                     if (plugin.getCalculateManager().isDouble(args[2])) {
                                         if (plugin.getCalculateManager().isInt(args[3]) && Integer.parseInt(args[3]) <= 2073600) {
                                             final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
-                                            playerConnect.setMultiplier(Double.parseDouble(args[2]));
-                                            playerConnect.setMultiplierTime(Integer.parseInt(args[3]));
-                                            playerConnect.setMultiplierTimeLeft(Integer.parseInt(args[3]));
-                                            playerConnect.save();
-                                            plugin.multipliers.add(target);
+                                            final PlayerGetMultiplierEvent playerGetMultiplierEvent = new PlayerGetMultiplierEvent(target, playerConnect, Double.parseDouble(args[2]), Integer.parseInt(args[3]));
+                                            plugin.getServer().getPluginManager().callEvent(playerGetMultiplierEvent);
+                                            if (!playerGetMultiplierEvent.isCancelled()) {
+                                                if (playerGetMultiplierEvent.getCommands() == null) {
+                                                    final List<String> commands = new ArrayList<>();
+                                                    for (String command : getCommands("multiplier.target")) {
+                                                        commands.add(command.replace("{target}", target.getName()));
+                                                    }
+                                                    playerGetMultiplierEvent.setCommands(commands);
+                                                }
+                                                playerGetMultiplierEvent.execute();
+                                            }
                                             if (player != null) {
                                                 for (String command : getCommands("multiplier.got")) {
                                                     dispatchCommand(player, command.replace("{target}", target.getName()));
@@ -541,9 +548,6 @@ public class PvPLevels_Command implements CommandExecutor {
                                                 for (String message : getCommands("console.multiplier.got")) {
                                                     sendMessage(sender, message.replace("{target}", target.getName()).replace("{xp_multiplier}", plugin.getStatsManager().getMultiplier(playerConnect)).replace("{xp_multiplier_time}", plugin.getStatsManager().getMultiplierTime(playerConnect)));
                                                 }
-                                            }
-                                            for (String command : getCommands("multiplier.target")) {
-                                                dispatchCommand(target, command.replace("{target}", target.getName()));
                                             }
                                         } else if (player != null) {
                                             dispatchCommandList(player, "multiplier.number");

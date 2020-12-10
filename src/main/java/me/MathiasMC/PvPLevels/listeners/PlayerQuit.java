@@ -21,6 +21,7 @@ public class PlayerQuit implements Listener {
         if (!plugin.listPlayerConnect().contains(uuid)) {
             return;
         }
+        plugin.multipliers.remove(uuid);
         final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
         playerConnect.setTime();
         playerConnect.save();

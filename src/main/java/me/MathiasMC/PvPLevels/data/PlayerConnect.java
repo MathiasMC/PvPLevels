@@ -58,6 +58,10 @@ public class PlayerConnect {
         this.time = Timestamp.valueOf(data[8]);
     }
 
+    public String getUniqueId() {
+        return this.uuid;
+    }
+
     public String getGroup() {
         return this.group;
     }
@@ -184,6 +188,26 @@ public class PlayerConnect {
 
     public void setXpItem(final long xpItem) {
         this.xpItem = xpItem;
+    }
+
+    public void startMultiplier(final double multiplier, final long seconds) {
+        setMultiplier(multiplier);
+        setMultiplierTime(seconds);
+        setMultiplierTimeLeft(seconds);
+        PvPLevels.getInstance().multipliers.add(uuid);
+        save();
+    }
+
+    public void stopMultiplier() {
+        setMultiplier(0D);
+        setMultiplierTime(0);
+        setMultiplierTimeLeft(0);
+        PvPLevels.getInstance().multipliers.remove(uuid);
+        save();
+    }
+
+    public boolean hasMultiplier() {
+        return PvPLevels.getInstance().multipliers.contains(uuid) && multiplier != 0D && multiplierTime != 0 && multiplierTimeLeft != 0;
     }
 
     public void save() {

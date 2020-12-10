@@ -1,5 +1,6 @@
 package me.MathiasMC.PvPLevels;
 
+import me.MathiasMC.PvPLevels.api.events.PlayerLostMultiplierEvent;
 import me.MathiasMC.PvPLevels.commands.*;
 import me.MathiasMC.PvPLevels.data.Database;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
@@ -15,7 +16,6 @@ import me.MathiasMC.PvPLevels.utils.TextUtils;
 import me.MathiasMC.PvPLevels.utils.UpdateUtils;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.script.ScriptEngine;
@@ -51,7 +51,7 @@ public class PvPLevels extends JavaPlugin {
 
     public final Map<String, String> lastDamagers = new HashMap<>();
 
-    public final HashSet<OfflinePlayer> multipliers = new HashSet<>();
+    public final HashSet<String> multipliers = new HashSet<>();
 
     public String generateGroup = null;
 
@@ -155,24 +155,23 @@ public class PvPLevels extends JavaPlugin {
             }
 
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
-                Iterator<OfflinePlayer> iterator = multipliers.iterator();
-                while (iterator.hasNext()) {
-                    final OfflinePlayer offlinePlayer = iterator.next();
-                    if (offlinePlayer.isOnline()) {
-                        final PlayerConnect playerConnect = getPlayerConnect(offlinePlayer.getUniqueId().toString());
-                        long left = playerConnect.getMultiplierTimeLeft();
-                        if (left > 0) {
-                            left--;
-                            playerConnect.setMultiplierTimeLeft(left);
-                            return;
-                        }
-                        xpManager.sendCommands((Player) offlinePlayer, fileUtils.language.getStringList("multiplier.lost"));
-                        playerConnect.setMultiplier(0D);
-                        playerConnect.setMultiplierTime(0);
-                        playerConnect.setMultiplierTimeLeft(0);
-                        playerConnect.save();
+                for (String uuid : multipliers) {
+                    final PlayerConnect playerConnect = getPlayerConnect(uuid);
+                    long left = playerConnect.getMultiplierTimeLeft();
+                    if (left > 0) {
+                        left--;
+                        playerConnect.setMultiplierTimeLeft(left);
+                        return;
                     }
-                    iterator.remove();
+                    final PlayerLostMultiplierEvent playerLostMultiplierEvent = new PlayerLostMultiplierEvent(getServer().getOfflinePlayer(UUID.fromString(uuid)), playerConnect, playerConnect.getMultiplier(), playerConnect.getMultiplierTime());
+                    getServer().getPluginManager().callEvent(playerLostMultiplierEvent);
+                    if (playerLostMultiplierEvent.isCancelled()) {
+                        return;
+                    }
+                    if (playerLostMultiplierEvent.getCommands() == null) {
+                        playerLostMultiplierEvent.setCommands(fileUtils.language.getStringList("multiplier.lost"));
+                    }
+                    playerLostMultiplierEvent.execute();
                 }
             }, 20, 20);
 

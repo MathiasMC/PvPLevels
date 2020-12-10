@@ -57,6 +57,10 @@ public class PlayerGetXPEvent extends Event implements Cancellable {
         return this.key;
     }
 
+    public List<String> getCommands() {
+        return this.commands;
+    }
+
     public void setXp(final long xp) {
         this.xp = xp;
     }

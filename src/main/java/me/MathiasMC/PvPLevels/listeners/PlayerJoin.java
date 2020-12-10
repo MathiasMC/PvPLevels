@@ -19,10 +19,11 @@ public class PlayerJoin implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
-        final PlayerConnect playerConnect = plugin.getPlayerConnect(player.getUniqueId().toString());
+        final String uuid = player.getUniqueId().toString();
+        final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
         if (playerConnect.getMultiplier() != 0) {
             plugin.getXPManager().sendCommands(player, plugin.getFileUtils().language.getStringList("multiplier.join"));
-            plugin.multipliers.add(player);
+            plugin.multipliers.add(uuid);
         }
     }
 }

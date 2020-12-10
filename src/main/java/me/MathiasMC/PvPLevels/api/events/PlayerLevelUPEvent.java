@@ -51,6 +51,10 @@ public class PlayerLevelUPEvent extends Event implements Cancellable {
         return this.level;
     }
 
+    public List<String> getCommands() {
+        return this.commands;
+    }
+
     public void setLevel(final long level) {
         this.level = level;
     }
