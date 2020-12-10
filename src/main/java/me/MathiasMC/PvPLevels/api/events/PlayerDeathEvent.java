@@ -55,6 +55,13 @@ public class PlayerDeathEvent extends Event implements Cancellable {
         return this.commands;
     }
 
+    public List<String> getDefaultCommands() {
+        if (entity != null) {
+            return plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".player");
+        }
+        return plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other");
+    }
+
     public void setDeaths(final long deaths) {
         this.deaths = deaths;
     }
@@ -65,13 +72,6 @@ public class PlayerDeathEvent extends Event implements Cancellable {
 
     public void execute() {
         playerConnect.setDeaths(deaths);
-        if (commands == null) {
-            if (entity != null) {
-                setCommands(plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".player"));
-            } else {
-                setCommands(plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other"));
-            }
-        }
         plugin.getXPManager().sendCommands(player, commands);
     }
 

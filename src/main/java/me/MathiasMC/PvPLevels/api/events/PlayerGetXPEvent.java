@@ -61,6 +61,14 @@ public class PlayerGetXPEvent extends Event implements Cancellable {
         return this.commands;
     }
 
+    public List<String> getDefaultCommands() {
+        final String path = playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override";
+        if (!plugin.getFileUtils().levels.contains(path)) {
+            return plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp." + key);
+        }
+        return plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".xp." + key);
+    }
+
     public void setXp(final long xp) {
         this.xp = xp;
     }
@@ -79,14 +87,6 @@ public class PlayerGetXPEvent extends Event implements Cancellable {
         }
         final boolean getLevel = plugin.getXPManager().getLevel(player, entity, playerConnect);
         if (!getLevel) {
-            if (commands == null) {
-                final String path = playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override";
-                if (!plugin.getFileUtils().levels.contains(path)) {
-                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp." + key));
-                } else {
-                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".xp." + key));
-                }
-            }
             plugin.getXPManager().sendCommands(player, commands);
         }
         if (playerConnect.getSave() >= plugin.getFileUtils().config.getInt("mysql.save")) {

@@ -54,6 +54,14 @@ public class PlayerKillStreakTopEvent extends Event implements Cancellable {
         return this.commands;
     }
 
+    public List<String> getDefaultCommands() {
+        final String path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".top";
+        if (plugin.getFileUtils().config.contains(path)) {
+            return plugin.getFileUtils().config.getStringList(path);
+        }
+        return null;
+    }
+
     public void setKillstreak(final long killstreak) {
         this.killstreak = killstreak;
     }
@@ -64,13 +72,6 @@ public class PlayerKillStreakTopEvent extends Event implements Cancellable {
 
     public void execute() {
         playerConnect.setKillstreakTop(killstreak);
-        if (commands == null) {
-            final String path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".top";
-            if (!plugin.getFileUtils().config.contains(path)) {
-                return;
-            }
-            setCommands(plugin.getFileUtils().config.getStringList(path));
-        }
         plugin.getXPManager().sendCommands(player, commands);
     }
 

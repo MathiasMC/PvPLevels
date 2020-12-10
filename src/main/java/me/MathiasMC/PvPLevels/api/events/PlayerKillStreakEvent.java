@@ -54,6 +54,14 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
         return this.commands;
     }
 
+    public List<String> getDefaultCommands() {
+        final String path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".get";
+        if (plugin.getFileUtils().config.contains(path)) {
+            return plugin.getFileUtils().config.getStringList(path);
+        }
+        return plugin.getFileUtils().config.getStringList("killstreak." + playerConnect.getGroup() + ".get");
+    }
+
     public void setKillstreak(final long killstreak) {
         this.killstreak = killstreak;
     }
@@ -64,22 +72,17 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
 
     public void execute() {
         playerConnect.setKillstreak(killstreak);
-        if (commands == null) {
-            if (killstreak > playerConnect.getKillstreakTop()) {
-                final PlayerKillStreakTopEvent playerKillStreakTopEvent = new PlayerKillStreakTopEvent(player, killed, playerConnect, killstreak);
-                plugin.getServer().getPluginManager().callEvent(playerKillStreakTopEvent);
-                if (playerKillStreakTopEvent.isCancelled()) {
-                    return;
-                }
-                playerKillStreakTopEvent.execute();
+        if (killstreak > playerConnect.getKillstreakTop()) {
+            final PlayerKillStreakTopEvent playerKillStreakTopEvent = new PlayerKillStreakTopEvent(player, killed, playerConnect, killstreak);
+            plugin.getServer().getPluginManager().callEvent(playerKillStreakTopEvent);
+            if (playerKillStreakTopEvent.isCancelled()) {
                 return;
             }
-            final String path = "killstreak." + playerConnect.getGroup() + "." + killstreak + ".get";
-            if (plugin.getFileUtils().config.contains(path)) {
-                setCommands(plugin.getFileUtils().config.getStringList(path));
-            } else {
-                setCommands(plugin.getFileUtils().config.getStringList("killstreak." + playerConnect.getGroup() + ".get"));
+            if (playerKillStreakTopEvent.getCommands() == null) {
+                playerKillStreakTopEvent.setCommands(playerKillStreakTopEvent.getDefaultCommands());
             }
+            playerKillStreakTopEvent.execute();
+            return;
         }
         plugin.getXPManager().sendCommands(player, commands);
     }

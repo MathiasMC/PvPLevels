@@ -54,6 +54,14 @@ public class PlayerKillEvent extends Event implements Cancellable {
         return this.commands;
     }
 
+    public List<String> getDefaultCommands() {
+        final String path = "kills." + playerConnect.getGroup() + "." + kills;
+        if (plugin.getFileUtils().config.contains(path)) {
+            return plugin.getFileUtils().config.getStringList(path);
+        }
+        return plugin.getFileUtils().config.getStringList("kills." + playerConnect.getGroup() + ".get");
+    }
+
     public void setKills(final long kills) {
         this.kills = kills;
     }
@@ -64,14 +72,6 @@ public class PlayerKillEvent extends Event implements Cancellable {
 
     public void execute() {
         playerConnect.setKills(kills);
-        final String path = "kills." + playerConnect.getGroup() + "." + kills;
-        if (commands == null) {
-            if (plugin.getFileUtils().config.contains(path)) {
-                setCommands(plugin.getFileUtils().config.getStringList(path));
-            } else {
-                setCommands(plugin.getFileUtils().config.getStringList("kills." + playerConnect.getGroup() + ".get"));
-            }
-        }
         plugin.getXPManager().sendCommands(player, commands);
     }
 

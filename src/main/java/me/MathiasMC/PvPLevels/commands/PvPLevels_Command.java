@@ -657,6 +657,9 @@ public class PvPLevels_Command implements CommandExecutor {
                     final PlayerLostKillStreakEvent playerLostKillStreakEvent = new PlayerLostKillStreakEvent(target, playerConnect, set);
                     plugin.getServer().getPluginManager().callEvent(playerLostKillStreakEvent);
                     if (!playerLostKillStreakEvent.isCancelled()) {
+                        if (playerLostKillStreakEvent.getCommands() == null) {
+                            playerLostKillStreakEvent.setCommands(playerLostKillStreakEvent.getDefaultCommands());
+                        }
                         playerLostKillStreakEvent.execute();
                     }
                 }

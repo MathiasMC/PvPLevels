@@ -55,6 +55,14 @@ public class PlayerLostXPEvent extends Event implements Cancellable {
         return this.commands;
     }
 
+    public List<String> getDefaultCommands() {
+        final String path = playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override";
+        if (!plugin.getFileUtils().levels.contains(path)) {
+            return plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp.lose");
+        }
+        return plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".xp.lose");
+    }
+
     public void setXp(final long xp) {
         this.xp = xp;
     }
@@ -70,14 +78,6 @@ public class PlayerLostXPEvent extends Event implements Cancellable {
         playerConnect.setXp(xp);
         final boolean loseLevel = plugin.getXPManager().loseLevel(player, entity, playerConnect);
         if (!loseLevel) {
-            if (commands == null) {
-                final String path = playerConnect.getGroup() + "." + playerConnect.getLevel() + ".override";
-                if (!plugin.getFileUtils().levels.contains(path)) {
-                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + ".execute") + ".xp.lose"));
-                } else {
-                    setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".xp.lose"));
-                }
-            }
             plugin.getXPManager().sendCommands(player, commands);
         }
     }

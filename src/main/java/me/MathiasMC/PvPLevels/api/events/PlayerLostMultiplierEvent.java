@@ -68,7 +68,7 @@ public class PlayerLostMultiplierEvent extends Event implements Cancellable {
     }
 
     public void execute() {
-        if (commands != null && offlinePlayer.isOnline()) {
+        if (offlinePlayer.isOnline()) {
             plugin.getXPManager().sendCommands((Player) offlinePlayer, commands);
         }
         playerConnect.stopMultiplier();

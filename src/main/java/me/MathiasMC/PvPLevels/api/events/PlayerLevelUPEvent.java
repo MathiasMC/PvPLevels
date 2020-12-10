@@ -55,6 +55,14 @@ public class PlayerLevelUPEvent extends Event implements Cancellable {
         return this.commands;
     }
 
+    public List<String> getDefaultCommands() {
+        final String path = playerConnect.getGroup() + "." + level + ".override";
+        if (!plugin.getFileUtils().levels.contains(path)) {
+            return plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".execute") + ".level.up");
+        }
+        return plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".level.up");
+    }
+
     public void setLevel(final long level) {
         this.level = level;
     }
@@ -68,14 +76,6 @@ public class PlayerLevelUPEvent extends Event implements Cancellable {
     }
 
     public void execute() {
-        if (commands == null) {
-            final String path = playerConnect.getGroup() + "." + level + ".override";
-            if (!plugin.getFileUtils().levels.contains(path)) {
-                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".execute") + ".level.up"));
-            } else {
-                setCommands(plugin.getFileUtils().execute.getStringList(plugin.getFileUtils().levels.getString(path) + ".level.up"));
-            }
-        }
         plugin.getXPManager().sendCommands(player, commands);
         playerConnect.setLevel(level);
         playerConnect.save();

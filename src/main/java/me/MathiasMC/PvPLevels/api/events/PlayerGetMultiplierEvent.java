@@ -68,9 +68,6 @@ public class PlayerGetMultiplierEvent extends Event implements Cancellable {
 
     public void execute() {
         playerConnect.startMultiplier(multiplier, seconds);
-        if (commands == null) {
-            return;
-        }
         plugin.getXPManager().sendCommands(player, commands);
     }
 

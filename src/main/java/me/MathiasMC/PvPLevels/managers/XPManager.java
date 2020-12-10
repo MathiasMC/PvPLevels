@@ -80,6 +80,9 @@ public class XPManager {
         if (!isInWorld(player, playerConnect, "killstreak")) {
             return;
         }
+        if (playerKillStreakEvent.getCommands() == null) {
+            playerKillStreakEvent.setCommands(playerKillStreakEvent.getDefaultCommands());
+        }
         playerKillStreakEvent.execute();
     }
 
@@ -97,6 +100,9 @@ public class XPManager {
         if (!isInWorld(player, playerConnect, "deaths")) {
             return;
         }
+        if (playerDeathEvent.getCommands() == null) {
+            playerDeathEvent.setCommands(playerDeathEvent.getDefaultCommands());
+        }
         playerDeathEvent.execute();
     }
 
@@ -108,6 +114,9 @@ public class XPManager {
         }
         if (!isInWorld(player, playerConnect, "kills")) {
             return;
+        }
+        if (playerKillEvent.getCommands() == null) {
+            playerKillEvent.setCommands(playerKillEvent.getDefaultCommands());
         }
         playerKillEvent.execute();
     }
@@ -184,6 +193,9 @@ public class XPManager {
         if (playerGetXPEvent.isCancelled()) {
             return;
         }
+        if (playerGetXPEvent.getCommands() == null) {
+            playerGetXPEvent.setCommands(playerGetXPEvent.getDefaultCommands());
+        }
         playerGetXPEvent.execute();
     }
 
@@ -203,6 +215,9 @@ public class XPManager {
         if (playerLostXPEvent.isCancelled()) {
             return;
         }
+        if (playerLostXPEvent.getCommands() == null) {
+            playerLostXPEvent.setCommands(playerLostXPEvent.getDefaultCommands());
+        }
         playerLostXPEvent.execute();
     }
 
@@ -212,6 +227,9 @@ public class XPManager {
             plugin.getServer().getPluginManager().callEvent(playerLevelDownEvent);
             if (playerLevelDownEvent.isCancelled()) {
                 return false;
+            }
+            if (playerLevelDownEvent.getCommands() == null) {
+                playerLevelDownEvent.setCommands(playerLevelDownEvent.getDefaultCommands());
             }
             playerLevelDownEvent.execute();
             return true;
@@ -229,6 +247,9 @@ public class XPManager {
             plugin.getServer().getPluginManager().callEvent(playerLevelUPEvent);
             if (playerLevelUPEvent.isCancelled()) {
                 return false;
+            }
+            if (playerLevelUPEvent.getCommands() == null) {
+                playerLevelUPEvent.setCommands(playerLevelUPEvent.getDefaultCommands());
             }
             playerLevelUPEvent.execute();
             return true;
@@ -255,6 +276,7 @@ public class XPManager {
     }
 
     public void sendCommands(final Player player, final List<String> list) {
+        if (list == null) return;
         for (String command : list) {
             plugin.getServer().dispatchCommand(plugin.consoleSender, plugin.getPlaceholderManager().replacePlaceholders(player, false, command));
         }
