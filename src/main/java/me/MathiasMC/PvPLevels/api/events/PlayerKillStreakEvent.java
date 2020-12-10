@@ -74,12 +74,10 @@ public class PlayerKillStreakEvent extends Event implements Cancellable {
         playerConnect.setKillstreak(killstreak);
         if (killstreak > playerConnect.getKillstreakTop()) {
             final PlayerKillStreakTopEvent playerKillStreakTopEvent = new PlayerKillStreakTopEvent(player, killed, playerConnect, killstreak);
+            playerKillStreakTopEvent.setCommands(playerKillStreakTopEvent.getDefaultCommands());
             plugin.getServer().getPluginManager().callEvent(playerKillStreakTopEvent);
             if (playerKillStreakTopEvent.isCancelled()) {
                 return;
-            }
-            if (playerKillStreakTopEvent.getCommands() == null) {
-                playerKillStreakTopEvent.setCommands(playerKillStreakTopEvent.getDefaultCommands());
             }
             playerKillStreakTopEvent.execute();
             return;

@@ -72,51 +72,45 @@ public class XPManager {
     }
 
     public void getKillStreak(final Player player, final Player killed, final PlayerConnect playerConnect) {
-        final PlayerKillStreakEvent playerKillStreakEvent = new PlayerKillStreakEvent(player, killed, playerConnect, (playerConnect.getKillstreak() + 1));
+        if (!isWorld(player, playerConnect, "killstreak")) {
+            return;
+        }
+        final PlayerKillStreakEvent playerKillStreakEvent = new PlayerKillStreakEvent(player, killed, playerConnect, playerConnect.getKillstreak() + 1);
+        playerKillStreakEvent.setCommands(playerKillStreakEvent.getDefaultCommands());
         plugin.getServer().getPluginManager().callEvent(playerKillStreakEvent);
         if (playerKillStreakEvent.isCancelled()) {
             return;
-        }
-        if (!isInWorld(player, playerConnect, "killstreak")) {
-            return;
-        }
-        if (playerKillStreakEvent.getCommands() == null) {
-            playerKillStreakEvent.setCommands(playerKillStreakEvent.getDefaultCommands());
         }
         playerKillStreakEvent.execute();
     }
 
     public void getDeath(final Player player, final Entity entity, final PlayerConnect playerConnect) {
+        if (!isWorld(player, playerConnect, "deaths")) {
+            return;
+        }
         if (plugin.getFileUtils().config.getBoolean("deaths." + playerConnect.getGroup() + ".only-player")) {
             if (entity == null) {
                 return;
             }
         }
-        final PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, entity, playerConnect, (playerConnect.getDeaths() + 1));
+        final PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, entity, playerConnect, playerConnect.getDeaths() + 1);
+        playerDeathEvent.setCommands(playerDeathEvent.getDefaultCommands());
         plugin.getServer().getPluginManager().callEvent(playerDeathEvent);
         if (playerDeathEvent.isCancelled()) {
             return;
-        }
-        if (!isInWorld(player, playerConnect, "deaths")) {
-            return;
-        }
-        if (playerDeathEvent.getCommands() == null) {
-            playerDeathEvent.setCommands(playerDeathEvent.getDefaultCommands());
         }
         playerDeathEvent.execute();
     }
 
     public void getKill(final Player player, final Player killed, final PlayerConnect playerConnect) {
-        final PlayerKillEvent playerKillEvent = new PlayerKillEvent(player, killed, playerConnect, (playerConnect.getKills() + 1));
+        if (!isWorld(player, playerConnect, "kills")) {
+            return;
+        }
+        final PlayerKillEvent playerKillEvent = new PlayerKillEvent(player, killed, playerConnect, playerConnect.getKills() + 1);
+        playerKillEvent.setCommands(playerKillEvent.getDefaultCommands());
         plugin.getServer().getPluginManager().callEvent(playerKillEvent);
         if (playerKillEvent.isCancelled()) {
             return;
-        }
-        if (!isInWorld(player, playerConnect, "kills")) {
-            return;
-        }
-        if (playerKillEvent.getCommands() == null) {
-            playerKillEvent.setCommands(playerKillEvent.getDefaultCommands());
         }
         playerKillEvent.execute();
     }
@@ -156,7 +150,7 @@ public class XPManager {
             if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] config.yml path " + path + " is not found."); }
             return;
         }
-        if (!isInWorld(player, playerConnect, path)) {
+        if (!isWorld(player, playerConnect, path)) {
             return;
         }
         long xp = plugin.getCalculateManager().randomNumber(plugin.getFileUtils().config.getLong(path + ".min"), plugin.getFileUtils().config.getLong(path + ".max"));
@@ -184,17 +178,15 @@ public class XPManager {
             }
             xp = (int) (xp * multiplier);
         }
-        final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(player, entity, playerConnect, (playerConnect.getXp() + xp));
+        final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(player, entity, playerConnect, playerConnect.getXp() + xp);
         playerGetXPEvent.setKey(key);
         playerConnect.setXpItem(item);
         playerConnect.setXpType(entityType);
         playerConnect.setXpLast(xp);
+        playerGetXPEvent.setCommands(playerGetXPEvent.getDefaultCommands());
         plugin.getServer().getPluginManager().callEvent(playerGetXPEvent);
         if (playerGetXPEvent.isCancelled()) {
             return;
-        }
-        if (playerGetXPEvent.getCommands() == null) {
-            playerGetXPEvent.setCommands(playerGetXPEvent.getDefaultCommands());
         }
         playerGetXPEvent.execute();
     }
@@ -208,14 +200,12 @@ public class XPManager {
         if (xp < plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + plugin.getStartLevel() + ".xp")) {
             return;
         }
-        final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(player, killer, playerConnect, (playerConnect.getXp() - xp));
+        final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(player, killer, playerConnect, playerConnect.getXp() - xp);
         playerConnect.setXpLost(xp);
+        playerLostXPEvent.setCommands(playerLostXPEvent.getDefaultCommands());
         plugin.getServer().getPluginManager().callEvent(playerLostXPEvent);
         if (playerLostXPEvent.isCancelled()) {
             return;
-        }
-        if (playerLostXPEvent.getCommands() == null) {
-            playerLostXPEvent.setCommands(playerLostXPEvent.getDefaultCommands());
         }
         playerLostXPEvent.execute();
     }
@@ -223,12 +213,10 @@ public class XPManager {
     public boolean loseLevel(final Player player, final Entity entity, final PlayerConnect playerConnect) {
         if (playerConnect.getLevel() - 1 >= plugin.getStartLevel() && playerConnect.getXp() < plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + playerConnect.getLevel() + ".xp")) {
             final PlayerLevelDownEvent playerLevelDownEvent = new PlayerLevelDownEvent(player, entity, playerConnect, playerConnect.getLevel() - 1);
+            playerLevelDownEvent.setCommands(playerLevelDownEvent.getDefaultCommands());
             plugin.getServer().getPluginManager().callEvent(playerLevelDownEvent);
             if (playerLevelDownEvent.isCancelled()) {
                 return false;
-            }
-            if (playerLevelDownEvent.getCommands() == null) {
-                playerLevelDownEvent.setCommands(playerLevelDownEvent.getDefaultCommands());
             }
             playerLevelDownEvent.execute();
             return true;
@@ -243,12 +231,10 @@ public class XPManager {
         final long nextLevel = playerConnect.getLevel() + 1;
         if (playerConnect.getXp() >= plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + nextLevel + ".xp")) {
             PlayerLevelUPEvent playerLevelUPEvent = new PlayerLevelUPEvent(player, entity, playerConnect, nextLevel);
+            playerLevelUPEvent.setCommands(playerLevelUPEvent.getDefaultCommands());
             plugin.getServer().getPluginManager().callEvent(playerLevelUPEvent);
             if (playerLevelUPEvent.isCancelled()) {
                 return false;
-            }
-            if (playerLevelUPEvent.getCommands() == null) {
-                playerLevelUPEvent.setCommands(playerLevelUPEvent.getDefaultCommands());
             }
             playerLevelUPEvent.execute();
             return true;
@@ -260,16 +246,13 @@ public class XPManager {
         return !plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + (playerConnect.getLevel() + 1));
     }
 
-    public boolean isInWorld(final Player player, final PlayerConnect playerConnect, final String key) {
+    public boolean isWorld(final Player player, final PlayerConnect playerConnect, final String key) {
         final FileConfiguration config = plugin.getFileUtils().config;
         final String group = playerConnect.getGroup();
         if (config.contains(key + "." + group + ".worlds")) {
-            final List<String> worlds = config.getStringList(key + "." + group + ".worlds");
-            if (worlds.contains(player.getWorld().getName())) {
-                return true;
-            }
-            if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + player.getName() + " world " + player.getWorld().getName() + " is not in " + key + "." + group + ".worlds"); }
-            return false;
+            final boolean world = config.getStringList(key + "." + group + ".worlds").contains(player.getWorld().getName());
+            if (!world) { plugin.getTextUtils().debug("[XP] " + player.getName() + " world " + player.getWorld().getName() + " is not in " + key + "." + group + ".worlds"); }
+            return world;
         }
         return true;
     }

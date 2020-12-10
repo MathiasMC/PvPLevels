@@ -529,15 +529,13 @@ public class PvPLevels_Command implements CommandExecutor {
                                         if (plugin.getCalculateManager().isInt(args[3]) && Integer.parseInt(args[3]) <= 2073600) {
                                             final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                             final PlayerGetMultiplierEvent playerGetMultiplierEvent = new PlayerGetMultiplierEvent(target, playerConnect, Double.parseDouble(args[2]), Integer.parseInt(args[3]));
+                                            final List<String> commands = new ArrayList<>();
+                                            for (String command : getCommands("multiplier.target")) {
+                                                commands.add(command.replace("{target}", target.getName()));
+                                            }
+                                            playerGetMultiplierEvent.setCommands(commands);
                                             plugin.getServer().getPluginManager().callEvent(playerGetMultiplierEvent);
                                             if (!playerGetMultiplierEvent.isCancelled()) {
-                                                if (playerGetMultiplierEvent.getCommands() == null) {
-                                                    final List<String> commands = new ArrayList<>();
-                                                    for (String command : getCommands("multiplier.target")) {
-                                                        commands.add(command.replace("{target}", target.getName()));
-                                                    }
-                                                    playerGetMultiplierEvent.setCommands(commands);
-                                                }
                                                 playerGetMultiplierEvent.execute();
                                             }
                                             if (player != null) {
@@ -655,11 +653,9 @@ public class PvPLevels_Command implements CommandExecutor {
                 }
                 if (set > 0) {
                     final PlayerLostKillStreakEvent playerLostKillStreakEvent = new PlayerLostKillStreakEvent(target, playerConnect, set);
+                    playerLostKillStreakEvent.setCommands(playerLostKillStreakEvent.getDefaultCommands());
                     plugin.getServer().getPluginManager().callEvent(playerLostKillStreakEvent);
                     if (!playerLostKillStreakEvent.isCancelled()) {
-                        if (playerLostKillStreakEvent.getCommands() == null) {
-                            playerLostKillStreakEvent.setCommands(playerLostKillStreakEvent.getDefaultCommands());
-                        }
                         playerLostKillStreakEvent.execute();
                     }
                 }

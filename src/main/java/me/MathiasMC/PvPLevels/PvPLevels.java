@@ -164,12 +164,10 @@ public class PvPLevels extends JavaPlugin {
                         return;
                     }
                     final PlayerLostMultiplierEvent playerLostMultiplierEvent = new PlayerLostMultiplierEvent(getServer().getOfflinePlayer(UUID.fromString(uuid)), playerConnect, playerConnect.getMultiplier(), playerConnect.getMultiplierTime());
+                    playerLostMultiplierEvent.setCommands(fileUtils.language.getStringList("multiplier.lost"));
                     getServer().getPluginManager().callEvent(playerLostMultiplierEvent);
                     if (playerLostMultiplierEvent.isCancelled()) {
                         return;
-                    }
-                    if (playerLostMultiplierEvent.getCommands() == null) {
-                        playerLostMultiplierEvent.setCommands(fileUtils.language.getStringList("multiplier.lost"));
                     }
                     playerLostMultiplierEvent.execute();
                 }
