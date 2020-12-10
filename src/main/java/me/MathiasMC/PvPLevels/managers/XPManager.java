@@ -196,7 +196,7 @@ public class XPManager {
         if (!plugin.getFileUtils().config.contains(path + ".xp-lose")) {
             return;
         }
-        if (!isWorld(player, path)) {
+        if (!isWorld(player, path + ".xp-lose")) {
             return;
         }
         final long xp = plugin.getCalculateManager().randomNumber(plugin.getFileUtils().config.getLong(path + ".xp-lose.min"), plugin.getFileUtils().config.getLong(path + ".xp-lose.max"));

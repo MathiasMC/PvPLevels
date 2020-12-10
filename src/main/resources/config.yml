@@ -224,7 +224,7 @@ xp:
 
       min: 3
       max: 15
-      # worlds section to allow only in certain worlds
+      # worlds section to allow get xp only in certain worlds
       #worlds:
       #  - world
 
@@ -232,6 +232,9 @@ xp:
       xp-lose:
         min: 6
         max: 20
+        # worlds section to allow lose xp only in certain worlds
+        #worlds:
+        #  - world
 
     bat:
       min: 1
