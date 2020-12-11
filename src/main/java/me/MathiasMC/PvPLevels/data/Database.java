@@ -24,6 +24,7 @@ public class Database {
                     }
                 } catch (SQLException e) {
                     connection = get();
+                    if (plugin.isDebug()) { plugin.getTextUtils().debug("[Database] Lost connection, getting new connection"); }
                 }
             }
         }).runTaskTimerAsynchronously(plugin, 60 * 20, 60 * 20);
@@ -32,11 +33,11 @@ public class Database {
     private Connection get() {
         try {
             if (plugin.getFileUtils().config.getBoolean("mysql.use")) {
-                plugin.getTextUtils().info("Database ( Connected ) ( MySQL )");
+                plugin.getTextUtils().info("[Database] ( Connected ) ( MySQL )");
                 Class.forName("com.mysql.jdbc.Driver");
                 return DriverManager.getConnection("jdbc:mysql://" + plugin.getFileUtils().config.getString("mysql.host") + ":" + plugin.getFileUtils().config.getString("mysql.port") + "/" + plugin.getFileUtils().config.getString("mysql.database"), plugin.getFileUtils().config.getString("mysql.username"), plugin.getFileUtils().config.getString("mysql.password"));
             } else {
-                plugin.getTextUtils().info("Database ( Connected ) ( SQLite )");
+                plugin.getTextUtils().info("[Database] ( Connected ) ( SQLite )");
                 Class.forName("org.sqlite.JDBC");
                 return DriverManager.getConnection("jdbc:sqlite:" + new File(plugin.getDataFolder(), "data.db"));
             }
@@ -94,7 +95,7 @@ public class Database {
                             preparedStatement.setString(9, "0.0 0 0");
                             preparedStatement.setTimestamp(10, new Timestamp(new Date().getTime()));
                             preparedStatement.executeUpdate();
-                            if (plugin.isDebug()) { plugin.getTextUtils().debug("Inserted " + uuid); }
+                            if (plugin.isDebug()) { plugin.getTextUtils().debug("[Database] Inserted ( " + uuid + " )"); }
                         }
                     } catch (SQLException exception) {
                         plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
@@ -131,7 +132,7 @@ public class Database {
                             preparedStatement.setString(1, uuid);
                             preparedStatement.executeUpdate();
                             plugin.removePlayerConnect(uuid);
-                            if (plugin.isDebug()) { plugin.getTextUtils().debug("Deleting " + uuid); }
+                            if (plugin.isDebug()) { plugin.getTextUtils().debug("[Database] Deleting ( " + uuid + " )"); }
                         }
                     } catch (SQLException exception) {
                         plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
@@ -176,7 +177,7 @@ public class Database {
                             preparedStatement.setTimestamp(9, timestamp);
                             preparedStatement.setString(10, uuid);
                             preparedStatement.executeUpdate();
-                            if (plugin.isDebug()) { plugin.getTextUtils().debug("Setting values for " + uuid); }
+                            if (plugin.isDebug()) { plugin.getTextUtils().debug("[Database] Setting values for ( " + uuid + " )"); }
                         }
                     } catch (SQLException exception) {
                         plugin.getTextUtils().exception(exception.getStackTrace(), exception.getMessage());
@@ -207,7 +208,7 @@ public class Database {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM players WHERE uuid= '" + uuid + "';");
             if (resultSet.next()) {
-                if (plugin.isDebug()) { plugin.getTextUtils().debug("Getting data for " + uuid); }
+                if (plugin.isDebug()) { plugin.getTextUtils().debug("[Database] Getting new data for ( " + uuid + " )"); }
                 return new String[]{ resultSet.getString("group"), String.valueOf(resultSet.getLong("kills")), String.valueOf(resultSet.getLong("deaths")), String.valueOf(resultSet.getLong("xp")), String.valueOf(resultSet.getLong("level")), String.valueOf(resultSet.getLong("killstreak")), String.valueOf(resultSet.getLong("killstreak_top")), resultSet.getString("multiplier"), String.valueOf(resultSet.getTimestamp("lastseen")) };
             }
         } catch (SQLException exception) {

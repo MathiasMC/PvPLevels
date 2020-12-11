@@ -15,6 +15,10 @@ debug: false
 # Check for blocks and get xp if type found. (disable block break, place event) (Require server restart)
 blocks: true
 
+# Reverse worlds section?
+# If true contains list of turned off worlds.
+reverse-worlds: false
+
 # Instant death on certain y level
 instant-death:
   # Use? (Require server restart)

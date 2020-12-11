@@ -36,8 +36,8 @@ public class XPManager {
                 if (!plugin.getFileUtils().config.getStringList("excluded").contains(entityUUID)) {
                     loseXP(player, killer, playerConnect);
                     getDeath(player, killer, playerConnect);
-                } else if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + killer.getName() + " cannot get stats currently, is in the excluded list."); }
-            } else if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + player.getName() + " does not have access to get xp " + "pvplevels.group." + playerConnect.getGroup()); }
+                } else if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + killer.getName() + " ) Cannot get stats (lose), is in the excluded list"); }
+            } else if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + player.getName() + " ) Cannot get stats (lose), does not have permission ( " + "pvplevels.group." + playerConnect.getGroup() + " )"); }
         }
         if (killer == null) {
             return;
@@ -45,20 +45,18 @@ public class XPManager {
         final String killerUUID = killer.getUniqueId().toString();
         final PlayerConnect playerConnect = plugin.getPlayerConnect(killerUUID);
         if (!killer.hasPermission("pvplevels.group." + playerConnect.getGroup())) {
-            if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + killer.getName() + " does not have access to get xp " + "pvplevels.group." + playerConnect.getGroup()); }
+            if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + killer.getName() + " ) Cannot get stats (get), does not have permission ( " + "pvplevels.group." + playerConnect.getGroup() + " )"); }
             return;
         }
         if (plugin.getFileUtils().config.getStringList("excluded").contains(killerUUID)) {
-            if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + killer.getName() + " cannot get stats currently, is in the excluded list."); }
+            if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + killer.getName() + " ) Cannot get stats (get), is in the excluded list"); }
             return;
         }
 
         if (entityPlayer) {
             playerConnect.setXpType(entity.getName());
             if (plugin.getKillSessionManager().hasSession(killer, (Player) entity)) {
-                if (plugin.isDebug()) {
-                    plugin.getTextUtils().debug("[XP] " + killer.getName() + " are still in the kill session.");
-                }
+                if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + killer.getName() + " ) Cannot get stats (get), still in the kill session"); }
                 return;
             }
         }
@@ -124,11 +122,11 @@ public class XPManager {
         if (entity != null) {
             final String entityUUID = entity.getUniqueId().toString();
             if (plugin.spawners.contains(entityUUID)) {
-                if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + player.getName() + " could not get xp from " + entity.getName()); }
+                if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + player.getName() + " ) Cannot get xp, from entity ( " + entity.getName() + " ) found in spawners section"); }
                 return;
             }
             if (uuid.equalsIgnoreCase(entityUUID)) {
-                if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] " + uuid + " is the same as " + entityUUID); }
+                if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + player.getName() + " ) Cannot get xp, same uuid as ( " + entityUUID + " )"); }
                 return;
             }
             pathKey = entity.getType().toString().toLowerCase();
@@ -147,7 +145,7 @@ public class XPManager {
         }
         final String path = "xp." + group + "." + pathKey;
         if (!plugin.getFileUtils().config.contains(path)) {
-            if (plugin.isDebug()) { plugin.getTextUtils().debug("[XP] config.yml path " + path + " is not found."); }
+            if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + player.getName() + " ) Cannot get xp, path not found ( " + path + " )"); }
             return;
         }
         if (!isWorld(player, path)) {
@@ -253,7 +251,11 @@ public class XPManager {
         final FileConfiguration config = plugin.getFileUtils().config;
         if (config.contains(key + ".worlds")) {
             final boolean world = config.getStringList(key + ".worlds").contains(player.getWorld().getName());
-            if (plugin.isDebug() && !world) { plugin.getTextUtils().debug("[XP] " + player.getName() + " world " + player.getWorld().getName() + " is not in " + key + ".worlds"); }
+            if (plugin.getFileUtils().config.getBoolean("reverse-worlds", false)) {
+                if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + player.getName() + " ) Is in world ( " + player.getWorld().getName() + " ) but is turned off for this world ( " + key + ".worlds )"); }
+                return !world;
+            }
+            if (plugin.isDebug()) { plugin.getTextUtils().debug("( " + player.getName() + " ) Is in world ( " + player.getWorld().getName() + " ) but not found ( " + key + ".worlds )"); }
             return world;
         }
         return true;
