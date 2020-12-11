@@ -155,21 +155,22 @@ public class PvPLevels extends JavaPlugin {
             }
 
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
-                for (String uuid : multipliers) {
+                final Iterator<String> iterator = new ArrayList<>(multipliers).iterator();
+                while (iterator.hasNext()) {
+                    final String uuid = iterator.next();
                     final PlayerConnect playerConnect = getPlayerConnect(uuid);
                     long left = playerConnect.getMultiplierTimeLeft();
                     if (left > 0) {
                         left--;
                         playerConnect.setMultiplierTimeLeft(left);
-                        return;
+                    } else {
+                        final PlayerLostMultiplierEvent playerLostMultiplierEvent = new PlayerLostMultiplierEvent(getServer().getOfflinePlayer(UUID.fromString(uuid)), playerConnect, playerConnect.getMultiplier(), playerConnect.getMultiplierTime());
+                        playerLostMultiplierEvent.setCommands(fileUtils.language.getStringList("multiplier.lost"));
+                        getServer().getPluginManager().callEvent(playerLostMultiplierEvent);
+                        if (!playerLostMultiplierEvent.isCancelled()) {
+                            playerLostMultiplierEvent.execute();
+                        }
                     }
-                    final PlayerLostMultiplierEvent playerLostMultiplierEvent = new PlayerLostMultiplierEvent(getServer().getOfflinePlayer(UUID.fromString(uuid)), playerConnect, playerConnect.getMultiplier(), playerConnect.getMultiplierTime());
-                    playerLostMultiplierEvent.setCommands(fileUtils.language.getStringList("multiplier.lost"));
-                    getServer().getPluginManager().callEvent(playerLostMultiplierEvent);
-                    if (playerLostMultiplierEvent.isCancelled()) {
-                        return;
-                    }
-                    playerLostMultiplierEvent.execute();
                 }
             }, 20, 20);
 

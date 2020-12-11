@@ -540,7 +540,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             }
                                             if (player != null) {
                                                 for (String command : getCommands("multiplier.got")) {
-                                                    dispatchCommand(player, command.replace("{target}", target.getName()));
+                                                    dispatchCommand(player, command.replace("{target}", target.getName()).replace("{xp_multiplier}", plugin.getStatsManager().getMultiplier(playerConnect)).replace("{xp_multiplier_time}", plugin.getStatsManager().getMultiplierTime(playerConnect)));
                                                 }
                                             } else {
                                                 for (String message : getCommands("console.multiplier.got")) {
