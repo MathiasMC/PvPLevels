@@ -195,6 +195,7 @@ generate:
 xp:
   default:
     # lowercase entity names
+    # You can use worlds, items, name in all types here
     player:
 
       # Get more xp with an specific item (PlaceholderAPI support)
@@ -459,6 +460,9 @@ xp:
 
     # All is used if not found other xp-lose use this (remove all section to disable)
     all:
+      # worlds section to allow lose xp only in certain worlds
+      #worlds:
+      #  - world
       xp-lose:
         min: 2
         max: 2

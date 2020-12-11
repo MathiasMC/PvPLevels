@@ -308,9 +308,6 @@ public class XPManager {
     }
 
     private String getSourceType(final Player player) {
-        if (plugin.getFileUtils().config.contains("xp." + plugin.getPlayerConnect(player.getUniqueId().toString()).getGroup() + ".all")) {
-            return "all";
-        }
         final EntityDamageEvent entityDamageEvent = player.getLastDamageCause();
         if (entityDamageEvent instanceof EntityDamageByEntityEvent) {
             Entity entity = ((EntityDamageByEntityEvent) entityDamageEvent).getDamager();
@@ -321,6 +318,9 @@ public class XPManager {
             }
         } else if (entityDamageEvent != null) {
             return entityDamageEvent.getCause().toString().toLowerCase();
+        }
+        if (plugin.getFileUtils().config.contains("xp." + plugin.getPlayerConnect(player.getUniqueId().toString()).getGroup() + ".all")) {
+            return "all";
         }
         return "void";
     }
