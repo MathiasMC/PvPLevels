@@ -56,20 +56,8 @@ public class PvPLevelsAPI {
         return plugin.getActionBarManager();
     }
 
-    public KillSessionManager getKillSessionManager() {
-        return plugin.getKillSessionManager();
-    }
-
     public StatsManager getStatsManager() {
         return plugin.getStatsManager();
-    }
-
-    public PlaceholderManager getPlaceholderManager() {
-        return plugin.getPlaceholderManager();
-    }
-
-    public CalculateManager getCalculateManager() {
-        return plugin.getCalculateManager();
     }
 
     public long getStartLevel() {
@@ -101,49 +89,42 @@ public class PvPLevelsAPI {
     public void unregisterPlayerJoin() {
         final PlayerJoin listener = plugin.getPlayerJoin();
         if (listener == null) return;
-        if (plugin.isDebug()) { plugin.getTextUtils().debug("PlayerJoin Listener has been unregistered."); }
         HandlerList.unregisterAll(listener);
     }
 
     public void unregisterEntityDeath() {
         final EntityDeath listener = plugin.getEntityDeath();
         if (listener == null) return;
-        if (plugin.isDebug()) { plugin.getTextUtils().debug("EntityDeath Listener has been unregistered."); }
         HandlerList.unregisterAll(listener);
     }
 
     public void unregisterEntityDamageByEntity() {
         final EntityDamageByEntity listener = plugin.getEntityDamageByEntity();
         if (listener == null) return;
-        if (plugin.isDebug()) { plugin.getTextUtils().debug("EntityDamageByEntity Listener has been unregistered."); }
         HandlerList.unregisterAll(listener);
     }
 
     public void unregisterCreatureSpawn() {
-        final CreatureSpawn listener = plugin.getCreatureSpawn();
+        CreatureSpawn listener = plugin.getCreatureSpawn();
         if (listener == null) return;
-        if (plugin.isDebug()) { plugin.getTextUtils().debug("CreatureSpawn Listener has been unregistered."); }
         HandlerList.unregisterAll(listener);
     }
 
     public void unregisterBlockBreak() {
         final BlockBreak listener = plugin.getBlockBreak();
         if (listener == null) return;
-        if (plugin.isDebug()) { plugin.getTextUtils().debug("BlockBreak Listener has been unregistered."); }
         HandlerList.unregisterAll(listener);
     }
 
     public void unregisterBlockPlace() {
         final BlockPlace listener = plugin.getBlockPlace();
         if (listener == null) return;
-        if (plugin.isDebug()) { plugin.getTextUtils().debug("BlockPlace Listener has been unregistered."); }
         HandlerList.unregisterAll(listener);
     }
 
     public void unregisterPlayerMove() {
         final PlayerMove listener = plugin.getPlayerMove();
         if (listener == null) return;
-        if (plugin.isDebug()) { plugin.getTextUtils().debug("PlayerMove Listener has been unregistered."); }
         HandlerList.unregisterAll(listener);
     }
 

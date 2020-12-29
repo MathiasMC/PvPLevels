@@ -27,7 +27,7 @@ public class PlayerDeathEvent extends Event implements Cancellable {
 
     private List<String> commands = null;
 
-    public PlayerDeathEvent(final Player player, final Entity entity, final PlayerConnect playerConnect, final long deaths) {
+    public PlayerDeathEvent(Player player, Entity entity, PlayerConnect playerConnect, long deaths) {
         this.plugin = PvPLevels.getInstance();
         this.player = player;
         this.entity = entity;
@@ -62,11 +62,11 @@ public class PlayerDeathEvent extends Event implements Cancellable {
         return plugin.getFileUtils().config.getStringList("deaths." + playerConnect.getGroup() + ".other");
     }
 
-    public void setDeaths(final long deaths) {
+    public void setDeaths(long deaths) {
         this.deaths = deaths;
     }
 
-    public void setCommands(final List<String> commands) {
+    public void setCommands(List<String> commands) {
         this.commands = commands;
     }
 

@@ -26,7 +26,7 @@ public class UpdateUtils {
                     consumer.accept(scanner.next());
                 }
             } catch (IOException exception) {
-                plugin.getTextUtils().error("Error when checking for a new update!");
+                Utils.error("Error when checking for a new update!");
             }
         });
     }

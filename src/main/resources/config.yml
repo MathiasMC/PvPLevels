@@ -15,9 +15,10 @@ debug: false
 # Check for blocks and get xp if type found. (disable block break, place event) (Require server restart)
 blocks: true
 
-# Reverse worlds section?
-# If true contains list of turned off worlds.
-reverse-worlds: false
+# Worlds section
+# Disable getting stats in worlds in thís list
+worlds:
+  - world_nether
 
 # Instant death on certain y level
 instant-death:
@@ -229,17 +230,11 @@ xp:
 
       min: 3
       max: 15
-      # worlds section to allow get xp only in certain worlds
-      #worlds:
-      #  - world
 
       # xp lose, remove this section to disable.
       xp-lose:
         min: 6
         max: 20
-        # worlds section to allow lose xp only in certain worlds
-        #worlds:
-        #  - world
 
     bat:
       min: 1
@@ -464,9 +459,6 @@ xp:
 
     # All is used if not found other xp-lose use this (remove all section to disable)
     all:
-      # worlds section to allow lose xp only in certain worlds
-      #worlds:
-      #  - world
       xp-lose:
         min: 2
         max: 2
@@ -474,9 +466,6 @@ xp:
 # If you dont use you can just remove this section.
 kills:
   default:
-    # worlds section to allow only in certain worlds
-    #worlds:
-    #  - world
     get: []
     5:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have reached &b5 &7kills.'
@@ -487,9 +476,6 @@ kills:
 deaths:
   default:
     only-player: false
-    # worlds section to allow only in certain worlds
-    #worlds:
-    #  - world
     player:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{source} &7has murdered you!'
       - 'pvplevels reset killstreak {player}'
@@ -500,9 +486,6 @@ deaths:
 # If you dont use you can just remove this section.
 killstreak:
   default:
-    # worlds section to allow only in certain worlds
-    #worlds:
-    #  - world
     get: []
     5:
       top:

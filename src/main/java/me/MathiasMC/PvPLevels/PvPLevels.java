@@ -12,8 +12,8 @@ import me.MathiasMC.PvPLevels.support.actionbar.ActionBar;
 import me.MathiasMC.PvPLevels.support.actionbar.ActionBar_1_8_R3;
 import me.MathiasMC.PvPLevels.utils.FileUtils;
 import me.MathiasMC.PvPLevels.utils.MetricsLite;
-import me.MathiasMC.PvPLevels.utils.TextUtils;
 import me.MathiasMC.PvPLevels.utils.UpdateUtils;
+import me.MathiasMC.PvPLevels.utils.Utils;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,13 +31,9 @@ public class PvPLevels extends JavaPlugin {
 
     public Database database;
 
-    private TextUtils textUtils;
-
     private FileUtils fileUtils;
 
-    private CalculateManager calculateManager;
-    private PlaceholderManager placeholderManager;
-    private KillSessionManager killSessionManager;
+    private SessionManager sessionManager;
     private StatsManager statsManager;
     private XPManager xpManager;
 
@@ -87,8 +83,6 @@ public class PvPLevels extends JavaPlugin {
     public void onEnable() {
         call = this;
 
-        textUtils = new TextUtils(this);
-
         fileUtils = new FileUtils(this);
 
         startLevel = fileUtils.config.getLong("start-level");
@@ -97,11 +91,9 @@ public class PvPLevels extends JavaPlugin {
 
         database = new Database(this);
 
-        placeholderManager = new PlaceholderManager(this);
-        killSessionManager = new KillSessionManager(this);
+        sessionManager = new SessionManager(this);
         statsManager = new StatsManager(this);
         xpManager = new XPManager(this);
-        calculateManager = new CalculateManager();
         if (getServer().getVersion().contains("1.8")) {
             actionBarManager = new ActionBar_1_8_R3(this);
         } else {
@@ -139,26 +131,29 @@ public class PvPLevels extends JavaPlugin {
             if (fileUtils.config.getBoolean("update-check")) {
                 new UpdateUtils(this, 20807).getVersion(version -> {
                     if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                        textUtils.info("You are using the latest version of PvPLevels (" + getDescription().getVersion() + ")");
+                        Utils.info("You are using the latest version of PvPLevels (" + getDescription().getVersion() + ")");
                     } else {
-                        textUtils.warning("Version: " + version + " has been released! you are currently using version: " + getDescription().getVersion());
+                        Utils.warning("Version: " + version + " has been released! you are currently using version: " + getDescription().getVersion());
                     }
                 });
             }
             if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 new PlaceholderAPI(this).register();
-                textUtils.info("PlaceholderAPI (found)");
+                Utils.info("PlaceholderAPI (found)");
             }
 
             if (fileUtils.config.contains("mysql.purge")) {
                 new Purge(this);
             }
 
+            Utils.info("Created by MathiasMC");
+            Utils.info(" ");
+
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
-                final Iterator<String> iterator = new ArrayList<>(multipliers).iterator();
+                Iterator<String> iterator = new ArrayList<>(multipliers).iterator();
                 while (iterator.hasNext()) {
-                    final String uuid = iterator.next();
-                    final PlayerConnect playerConnect = getPlayerConnect(uuid);
+                    String uuid = iterator.next();
+                    PlayerConnect playerConnect = getPlayerConnect(uuid);
                     long left = playerConnect.getMultiplierTimeLeft();
                     if (left > 0) {
                         left--;
@@ -175,7 +170,7 @@ public class PvPLevels extends JavaPlugin {
             }, 20, 20);
 
         } else {
-            textUtils.error("Disabling plugin cannot connect to database");
+            Utils.error("Disabling plugin cannot connect to database");
             getServer().getPluginManager().disablePlugin(this);
         }
     }
@@ -184,7 +179,7 @@ public class PvPLevels extends JavaPlugin {
         try {
             database.close();
         } catch (SQLException exception) {
-            textUtils.exception(exception.getStackTrace(), exception.getMessage());
+            Utils.exception(exception.getStackTrace(), exception.getMessage());
         }
         call = null;
     }
@@ -197,10 +192,6 @@ public class PvPLevels extends JavaPlugin {
         return this.fileUtils;
     }
 
-    public TextUtils getTextUtils() {
-        return this.textUtils;
-    }
-
     public XPManager getXPManager() {
         return this.xpManager;
     }
@@ -209,20 +200,12 @@ public class PvPLevels extends JavaPlugin {
         return this.actionBarManager;
     }
 
-    public KillSessionManager getKillSessionManager() {
-        return this.killSessionManager;
+    public SessionManager getSessionManager() {
+        return sessionManager;
     }
 
     public StatsManager getStatsManager() {
         return this.statsManager;
-    }
-
-    public PlaceholderManager getPlaceholderManager() {
-        return this.placeholderManager;
-    }
-
-    public CalculateManager getCalculateManager() {
-        return this.calculateManager;
     }
 
     public long getStartLevel() {
@@ -233,7 +216,7 @@ public class PvPLevels extends JavaPlugin {
         return this.debug;
     }
 
-    public void setDebug(final boolean debug) {
+    public void setDebug(boolean debug) {
         this.debug = debug;
     }
 
@@ -265,19 +248,19 @@ public class PvPLevels extends JavaPlugin {
         return this.playerMove;
     }
 
-    public void unloadPlayerConnect(final String uuid) {
+    public void unloadPlayerConnect(String uuid) {
         PlayerConnect playerConnect= this.playerConnect.remove(uuid);
         if (playerConnect != null) {
             playerConnect.save();
         }
     }
 
-    public void updatePlayerConnect(final String uuid) {
+    public void updatePlayerConnect(String uuid) {
         unloadPlayerConnect(uuid);
         getPlayerConnect(uuid);
     }
 
-    public void removePlayerConnect(final String uuid) {
+    public void removePlayerConnect(String uuid) {
         playerConnect.remove(uuid);
     }
 
@@ -285,11 +268,11 @@ public class PvPLevels extends JavaPlugin {
         return this.scriptEngine;
     }
 
-    public PlayerConnect getPlayerConnect(final String uuid) {
+    public PlayerConnect getPlayerConnect(String uuid) {
         if (playerConnect.containsKey(uuid)) {
             return playerConnect.get(uuid);
         }
-        final PlayerConnect playerConnect = new PlayerConnect(uuid);
+        PlayerConnect playerConnect = new PlayerConnect(uuid);
         this.playerConnect.put(uuid, playerConnect);
         return playerConnect;
     }

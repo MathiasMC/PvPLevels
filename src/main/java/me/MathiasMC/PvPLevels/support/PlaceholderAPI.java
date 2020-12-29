@@ -2,6 +2,7 @@ package me.MathiasMC.PvPLevels.support;
 
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import me.MathiasMC.PvPLevels.utils.Utils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -667,40 +668,40 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return plugin.getStatsManager().getTopKillStreakTop( 15, false);
         }
         if (identifier.equals("helmet_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getHelmet())[0]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getHelmet())[0]);
         }
         if (identifier.equals("helmet_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getHelmet())[1]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getHelmet())[1]);
         }
         if (identifier.equals("chestplate_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getChestplate())[0]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getChestplate())[0]);
         }
         if (identifier.equals("chestplate_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getChestplate())[1]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getChestplate())[1]);
         }
         if (identifier.equals("leggings_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getLeggings())[0]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getLeggings())[0]);
         }
         if (identifier.equals("leggings_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getLeggings())[1]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getLeggings())[1]);
         }
         if (identifier.equals("boots_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getBoots())[0]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getBoots())[0]);
         }
         if (identifier.equals("boots_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(player.getInventory().getBoots())[1]);
+            return String.valueOf(Utils.getDurability(player.getInventory().getBoots())[1]);
         }
         if (identifier.equals("item_in_mainhand_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, true))[0]);
+            return String.valueOf(Utils.getDurability(Utils.getHandItemStack(player, true))[0]);
         }
         if (identifier.equals("item_in_mainhand_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, true))[1]);
+            return String.valueOf(Utils.getDurability(Utils.getHandItemStack(player, true))[1]);
         }
         if (identifier.equals("item_in_offhand_remaining_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, false))[0]);
+            return String.valueOf(Utils.getDurability(Utils.getHandItemStack(player, false))[0]);
         }
         if (identifier.equals("item_in_offhand_max_durability")) {
-            return String.valueOf(plugin.getPlaceholderManager().getDurability(plugin.getPlaceholderManager().getHandItemStack(player, false))[1]);
+            return String.valueOf(Utils.getDurability(Utils.getHandItemStack(player, false))[1]);
         }
         return null;
     }

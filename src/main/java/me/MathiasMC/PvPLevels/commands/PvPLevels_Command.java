@@ -4,6 +4,7 @@ import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.api.events.*;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import me.MathiasMC.PvPLevels.utils.GenerateThread;
+import me.MathiasMC.PvPLevels.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -104,7 +105,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                     final Player target = plugin.getServer().getPlayer(args[1]);
                                     if (target != null) {
                                         for (String command : getCommands("stats.target")) {
-                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, command.replace("{player}", player.getName()).replace("{target}", target.getName()))));
+                                            plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', Utils.replacePlaceholders(target, false, command.replace("{player}", player.getName()).replace("{target}", target.getName()))));
                                         }
                                     } else {
                                         dispatchCommandList(player, "stats.online");
@@ -172,10 +173,10 @@ public class PvPLevels_Command implements CommandExecutor {
                                     }
                                     String text = sb.toString().trim();
                                     if (!text.contains("\\n")) {
-                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, text)));
+                                        target.sendMessage(ChatColor.translateAlternateColorCodes('&', Utils.replacePlaceholders(target, false, text)));
                                     } else {
                                         for (String message : text.split(Pattern.quote("\\n"))) {
-                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(target, false, message)));
+                                            target.sendMessage(ChatColor.translateAlternateColorCodes('&', Utils.replacePlaceholders(target, false, message)));
                                         }
                                     }
                                 } else {
@@ -195,7 +196,7 @@ public class PvPLevels_Command implements CommandExecutor {
                             if (args.length > 3) {
                                 final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
-                                    if (plugin.getCalculateManager().isInt(args[2])) {
+                                    if (Utils.isInt(args[2])) {
                                         final StringBuilder sb = new StringBuilder();
                                         for (int i = 3; i < args.length; i++) {
                                             sb.append(args[i]).append(" ");
@@ -246,7 +247,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                     if (args.length == 4) {
                                         final Player target = plugin.getServer().getPlayer(args[2]);
                                         if (target != null) {
-                                            if (plugin.getCalculateManager().isString(args[3]) && plugin.getFileUtils().levels.contains(args[3])) {
+                                            if (Utils.isString(args[3]) && plugin.getFileUtils().levels.contains(args[3])) {
                                                 final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                                 playerConnect.setGroup(args[3]);
                                                 playerConnect.save();
@@ -384,7 +385,7 @@ public class PvPLevels_Command implements CommandExecutor {
                             if (args.length == 3) {
                                 final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
-                                    if (plugin.getCalculateManager().isLong(args[2])) {
+                                    if (Utils.isLong(args[2])) {
                                         final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         long set = Long.parseLong(args[2]);
                                         boolean plus = true;
@@ -400,6 +401,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                                     playerConnect.setXpType("");
                                                     playerConnect.setXpLast(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                     final PlayerGetXPEvent playerGetXPEvent = new PlayerGetXPEvent(target, null, playerConnect, set);
+                                                    playerGetXPEvent.setCommands(playerGetXPEvent.getDefaultCommands());
                                                     plugin.getServer().getPluginManager().callEvent(playerGetXPEvent);
                                                     if (!playerGetXPEvent.isCancelled()) {
                                                         playerGetXPEvent.execute();
@@ -407,6 +409,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                                 } else {
                                                     playerConnect.setXpLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                     final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
+                                                    playerLostXPEvent.setCommands(playerLostXPEvent.getDefaultCommands());
                                                     plugin.getServer().getPluginManager().callEvent(playerLostXPEvent);
                                                     if (!playerLostXPEvent.isCancelled()) {
                                                         playerLostXPEvent.execute();
@@ -415,6 +418,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             } else {
                                                 playerConnect.setXpLost(Long.parseLong(args[2].replace("+", "").replace("-", "")));
                                                 final PlayerLostXPEvent playerLostXPEvent = new PlayerLostXPEvent(target, null, playerConnect, set);
+                                                playerLostXPEvent.setCommands(playerLostXPEvent.getDefaultCommands());
                                                 plugin.getServer().getPluginManager().callEvent(playerLostXPEvent);
                                                 if (!playerLostXPEvent.isCancelled()) {
                                                     playerLostXPEvent.execute();
@@ -457,7 +461,7 @@ public class PvPLevels_Command implements CommandExecutor {
                             if (args.length == 3) {
                                 final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
-                                    if (plugin.getCalculateManager().isLong(args[2])) {
+                                    if (Utils.isLong(args[2])) {
                                         final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                         long set = Long.parseLong(args[2]);
                                         boolean plus = true;
@@ -471,6 +475,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                             if (plus) {
                                                 playerConnect.setLevel(set - 1);
                                                 final PlayerLevelUPEvent playerLevelUPEvent = new PlayerLevelUPEvent(target, null, playerConnect, set);
+                                                playerLevelUPEvent.setCommands(playerLevelUPEvent.getDefaultCommands());
                                                 plugin.getServer().getPluginManager().callEvent(playerLevelUPEvent);
                                                 if (!playerLevelUPEvent.isCancelled()) {
                                                     playerLevelUPEvent.setXp();
@@ -478,6 +483,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                                 }
                                             } else {
                                                 final PlayerLevelDownEvent playerLevelDownEvent = new PlayerLevelDownEvent(target, null, playerConnect, set);
+                                                playerLevelDownEvent.setCommands(playerLevelDownEvent.getDefaultCommands());
                                                 plugin.getServer().getPluginManager().callEvent(playerLevelDownEvent);
                                                 if (!playerLevelDownEvent.isCancelled()) {
                                                     playerLevelDownEvent.setXp();
@@ -525,8 +531,8 @@ public class PvPLevels_Command implements CommandExecutor {
                             if (args.length == 4) {
                                 final Player target = plugin.getServer().getPlayer(args[1]);
                                 if (target != null) {
-                                    if (plugin.getCalculateManager().isDouble(args[2])) {
-                                        if (plugin.getCalculateManager().isInt(args[3]) && Integer.parseInt(args[3]) <= 2073600) {
+                                    if (Utils.isDouble(args[2])) {
+                                        if (Utils.isInt(args[3]) && Integer.parseInt(args[3]) <= 2073600) {
                                             final PlayerConnect playerConnect = plugin.getPlayerConnect(target.getUniqueId().toString());
                                             final PlayerGetMultiplierEvent playerGetMultiplierEvent = new PlayerGetMultiplierEvent(target, playerConnect, Double.parseDouble(args[2]), Integer.parseInt(args[3]));
                                             final List<String> commands = new ArrayList<>();
@@ -577,8 +583,8 @@ public class PvPLevels_Command implements CommandExecutor {
                                 if (!plugin.isGenerate) {
                                     if (player != null) {
                                         if (args.length > 2) {
-                                            if (plugin.getCalculateManager().isString(args[1])) {
-                                                if (plugin.getCalculateManager().isLong(args[2]) && Long.parseLong(args[2]) > 0 && Long.parseLong(args[2]) <= 50000) {
+                                            if (Utils.isString(args[1])) {
+                                                if (Utils.isLong(args[2]) && Long.parseLong(args[2]) > 0 && Long.parseLong(args[2]) <= 50000) {
                                                     plugin.generateGroup = args[1];
                                                     plugin.generateAmount = Long.parseLong(args[2]);
                                                     dispatchCommandList(player, "generate.group");
@@ -687,7 +693,7 @@ public class PvPLevels_Command implements CommandExecutor {
     }
 
     private void dispatchCommand(final Player player, final String message) {
-        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', plugin.getPlaceholderManager().replacePlaceholders(player, false, message.replace("{version}", plugin.getDescription().getVersion()))));
+        plugin.getServer().dispatchCommand(plugin.consoleSender, ChatColor.translateAlternateColorCodes('&', Utils.replacePlaceholders(player, false, message.replace("{version}", plugin.getDescription().getVersion()))));
     }
 
     private void sendMessageList(final CommandSender sender, final String path) {

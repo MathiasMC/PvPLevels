@@ -9,11 +9,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KillSessionManager {
+public class SessionManager {
 
     private final PvPLevels plugin;
 
-    public KillSessionManager(final PvPLevels plugin) {
+    public SessionManager(PvPLevels plugin) {
         this.plugin = plugin;
     }
 
@@ -21,7 +21,7 @@ public class KillSessionManager {
 
     private final Map<String, String> killsessiontime = new HashMap<>();
 
-    public boolean hasSession(final Player killer, final Player killed) {
+    public boolean hasSession(Player killer, Player killed) {
         if (plugin.getFileUtils().config.getBoolean("kill-session.use")) {
             boolean returning = false;
             boolean check = false;
@@ -32,8 +32,8 @@ public class KillSessionManager {
                 for (int i = 0; i < killsession.get(attacker).size(); i++) {
                     if (killed.getUniqueId().toString().equalsIgnoreCase(killsession.get(attacker).get(i).split(";")[0])) {
                         String uuid = killsession.get(attacker).get(i).split(";")[0];
-                        final int nameamount = Integer.parseInt(killsession.get(attacker).get(i).split(";")[1]);
-                        final int SessionInt = plugin.getFileUtils().config.getInt("kill-session.amount");
+                        int nameamount = Integer.parseInt(killsession.get(attacker).get(i).split(";")[1]);
+                        int SessionInt = plugin.getFileUtils().config.getInt("kill-session.amount");
                         if (killed.getUniqueId().toString().equalsIgnoreCase(uuid))
                             if (nameamount >= SessionInt) {
                                 returning = true;
@@ -55,12 +55,12 @@ public class KillSessionManager {
         return false;
     }
 
-    private void task(final Player killed, final String attacker, final Entity killer) {
+    private void task(Player killed, String attacker, Entity killer) {
         if (!killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
-            final int id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            int id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                 if (killsessiontime.containsKey(killed.getUniqueId().toString() + "=" + attacker)) {
-                    final String[] split = killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=");
-                    final int time = Integer.parseInt(split[1]);
+                    String[] split = killsessiontime.get(killed.getUniqueId().toString() + "=" + attacker).split("=");
+                    int time = Integer.parseInt(split[1]);
                     if (time > -1) {
                         killsessiontime.put(killed.getUniqueId().toString() + "=" + attacker, Integer.valueOf(split[0]) + "=" + (time - 1));
                     }
@@ -79,7 +79,7 @@ public class KillSessionManager {
         }
     }
 
-    private void sendMessage(final Entity killer, final String path) {
+    private void sendMessage(Entity killer, String path) {
         if (killer instanceof Player) {
             plugin.getXPManager().sendCommands((Player) killer, plugin.getFileUtils().config.getStringList("kill-session." + path));
         }

@@ -34,8 +34,8 @@ public class GenerateThread extends Thread {
 
     public void run() {
         plugin.isGenerate = true;
-        plugin.getTextUtils().warning("[Generate] Be sure to check the level system, when finished to check that everything, was added correct.");
-        plugin.getTextUtils().info("[Generate] Started task...");
+        Utils.warning("[Generate] Be sure to check the level system, when finished to check that everything, was added correct.");
+        Utils.info("[Generate] Started task...");
         long lastXP = 0;
         final String math = config.getString("generate.math");
         long size = amount + startLevel;
@@ -46,7 +46,7 @@ public class GenerateThread extends Thread {
         final int percent25 = (int) (size * (25.0f / 100.0f));
         final int percent50 = (int) (size * (50.0f / 100.0f));
         final int percent75 = (int) (size * (75.0f / 100.0f));
-        final long random = plugin.getCalculateManager().randomNumber(config.getLong("generate.random.min"), config.getLong("generate.random.max"));
+        final long random = Utils.randomNumber(config.getLong("generate.random.min"), config.getLong("generate.random.max"));
         boolean startUP = false;
         levels.set(group + ".execute", group);
         execute.set(group + ".xp.get", config.getStringList("generate.get"));
@@ -70,7 +70,7 @@ public class GenerateThread extends Thread {
                 final String Srandom = getRandom(math);
                 if (Srandom != null) {
                     final String[] split = Srandom.split("_");
-                    randomNumber = plugin.getCalculateManager().randomNumber(Long.parseLong(split[0]), Long.parseLong(split[1]));
+                    randomNumber = Utils.randomNumber(Long.parseLong(split[0]), Long.parseLong(split[1]));
                 }
                 final Object object = plugin.getScriptEngine().eval(math.replace("{lastXP}", String.valueOf(lastXP)).replace("{level}", String.valueOf(i)).replace("{random}", String.valueOf(random)).replace("[" + Srandom + "]", String.valueOf(randomNumber)));
                 for (Map.Entry<Integer, Integer> s : mapList.entrySet()) {
@@ -85,7 +85,7 @@ public class GenerateThread extends Thread {
                     execute.set(executeS + ".xp.lose", config.getStringList("generate.lose"));
                     execute.set(executeS + ".level.up", config.getStringList("generate.levels." + i + ".up"));
                     execute.set(executeS + ".level.down", config.getStringList("generate.levels." + i + ".down"));
-                    plugin.getTextUtils().info("[Generate] ( " + i + " ) has config commands ( Added )");
+                    Utils.info("[Generate] ( " + i + " ) has config commands ( Added )");
                 }
                 if (lastXP != 0) {
                     levels.set(group + "." + i + ".xp", lastXP);
@@ -95,19 +95,19 @@ public class GenerateThread extends Thread {
                 }
                 lastXP = Math.round(Double.parseDouble(object.toString()));
                 if (i == percent10) {
-                    plugin.getTextUtils().info("[Generate] Progress: 10%");
+                    Utils.info("[Generate] Progress: 10%");
                 }
                 if (i == percent25) {
-                    plugin.getTextUtils().info("[Generate] Progress: 25%");
+                    Utils.info("[Generate] Progress: 25%");
                 }
                 if (i == percent50) {
-                    plugin.getTextUtils().info("[Generate] Progress: 50%");
+                    Utils.info("[Generate] Progress: 50%");
                 }
                 if (i == percent75) {
-                    plugin.getTextUtils().info("[Generate] Progress: 75%");
+                    Utils.info("[Generate] Progress: 75%");
                 }
                 if (i == (size - 1)) {
-                    plugin.getTextUtils().info("[Generate] Progress: 100%");
+                    Utils.info("[Generate] Progress: 100%");
                 }
             } catch (ScriptException ignored) {}
         }
@@ -115,7 +115,7 @@ public class GenerateThread extends Thread {
         plugin.getFileUtils().loadLevels();
         plugin.getFileUtils().saveExecute();
         plugin.getFileUtils().loadExecute();
-        plugin.getTextUtils().info("[Generate] Finished ( " + amount + " ) levels for group ( " + group + " ) level system start at ( " + startLevel + " )");
+        Utils.info("[Generate] Finished ( " + amount + " ) levels for group ( " + group + " ) level system start at ( " + startLevel + " )");
         plugin.generateGroup = null;
         plugin.generateAmount = 0;
         plugin.isGenerate = false;

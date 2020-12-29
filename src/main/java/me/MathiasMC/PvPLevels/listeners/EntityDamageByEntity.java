@@ -18,6 +18,7 @@ public class EntityDamageByEntity implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntity(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
+            if (!plugin.getStatsManager().canProgress((Player)e.getEntity())) return;
             plugin.lastDamagers.put(e.getEntity().getUniqueId().toString(), e.getDamager().getUniqueId().toString());
         }
     }

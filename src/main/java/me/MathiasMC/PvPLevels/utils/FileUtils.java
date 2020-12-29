@@ -58,7 +58,7 @@ public class FileUtils {
         try {
             levels.save(levelsFile);
         } catch (IOException e) {
-            plugin.getTextUtils().exception(e.getStackTrace(), e.getMessage());
+            Utils.exception(e.getStackTrace(), e.getMessage());
         }
     }
 
@@ -66,7 +66,7 @@ public class FileUtils {
         try {
             execute.save(executeFile);
         } catch (IOException e) {
-            plugin.getTextUtils().exception(e.getStackTrace(), e.getMessage());
+            Utils.exception(e.getStackTrace(), e.getMessage());
         }
     }
 
@@ -86,10 +86,10 @@ public class FileUtils {
                 try {
                     ByteStreams.copy(plugin.getResource(fileName), new FileOutputStream(file));
                 } catch (NullPointerException e) {
-                    plugin.getTextUtils().info("cant find: " + fileName);
+                    Utils.info("cant find: " + fileName);
                 }
             } catch (IOException exception) {
-                plugin.getTextUtils().error("Could not create file " + fileName);
+                Utils.error("Could not create file " + fileName);
             }
         }
         return file;
