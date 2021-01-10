@@ -34,7 +34,6 @@ help:
     - 'pvplevels message {player} &f&l» &b/pvplevels broadcast <null/permission> <text>'
     - 'pvplevels message {player} &f&l» &b/pvplevels message <player> <text>'
     - 'pvplevels message {player} &f&l» &b/pvplevels actionbar <player> <seconds> <text>'
-    - 'pvplevels message {player} &f&l» &b/pvplevels group set/reset <player> <groupName (set)>'
     - 'pvplevels message {player} &f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <player> <resetGroup (stats)>'
     - 'pvplevels message {player} &f&l» &b/pvplevels xp/level <player> <+-amount>'
     - 'pvplevels message {player} &f&l» &b/pvplevels stats <player>'
@@ -88,25 +87,6 @@ actionbar:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   number:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
-group:
-  permission:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
-  usage:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set/reset'
-  online:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
-  valid:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a valid group name/not found in &blevels.yml&7! [a-zA-Z]'
-  reset:
-    usage:
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group reset <player>'
-    message:
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7group is reset back to the default group!'
-  set:
-    usage:
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set <player> <groupName>'
-    message:
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &b{target} &7group is now set to &b{group}&7.'
 reset:
   permission:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
@@ -293,7 +273,6 @@ console:
       - '&f&l» &b/pvplevels broadcast <null/permission> <text>'
       - '&f&l» &b/pvplevels message <player> <text>'
       - '&f&l» &b/pvplevels actionbar <player> <seconds> <text>'
-      - '&f&l» &b/pvplevels group set/reset <player> <groupName (set)>'
       - '&f&l» &b/pvplevels reset <kills, deaths, level, killstreak, stats> <player> <resetGroup (stats)>'
       - '&f&l» &b/pvplevels xp/level <player> <+-amount>'
       - '&f&l» &b/pvplevels stats <player>'
@@ -333,23 +312,6 @@ console:
       - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     number:
       - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
-  group:
-    usage:
-      - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set/reset'
-    online:
-      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
-    valid:
-      - '&7[&f&lP&b&lL&7] &f&l» &7Not a valid group name/not found in &blevels.yml&7! [a-zA-Z]'
-    reset:
-      usage:
-        - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group reset <player>'
-      message:
-        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7group is reset back to the default group!'
-    set:
-      usage:
-        - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels group set <player> <groupName>'
-      message:
-        - '&7[&f&lP&b&lL&7] &f&l» &b{target} &7group is now set to &b{group}&7.'
   reset:
     usage:
       - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels reset <kills, deaths, level, killstreak, stats> <player> <resetGroup (stats)>'

@@ -102,7 +102,7 @@ public class StatsManager {
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".prefix"));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".prefix", ""));
     }
 
     public String getSuffix(PlayerConnect playerConnect) {
@@ -110,7 +110,7 @@ public class StatsManager {
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix"));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix", ""));
     }
 
     public String getGroup(PlayerConnect playerConnect) {
@@ -118,7 +118,7 @@ public class StatsManager {
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".group"));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".group", ""));
     }
 
     public String getTopKills(int number, boolean isName) {

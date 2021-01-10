@@ -31,7 +31,6 @@ permissions:
       pvplevels.admin.message: true
       pvplevels.admin.actionbar: true
       pvplevels.admin.save: true
-      pvplevels.admin.group: true
       pvplevels.admin.reset: true
       pvplevels.admin.xp: true
       pvplevels.admin.level: true
@@ -64,9 +63,6 @@ permissions:
   pvplevels.admin.save:
     default: "op"
     description: "Access to use save"
-  pvplevels.admin.group:
-    default: "op"
-    description: "Access to use group"
   pvplevels.admin.reset:
     default: "op"
     description: "Access to use reset"

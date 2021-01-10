@@ -17,13 +17,12 @@ public class PlayerQuit implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent e) {
-        final String uuid = e.getPlayer().getUniqueId().toString();
-        if (!plugin.listPlayerConnect().contains(uuid)) {
-            return;
-        }
-        plugin.multipliers.remove(uuid);
+        String uuid = e.getPlayer().getUniqueId().toString();
+        if (!plugin.listPlayerConnect().contains(uuid)) return;
         final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
         playerConnect.setTime();
         playerConnect.save();
+        if (!plugin.getFileUtils().config.getBoolean("multiplier-quit", true)) return;
+        plugin.multipliers.remove(uuid);
     }
 }

@@ -25,7 +25,6 @@ public class Database {
                     }
                 } catch (SQLException e) {
                     connection = get();
-                    Utils.debug("[Database] Lost connection, getting new connection");
                 }
             }
         }).runTaskTimerAsynchronously(plugin, 60 * 20, 60 * 20);
@@ -96,7 +95,6 @@ public class Database {
                             preparedStatement.setString(9, "0.0 0 0");
                             preparedStatement.setTimestamp(10, new Timestamp(new Date().getTime()));
                             preparedStatement.executeUpdate();
-                            Utils.debug("[Database] Inserted ( " + uuid + " )");
                         }
                     } catch (SQLException exception) {
                         Utils.exception(exception.getStackTrace(), exception.getMessage());
@@ -122,7 +120,6 @@ public class Database {
                             preparedStatement.setString(1, uuid);
                             preparedStatement.executeUpdate();
                             plugin.removePlayerConnect(uuid);
-                            Utils.debug("[Database] Deleting ( " + uuid + " )");
                         }
                     } catch (SQLException exception) {
                         Utils.exception(exception.getStackTrace(), exception.getMessage());
@@ -156,7 +153,6 @@ public class Database {
                             preparedStatement.setTimestamp(9, timestamp);
                             preparedStatement.setString(10, uuid);
                             preparedStatement.executeUpdate();
-                            Utils.debug("[Database] Setting values for ( " + uuid + " )");
                         }
                     } catch (SQLException exception) {
                         Utils.exception(exception.getStackTrace(), exception.getMessage());
@@ -176,7 +172,6 @@ public class Database {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM players WHERE uuid= '" + uuid + "';");
             if (resultSet.next()) {
-                Utils.debug("[Database] Getting new data for ( " + uuid + " )");
                 return new String[]{ resultSet.getString("group"), String.valueOf(resultSet.getLong("kills")), String.valueOf(resultSet.getLong("deaths")), String.valueOf(resultSet.getLong("xp")), String.valueOf(resultSet.getLong("level")), String.valueOf(resultSet.getLong("killstreak")), String.valueOf(resultSet.getLong("killstreak_top")), resultSet.getString("multiplier"), String.valueOf(resultSet.getTimestamp("lastseen")) };
             }
         } catch (SQLException exception) {

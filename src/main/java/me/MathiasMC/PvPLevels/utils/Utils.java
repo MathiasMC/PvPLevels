@@ -3,7 +3,6 @@ package me.MathiasMC.PvPLevels.utils;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,10 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
-
-    public static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
-    }
 
     private static String prefix() {
         return "[" + PvPLevels.getInstance().getDescription().getName() + "]";
@@ -30,11 +25,6 @@ public class Utils {
 
     public static void error(String text) {
         Bukkit.getLogger().severe(prefix() + " " + text);
-    }
-
-    public static void debug(String text) {
-        if (!PvPLevels.getInstance().isDebug()) return;
-        Bukkit.getLogger().info(prefix() + " [DEBUG] " + text);
     }
 
     public static void exception(StackTraceElement[] stackTraceElement, String text) {

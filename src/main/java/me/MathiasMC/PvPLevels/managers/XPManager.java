@@ -32,35 +32,21 @@ public class XPManager {
             entityPlayer = true;
             Player player = (Player) entity;
             PlayerConnect playerConnect = plugin.getPlayerConnect(entityUUID);
-            if (player.hasPermission("pvplevels.group." + playerConnect.getGroup() + ".lose")) {
-                if (!plugin.getFileUtils().config.getStringList("excluded").contains(entityUUID)) {
-                    loseXP(player, killer, playerConnect);
-                    getDeath(player, killer, playerConnect);
-                } else { Utils.debug("( " + killer.getName() + " ) Cannot get stats (lose), is in the excluded list"); }
-            } else { Utils.debug("( " + player.getName() + " ) Cannot get stats (lose), does not have permission ( " + "pvplevels.group." + playerConnect.getGroup() + " )"); }
+            if (!plugin.getFileUtils().config.getStringList("excluded").contains(entityUUID)) {
+                loseXP(player, killer, playerConnect);
+                getDeath(player, killer, playerConnect);
+            }
         }
         if (killer == null) {
             return;
         }
         String killerUUID = killer.getUniqueId().toString();
+        if (plugin.getFileUtils().config.getStringList("excluded").contains(killerUUID)) return;
         PlayerConnect playerConnect = plugin.getPlayerConnect(killerUUID);
-        if (!killer.hasPermission("pvplevels.group." + playerConnect.getGroup())) {
-            Utils.debug("( " + killer.getName() + " ) Cannot get stats (get), does not have permission ( " + "pvplevels.group." + playerConnect.getGroup() + " )");
-            return;
-        }
-        if (plugin.getFileUtils().config.getStringList("excluded").contains(killerUUID)) {
-            Utils.debug("( " + killer.getName() + " ) Cannot get stats (get), is in the excluded list");
-            return;
-        }
-
         if (entityPlayer) {
             playerConnect.setXpType(entity.getName());
-            if (plugin.getSessionManager().hasSession(killer, (Player) entity)) {
-                Utils.debug("( " + killer.getName() + " ) Cannot get stats (get), still in the kill session");
-                return;
-            }
+            if (plugin.getSessionManager().hasSession(killer, (Player) entity)) return;
         }
-
         getXP(killer, entity, null);
         if (entityPlayer) {
             Player killed = (Player) entity;
@@ -112,14 +98,8 @@ public class XPManager {
         String pathKey;
         if (entity != null) {
             String entityUUID = entity.getUniqueId().toString();
-            if (plugin.spawners.contains(entityUUID)) {
-                Utils.debug("( " + player.getName() + " ) Cannot get xp, from entity ( " + entity.getName() + " ) found in spawners section");
-                return;
-            }
-            if (uuid.equalsIgnoreCase(entityUUID)) {
-                Utils.debug("( " + player.getName() + " ) Cannot get xp, same uuid as ( " + entityUUID + " )");
-                return;
-            }
+            if (plugin.spawners.contains(entityUUID)) return;
+            if (uuid.equalsIgnoreCase(entityUUID)) return;
             pathKey = entity.getType().toString().toLowerCase();
             entityType = entity.getName();
             String get = entityType.toUpperCase().replace(" ", "_");
@@ -135,11 +115,12 @@ public class XPManager {
             }
         }
         String path = "xp." + group + "." + pathKey;
-        if (!plugin.getFileUtils().config.contains(path)) {
-            Utils.debug("( " + player.getName() + " ) Cannot get xp, path not found ( " + path + " )");
-            return;
-        }
-        long xp = Utils.randomNumber(plugin.getFileUtils().config.getLong(path + ".min"), plugin.getFileUtils().config.getLong(path + ".max"));
+        if (!plugin.getFileUtils().config.contains(path)) return;
+        long xp = Utils.randomNumber(
+                plugin.getFileUtils().config.getLong(path + "." + player.getWorld().getName() + ".min",
+                        plugin.getFileUtils().config.getLong(path + ".min", 0)),
+                plugin.getFileUtils().config.getLong(path + "." + player.getWorld().getName() + ".max",
+                        plugin.getFileUtils().config.getLong(path + ".max", 0)));
         if (entity != null) {
             String customName = entity.getCustomName();
             if (customName != null) {
@@ -182,7 +163,11 @@ public class XPManager {
         if (!plugin.getFileUtils().config.contains(path + ".xp-lose")) {
             return;
         }
-        long xp = Utils.randomNumber(plugin.getFileUtils().config.getLong(path + ".xp-lose.min"), plugin.getFileUtils().config.getLong(path + ".xp-lose.max"));
+        long xp = Utils.randomNumber(
+                plugin.getFileUtils().config.getLong(path + ".xp-lose." + player.getWorld().getName() + ".min",
+                        plugin.getFileUtils().config.getLong(path + ".xp-lose.min", 0)),
+                plugin.getFileUtils().config.getLong(path + ".xp-lose." + player.getWorld().getName() + ".max",
+                        plugin.getFileUtils().config.getLong(path + ".xp-lose.max", 0)));
         if (xp < plugin.getFileUtils().levels.getLong(playerConnect.getGroup() + "." + plugin.getStartLevel() + ".xp")) {
             return;
         }

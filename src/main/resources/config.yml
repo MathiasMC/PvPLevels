@@ -9,11 +9,26 @@
 # Check for updates on startup?
 update-check: true
 
-# Debug info (Require server restart)
-debug: false
-
 # Check for blocks and get xp if type found. (disable block break, place event) (Require server restart)
 blocks: true
+
+# Group setup player is automatic set to group
+# if has permission on join
+# Case sensitive and must be found in levels.yml
+# Works from top to bottom
+# Best group should be at top
+# Example:
+# master: pvplevels.group.master
+# vip: pvplevels.group.vip
+# default: pvplevels.group.default
+# if you have permission on join, you get vip
+# but if has master permission you will get master group
+groups:
+  default: pvplevels.group.default
+  #vip: pvplevels.group.vip
+
+# Stop multiplier on quit?
+multiplier-quit: true
 
 # Worlds section
 # Disable getting stats in worlds in thís list
@@ -23,9 +38,9 @@ worlds:
 # Instant death on certain y level
 instant-death:
   # Use? (Require server restart)
-  use: true
+  use: false
   # Respawn instant?
-  respawn: true
+  respawn: false
   # Y-value for death
   y: -1
 
@@ -110,7 +125,7 @@ xp-progress-style-2:
   amount: 20
 
 # Start level of new players (Require server restart)
-start-level: 0
+start-level: 1
 
 # List of players that will not get kills/deaths/xp
 excluded:
@@ -231,10 +246,28 @@ xp:
       min: 3
       max: 15
 
+      # Another amount depend on world
+      world:
+        min: 1
+        max: 4
+
+      world_nether:
+        min: 5
+        max: 10
+
       # xp lose, remove this section to disable.
       xp-lose:
         min: 6
         max: 20
+
+        # Another amount depend on world
+        world:
+          min: 1
+          max: 4
+
+        world_nether:
+          min: 5
+          max: 10
 
     bat:
       min: 1

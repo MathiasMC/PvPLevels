@@ -95,22 +95,6 @@ public class PvPLevels_TabComplete implements TabCompleter {
                     }
                 }
             }
-            if (player.hasPermission("pvplevels.admin.group")) {
-                if (args.length == 1) {
-                    commands.add("group");
-                } else if (args.length > 1 && args[0].equalsIgnoreCase("group")){
-                    if (args.length == 2) {
-                        commands.add("set");
-                        commands.add("reset");
-                    } else if (args.length == 3) {
-                        commands.addAll(getPlayers(args[2]));
-                    } else if (args.length == 4) {
-                        if (args[1].equalsIgnoreCase("set")) {
-                            commands.addAll(plugin.getFileUtils().levels.getConfigurationSection("").getKeys(false));
-                        }
-                    }
-                }
-            }
             if (player.hasPermission("pvplevels.admin.reset")) {
                 if (args.length == 1) {
                     commands.add("reset");

@@ -8,20 +8,13 @@
 default:
   # executor for get xp section in execute.yml
   execute: default
-  '0':
-    prefix: '&7[&bDefault&7] [&b0&7]'
-    suffix: ''
-    group: 'Bad'
-    execute: default
-    # Dont touch xp must be 0 for start level (if start-level is 1 you can remove this section)
-    xp: 0
   '1':
     prefix: '&7[&bDefault&7] [&b1&7]'
     suffix: ''
     group: 'Good'
     execute: default
-    # If start-level is 1 xp must be 0
-    xp: 75
+    # start-level must be 0 xp
+    xp: 0
   '2':
     prefix: '&7[&bDefault&7] [&b2&7]'
     suffix: ''
