@@ -21,6 +21,7 @@ public class PlayerJoin implements Listener {
         final Player player = e.getPlayer();
         final String uuid = player.getUniqueId().toString();
         final PlayerConnect playerConnect = plugin.getPlayerConnect(uuid);
+        if (!plugin.getFileUtils().config.getBoolean("multiplier-quit", true)) return;
         if (playerConnect.getMultiplier() != 0) {
             plugin.getXPManager().sendCommands(player, plugin.getFileUtils().language.getStringList("multiplier.join"));
             plugin.multipliers.add(uuid);
