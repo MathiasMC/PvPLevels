@@ -1,13 +1,11 @@
 package me.MathiasMC.PvPLevels.utils;
 
-import com.google.common.io.ByteStreams;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 
 public class FileUtils {
 
@@ -25,7 +23,7 @@ public class FileUtils {
     private final File executeFile;
     public FileConfiguration execute;
 
-    public FileUtils(final PvPLevels plugin) {
+    public FileUtils(PvPLevels plugin) {
         this.plugin = plugin;
         final File pluginFolder = getFolder(plugin.getDataFolder().getPath());
         this.configFile = copyFile(pluginFolder, "config.yml");
@@ -70,27 +68,30 @@ public class FileUtils {
         }
     }
 
-    public File getFolder(final String path) {
-        final File file = new File(path);
-        if (!file.exists()) {
-            file.mkdir();
+    public File getFolder(String path) {
+        File file = new File(path);
+        if (file.mkdir()) {
+            return null;
         }
         return file;
     }
 
-    public File copyFile(final File folder, final String fileName) {
-        final File file = new File(folder, fileName);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-                try {
-                    ByteStreams.copy(plugin.getResource(fileName), new FileOutputStream(file));
-                } catch (NullPointerException e) {
-                    Utils.info("cant find: " + fileName);
+    public File copyFile(File folder, String fileName) {
+        File file = new File(folder, fileName);
+        try {
+            if (file.createNewFile()) {
+                InputStream input = plugin.getResource(fileName);
+                OutputStream output = Files.newOutputStream(file.toPath());
+                byte[] buffer = new byte[8192];
+                int length;
+                while ((length = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, length);
                 }
-            } catch (IOException exception) {
-                Utils.error("Could not create file " + fileName);
+                input.close();
+                output.close();
             }
+        } catch (IOException exception) {
+            Utils.error("Could not create file " + fileName);
         }
         return file;
     }
