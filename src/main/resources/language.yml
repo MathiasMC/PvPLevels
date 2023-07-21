@@ -290,8 +290,6 @@ console:
       - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels generate confirm'
     confirm:
       - '&7[&f&lP&b&lL&7] &f&l» &7Nothing to confirm run the command as a player.'
-    engine:
-      - '&7[&f&lP&b&lL&7] &f&l» &7JavaScript engine not found.'
     generate:
       - '&7[&f&lP&b&lL&7] &f&l» &7You cannot generate levels right now, one is already calculating...'
   save:
