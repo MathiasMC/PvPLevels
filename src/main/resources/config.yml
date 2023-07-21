@@ -143,14 +143,18 @@ generate:
   # Start xp of level system
   start: 75
 
-  # This is for {random} placeholder
-  # You can also use [min_max] to calculate random number while calculations is running.
-  random:
-    min: 1
-    max: 2
+  # Math used to calculate xp for every level
+  #
+  # Formula: ( lastXP + random[min, max] )
+  #
+  # You can also add another random at specific level
+  #
+  min: 50
+  max: 800
 
-  # The math used to calculate xp
-  math: '{lastXP} + [50_800] * {random}.{level}'
+  5:
+    min: 500
+    max: 1000
 
   percent:
 
