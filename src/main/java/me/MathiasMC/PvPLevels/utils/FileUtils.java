@@ -70,9 +70,7 @@ public class FileUtils {
 
     public File getFolder(String path) {
         File file = new File(path);
-        if (!file.mkdir()) {
-            return null;
-        }
+        file.mkdir();
         return file;
     }
 
