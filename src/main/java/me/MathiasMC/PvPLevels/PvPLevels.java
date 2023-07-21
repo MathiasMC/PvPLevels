@@ -18,8 +18,6 @@ import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -54,9 +52,6 @@ public class PvPLevels extends JavaPlugin {
     public long generateAmount = 0;
 
     public boolean isGenerate = false;
-
-    private final ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-    private final ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
 
     private long startLevel = 0;
 
@@ -147,7 +142,6 @@ public class PvPLevels extends JavaPlugin {
             }
 
             Utils.info("Created by MathiasMC");
-            Utils.info(" ");
 
             getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
                 Iterator<String> iterator = new ArrayList<>(multipliers).iterator();
@@ -262,10 +256,6 @@ public class PvPLevels extends JavaPlugin {
 
     public void removePlayerConnect(String uuid) {
         playerConnect.remove(uuid);
-    }
-
-    public ScriptEngine getScriptEngine() {
-        return this.scriptEngine;
     }
 
     public PlayerConnect getPlayerConnect(String uuid) {
