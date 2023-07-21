@@ -522,11 +522,7 @@ public class PvPLevels_Command implements CommandExecutor {
                                         }
                                     } else if (args.length > 1 && args[1].equalsIgnoreCase("confirm")) {
                                         if (plugin.generateGroup != null && plugin.generateAmount != 0) {
-                                            if (plugin.getScriptEngine() != null) {
-                                                new GenerateThread(plugin, plugin.generateGroup, plugin.generateAmount, plugin.getStartLevel()).start();
-                                            } else {
-                                                sendMessageList(sender, "console.generate.engine");
-                                            }
+                                            new GenerateThread(plugin, plugin.generateGroup, plugin.generateAmount, plugin.getStartLevel()).start();
                                         } else {
                                             sendMessageList(sender, "console.generate.confirm");
                                         }
@@ -626,7 +622,7 @@ public class PvPLevels_Command implements CommandExecutor {
     }
 
     private void sendMessage(final CommandSender sender, final String message) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("{version}", plugin.getDescription().getVersion())));
     }
 
     private void broadcast(final String text, final String[] args) {
