@@ -132,8 +132,6 @@ xp:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels xp <player> <+-amount>'
-  online:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   number:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   set:
@@ -145,8 +143,6 @@ level:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You dont have access to use this command!'
   usage:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels level <player> <+-amount>'
-  online:
-    - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
   number:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Not a number!'
   found:
@@ -339,8 +335,6 @@ console:
   xp:
     usage:
       - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels xp <player> <+-amount>'
-    online:
-      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     number:
       - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
     set:
@@ -348,8 +342,6 @@ console:
   level:
     usage:
       - '&7[&f&lP&b&lL&7] &f&l» &7Usage: &b/pvplevels level <player> <+-amount>'
-    online:
-      - '&7[&f&lP&b&lL&7] &f&l» &7The player is not online!'
     number:
       - '&7[&f&lP&b&lL&7] &f&l» &7Not a number!'
     found:
