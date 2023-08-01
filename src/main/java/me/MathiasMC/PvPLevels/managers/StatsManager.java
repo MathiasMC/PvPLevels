@@ -3,6 +3,7 @@ package me.MathiasMC.PvPLevels.managers;
 import com.google.common.base.Strings;
 import me.MathiasMC.PvPLevels.PvPLevels;
 import me.MathiasMC.PvPLevels.data.PlayerConnect;
+import me.MathiasMC.PvPLevels.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -97,20 +98,20 @@ public class StatsManager {
         }
     }
 
-    public String getPrefix(PlayerConnect playerConnect) {
+    public String getPrefix(OfflinePlayer offlinePlayer, PlayerConnect playerConnect) {
         long level = playerConnect.getLevel();
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".prefix", ""));
+        return Utils.replacePlaceholders(offlinePlayer, true, ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".prefix", "")));
     }
 
-    public String getSuffix(PlayerConnect playerConnect) {
+    public String getSuffix(OfflinePlayer offlinePlayer, PlayerConnect playerConnect) {
         long level = playerConnect.getLevel();
         if (!plugin.getFileUtils().levels.contains(playerConnect.getGroup() + "." + level + ".group")) {
             level = plugin.getFileUtils().config.getLong("start-level");
         }
-        return ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix", ""));
+        return Utils.replacePlaceholders(offlinePlayer, true, ChatColor.translateAlternateColorCodes('&', plugin.getFileUtils().levels.getString(playerConnect.getGroup() + "." + level + ".suffix", "")));
     }
 
     public String getGroup(PlayerConnect playerConnect) {

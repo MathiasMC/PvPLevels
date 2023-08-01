@@ -101,10 +101,10 @@ public class PlaceholderAPI extends PlaceholderExpansion {
             return plugin.getStatsManager().getGroup(playerConnect);
         }
         if(identifier.equals("level_prefix")) {
-            return plugin.getStatsManager().getPrefix(playerConnect);
+            return plugin.getStatsManager().getPrefix(player, playerConnect);
         }
         if(identifier.equals("level_suffix")) {
-            return plugin.getStatsManager().getSuffix(playerConnect);
+            return plugin.getStatsManager().getSuffix(player, playerConnect);
         }
         if (identifier.equals("xp_type")) {
             return plugin.getStatsManager().getType(playerConnect);
