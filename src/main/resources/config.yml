@@ -273,33 +273,36 @@ xp:
           min: 5
           max: 10
 
-    axolotl:
-      min: 1
-      max: 3
-    allay:
-      min: 1
-      max: 3
-    bat:
-      min: 1
-      max: 3
-    bee:
-      min: 2
-      max: 4
-    blaze:
-      min: 1
-      max: 3
-    camel:
-      min: 2
-      max: 4
-    cat:
-      min: 1
-      max: 3
-    cave_spider:
+    armadillo:
       min: 2
       max: 5
-    chicken:
+    axolotl:
+      min: 2
+      max: 5
+    allay:
       min: 3
       max: 6
+    bat:
+      min: 1
+      max: 2
+    bee:
+      min: 3
+      max: 6
+    blaze:
+      min: 10
+      max: 15
+    camel:
+      min: 3
+      max: 7
+    cat:
+      min: 2
+      max: 5
+    cave_spider:
+      min: 5
+      max: 8
+    chicken:
+      min: 2
+      max: 5
     cod:
       min: 1
       max: 3
@@ -307,210 +310,267 @@ xp:
       min: 3
       max: 6
     creeper:
-      min: 4
-      max: 7
+      min: 10
+      max: 15
     dolphin:
-      min: 1
-      max: 3
-    donkey:
-      min: 1
-      max: 5
-    drowned:
-      min: 1
-      max: 9
-    elder_guardian:
-      min: 4
-      max: 12
-    ender_dragon:
-      min: 8
-      max: 30
-    enderman:
-      min: 3
-      max: 7
-    endermite:
       min: 2
-      max: 8
+      max: 5
+    donkey:
+      min: 3
+      max: 6
+    drowned:
+      min: 5
+      max: 10
+    elder_guardian:
+      min: 20
+      max: 30
+    ender_dragon:
+      min: 50
+      max: 75
+    enderman:
+      min: 15
+      max: 25
+    endermite:
+      min: 5
+      max: 10
     evoker:
-      min: 4
-      max: 14
+      min: 20
+      max: 30
     fox:
       min: 2
-      max: 4
+      max: 5
     frog:
       min: 2
-      max: 4
-    ghast:
-      min: 2
-      max: 6
-    giant:
-      min: 2
-      max: 8
-    guardian:
-      min: 1
-      max: 14
-    hoglin:
-      min: 1
-      max: 7
-    horse:
-      min: 1
-      max: 4
-    husk:
-      min: 1
-      max: 4
-    illusioner:
-      min: 1
       max: 5
-    iron_golem:
-      min: 1
+    ghast:
+      min: 15
+      max: 25
+    giant:
+      min: 10
+      max: 20
+    glow_squid:
+      min: 3
       max: 7
+    goat:
+      min: 3
+      max: 7
+    guardian:
+      min: 10
+      max: 20
+    hoglin:
+      min: 7
+      max: 12
+    horse:
+      min: 3
+      max: 7
+    husk:
+      min: 7
+      max: 12
+    illusioner:
+      min: 15
+      max: 20
+    iron_golem:
+      min: 15
+      max: 25
     llama:
-      min: 1
-      max: 4
+      min: 3
+      max: 6
     magma_cube:
-      min: 1
-      max: 8
+      min: 8
+      max: 15
     mushroom_cow:
-      min: 1
+      min: 3
       max: 7
     mule:
-      min: 1
-      max: 4
+      min: 3
+      max: 7
     ocelot:
-      min: 1
-      max: 4
+      min: 3
+      max: 7
     panda:
-      min: 2
-      max: 8
-    parrot:
-      min: 1
-      max: 2
-    phantom:
-      min: 1
+      min: 5
       max: 10
-    pig:
-      min: 4
-      max: 7
-    piglin:
-      min: 1
-      max: 4
-    piglin_brute:
+    parrot:
       min: 2
-      max: 7
-    pillager:
-      min: 3
-      max: 5
-    polar_bear:
-      min: 3
-      max: 6
-    pufferfish:
-      min: 1
       max: 4
+    phantom:
+      min: 10
+      max: 20
+    pig:
+      min: 2
+      max: 5
+    piglin:
+      min: 7
+      max: 12
+    piglin_brute:
+      min: 15
+      max: 25
+    pillager:
+      min: 10
+      max: 15
+    polar_bear:
+      min: 10
+      max: 15
+    pufferfish:
+      min: 2
+      max: 5
     rabbit:
       min: 1
-      max: 4
+      max: 3
     ravager:
-      min: 1
-      max: 2
+      min: 25
+      max: 35
     salmon:
       min: 1
-      max: 2
+      max: 3
     sheep:
+      min: 2
+      max: 5
+    shulker:
+      min: 10
+      max: 20
+    silverfish:
+      min: 5
+      max: 10
+    skeleton:
+      min: 8
+      max: 15
+    skeleton_horse:
+      min: 10
+      max: 20
+    slime:
+      min: 5
+      max: 15
+    sniffer:
+      min: 3
+      max: 8
+    snowman:
       min: 3
       max: 7
-    shulker:
-      min: 1
-      max: 12
-    silverfish:
-      min: 1
-      max: 6
-    skeleton:
-      min: 2
-      max: 14
-    skeleton_horse:
-      min: 1
-      max: 14
-    slime:
-      min: 1
-      max: 10
-    sniffer:
-      min: 1
-      max: 10
-    snowman:
-      min: 1
-      max: 5
     spider:
-      min: 4
-      max: 8
+      min: 8
+      max: 15
     squid:
-      min: 1
-      max: 4
-    stray:
-      min: 1
+      min: 2
       max: 5
+    stray:
+      min: 7
+      max: 12
     strider:
-      min: 1
+      min: 3
       max: 7
     tadpole:
       min: 1
-      max: 5
+      max: 3
     trader_llama:
-      min: 1
-      max: 5
+      min: 3
+      max: 7
     tropical_fish:
       min: 1
-      max: 4
+      max: 3
     turtle:
-      min: 1
-      max: 4
-    vex:
-      min: 1
-      max: 9
-    villager:
-      min: 1
-      max: 16
-    vindicator:
-      min: 1
-      max: 11
-    wandering_trader:
-      min: 1
-      max: 8
-    witch:
-      min: 1
-      max: 7
-    wither:
-      min: 1
-      max: 20
-    wither_skeleton:
-      min: 1
-      max: 22
-    wolf:
-      min: 1
+      min: 2
       max: 5
-    zoglin:
-      min: 1
+    vex:
+      min: 15
+      max: 25
+    villager:
+      min: 5
+      max: 15
+    vindicator:
+      min: 15
+      max: 25
+    wandering_trader:
+      min: 3
       max: 7
+    warden:
+      min: 100
+      max: 150
+    witch:
+      min: 15
+      max: 25
+    wither:
+      min: 40
+      max: 70
+    wither_skeleton:
+      min: 25
+      max: 40
+    wolf:
+      min: 5
+      max: 10
+    zoglin:
+      min: 7
+      max: 15
     zombie:
-      min: 1
+      min: 5
       max: 15
     zombie_horse:
-      min: 1
-      max: 6
+      min: 5
+      max: 10
     zombie_villager:
-      min: 1
-      max: 18
+      min: 10
+      max: 20
     zombified_piglin:
-      min: 1
-      max: 7
+      min: 7
+      max: 15
 
     coal_ore:
       min: 2
       max: 5
+    deepslate_coal_ore:
+      min: 3
+      max: 6
     iron_ore:
-      min: 2
+      min: 5
+      max: 8
+    deepslate_iron_ore:
+      min: 6
+      max: 9
+    copper_ore:
+      min: 3
+      max: 6
+    deepslate_copper_ore:
+      min: 4
       max: 7
     gold_ore:
-      min: 2
+      min: 7
+      max: 12
+    deepslate_gold_ore:
+      min: 8
+      max: 14
+    redstone_ore:
+      min: 4
+      max: 8
+    deepslate_redstone_ore:
+      min: 5
+      max: 9
+    lapis_lazuli_ore:
+      min: 5
       max: 10
+    deepslate_lapis_lazuli_ore:
+      min: 6
+      max: 12
+    diamond_ore:
+      min: 15
+      max: 25
+    deepslate_diamond_ore:
+      min: 17
+      max: 28
+    emerald_ore:
+      min: 20
+      max: 30
+    deepslate_emerald_ore:
+      min: 22
+      max: 33
+    nether_quartz_ore:
+      min: 3
+      max: 7
+    nether_gold_ore:
+      min: 6
+      max: 11
+    ancient_debris:
+      min: 30
+      max: 50
 
     # All is used if not found other xp-lose use this (remove all section to disable)
     all:

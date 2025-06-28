@@ -32,7 +32,7 @@ default:
     suffix: ''
     group: 'Pro'
     execute: default
-    xp: 400
+    xp: 500
   '5':
     prefix: '&7[&bDefault&7] [&b5&7]'
     suffix: ''
@@ -41,4 +41,4 @@ default:
     override: default-last
     # The execute: executor (this is only the level.up and level.down)
     execute: default-last
-    xp: 500
+    xp: 750

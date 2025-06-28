@@ -407,8 +407,10 @@ translate:
     ENDERMITE: Endermite
     EVOKER: Evoker
     FOX: Fox
+    GOAT: Goat
     GHAST: Ghast
     GIANT: Giant
+    GLOW_SQUID: Glow Squid
     GUARDIAN: Guardian
     HOGLIN: Hoglin
     HORSE: Horse
@@ -437,6 +439,7 @@ translate:
     SKELETON_HORSE: Skeleton horse
     SKELETON: Skeleton
     SLIME: Slime
+    SNIFFER: Sniffer
     SNOWMAN: Snow golem
     SPIDER: Spider
     SQUID: Squid
@@ -449,6 +452,7 @@ translate:
     VILLAGER: Villager
     VINDICATOR: Vindicator
     WANDERING_TRADER: Wandering trader
+    WARDEN: Warden
     WITCH: Witch
     WITHER_SKELETON: Wither skeleton
     WITHER: Wither
@@ -460,16 +464,25 @@ translate:
     ZOMBIFIED_PIGLIN: Zombified piglin
     ARROW: Skeleton
   blocks:
-    ANCIENT_DEBRIS: Ancient debris
-    COAL_ORE: Coal ore
-    DIAMOND_ORE: Diamond ore
-    EMERALD_ORE: Emerald ore
-    GOLD_ORE: Gold ore
-    IRON_ORE: Iron ore
-    LAPIS_ORE: Lapis ore
-    NETHER_GOLD_ORE: Nether gold ore
-    NETHER_QUARTZ_ORE: Nether quartz ore
-    REDSTONE_ORE: Redstone ore
+    COAL_ORE: Coal Ore
+    DEEPSLATE_COAL_ORE: Deepslate Coal Ore
+    IRON_ORE: Iron Ore
+    DEEPSLATE_IRON_ORE: Deepslate Iron Ore
+    COPPER_ORE: Copper Ore
+    DEEPSLATE_COPPER_ORE: Deepslate Copper Ore
+    GOLD_ORE: Gold Ore
+    DEEPSLATE_GOLD_ORE: Deepslate Gold Ore
+    REDSTONE_ORE: Redstone Ore
+    DEEPSLATE_REDSTONE_ORE: Deepslate Redstone Ore
+    LAPIS_LAZULI_ORE: Lapis Lazuli Ore
+    DEEPSLATE_LAPIS_LAZULI_ORE: Deepslate Lapis Lazuli Ore
+    DIAMOND_ORE: Diamond Ore
+    DEEPSLATE_DIAMOND_ORE: Deepslate Diamond Ore
+    EMERALD_ORE: Emerald Ore
+    DEEPSLATE_EMERALD_ORE: Deepslate Emerald Ore
+    NETHER_QUARTZ_ORE: Nether Quartz Ore
+    NETHER_GOLD_ORE: Nether Gold Ore
+    ANCIENT_DEBRIS: Ancient Debris
   cause:
     BLOCK_EXPLOSION: TNT explosion
     PRIMED_TNT: TNT explosion
