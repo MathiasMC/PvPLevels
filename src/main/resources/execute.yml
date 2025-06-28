@@ -9,22 +9,22 @@
 default:
   xp:
     get:
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You gained &b{xp_get} &7xp for &b{xp_type}&7.'
     item:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Item multiplier &bx{xp_item} &7was applied.'
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You gained &b{xp_get} &7xp for &b{xp_type}&7.'
     boost:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Multiplier &bx{xp_multiplier} &7was applied.'
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You gained &b{xp_get} &7xp for &b{xp_type}&7.'
     both:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7Multiplier &bx{xp_multiplier} &7and Item multiplier &bx{xp_item} &7was applied.'
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You gained &b{xp_get} &7xp for &b{xp_type}&7.'
     lose:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost &b{xp_lost} &7xp.'
   level:
     up:
       - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You gained &b{xp_get} &7xp for &b{xp_type}&7.'
     down:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
 default-last:
@@ -42,6 +42,6 @@ default-last:
   level:
     up:
       - 'pvplevels broadcast null &7[&f&lP&b&lL&7] &f&l» &b{player} &7has leveled up to Level &b{level_next}&7!'
-      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
+      - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You gained &b{xp_get} &7xp for &b{xp_type}&7.'
     down:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
