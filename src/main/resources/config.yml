@@ -6,42 +6,47 @@
 #           contact me on spigot          #
 #                                         #
 
-# Check for updates on startup?
+# Check for plugin updates on server startup?
 update-check: true
 
-# Check for blocks and get xp if type found. (disable block break, place event) (Require server restart)
+# Checks for block interactions and awards XP if the block type matches.
+# Note: Block break and place events are disabled.
+# Requires a server restart to apply changes.
 blocks: true
 
-# Group setup player is automatic set to group
-# if has permission on join
-# Case sensitive and must be found in levels.yml
-# Works from top to bottom
-# Best group should be at top
+# Group Setup: Player is automatically assigned to a group on join based on permissions.
+#
+# - Group names are case-sensitive and must match entries in levels.yml.
+# - The system checks permissions from top to bottom in this list.
+# - The highest priority group (best group) should be listed first.
+#
 # Example:
-# master: pvplevels.group.master
-# vip: pvplevels.group.vip
-# default: pvplevels.group.default
-# if you have permission on join, you get vip
-# but if has master permission you will get master group
+#   master: pvplevels.group.master
+#   vip: pvplevels.group.vip
+#   default: pvplevels.group.default
+#
+# Explanation:
+# If a player has the "vip" permission on join, they will be assigned to the "vip" group.
+# However, if the player also has the "master" permission, they will be assigned to the "master" group instead,
+# because it is higher in the list.
 groups:
   default: pvplevels.group.default
-  #vip: pvplevels.group.vip
 
-# Stop multiplier on quit?
+# Stop XP multiplier when player quits the server?
 multiplier-quit: true
 
 # Worlds section
-# Disable getting stats in worlds in thís list
+# Disable XP and stats tracking in worlds listed here.
 worlds:
   - world_nether
 
-# Instant death on certain y level
+# Instant death at a specific Y-level
 instant-death:
-  # Use? (Require server restart)
+  # Enable instant death feature? (Requires server restart)
   use: false
-  # Respawn instant?
+  # Instantly respawn player after death?
   respawn: false
-  # Y-value for death
+  # Y-level threshold for instant death
   y: -1
 
 # Database settings
@@ -53,42 +58,44 @@ mysql:
   username: username
   password: password
 
-  # Get latest data on player join
-  # Used to sync cached data across multiple servers
-  # Recommended setting is 1-10 to be sure the other servers has updated data before getting new data
-  # If using SQLite or one server set to 0
-  # Seconds.
+  # Retrieve the latest data when a player joins.
+  # This ensures cached data is synchronized across multiple servers.
+  # Recommended value: 1-10 seconds - allows time for other servers to update their data.
+  # Set to 0 if using SQLite or running a single server instance.
+  # Value is in seconds.
   update: 2
 
-  # Save to the database every x amount of times got xp
-  # Recommended setting 3-20
+  # Save player data to the database after this many XP gains.
+  # Recommended range: 3-20 for balanced performance and data safety.
   save: 5
 
-  # Automatically remove inactive players from the database (remove section to disable)
+  # Automatically remove inactive players from the database.
+  # Remove this entire section to disable auto-purge.
   purge:
 
-    # How often to check the activity of players? Seconds.
+    # Interval (in seconds) between inactivity checks.
     interval: 7200
 
-    # Check on server startup?
+    # Perform an inactivity check when the server starts.
     check-on-startup: true
 
-    # How many days a player must be offline to remove him from the database.
+    # Number of days a player must be offline before removal.
     inactive-days: 30
 
-    # Additional commands that will be executed along with the purge. It may
-    # be useful for deleting player data from a databases of other plugins.
+    # Additional commands to execute during purge.
+    # Useful for cleaning data in other plugin databases.
     commands: []
 
-# Stop players from farming xp from killing the same player.
+# Prevent players from farming XP by repeatedly killing the same player.
 kill-session:
 
+  # Enable or disable kill session tracking.
   use: true
 
-  # Amount of times a player must kill another player to get in the kill session.
+  # Number of kills against the same player needed to enter a kill session.
   amount: 4
 
-  # Amount of time (in seconds) a player is in the kill session.
+  # Duration (in seconds) a player remains in the kill session.
   time: 150
 
   get:
@@ -103,7 +110,7 @@ top:
   value: '&cNone'
   excluded:
     - uuid
-  # Update top map every x amount of seconds. (300 = 5 minutes)
+  # Update the top map every X seconds (e.g., 300 = 5 minutes).
   update: 300
 
 xp-progress-style:
@@ -124,41 +131,42 @@ xp-progress-style-2:
     color: '&c'
   amount: 20
 
-# Start level of new players (Require server restart)
+# Starting level for new players (requires server restart)
 start-level: 1
 
-# List of players that will not get kills/deaths/xp
+# List of players excluded from gaining kills, deaths, or XP
 excluded:
   - uuid
 
-# List of entity names you cannot get xp from
+# List of entity names from which players cannot earn XP
 spawners:
   - zombie
 
-# Generate command
+# Generate command settings for level and XP system
 generate:
-  # Set to false if you have a level setup finished so you cannot by accident erase the levels.yml
+  # Enable or disable generation to prevent accidental overwrites of levels.yml
   use: true
 
-  # Start xp of level system
+  # Starting XP for the leveling system
   start: 75
 
-  # Math used to calculate xp for every level
+  # XP calculation parameters for each level
   #
   # Formula: ( lastXP + random[min, max] )
-  #
-  # You can also add another random at specific level
+  # You can override min/max XP range at specific levels by adding that level as a key
   #
   min: 50
   max: 800
 
+  # Override min/max XP range at level 5
   5:
     min: 500
     max: 1000
 
+  # Percent-based groups with custom prefixes, suffixes, and group names
+  #
+  # The keys represent percentage thresholds (must include 100)
   percent:
-
-    # If under or equal percent use that for inserting. (you can add more if you want) (Must contain 100)
     20:
       prefix: '&7[&b{group}&7] &7[&b{level}&7]'
       suffix: ''
@@ -180,6 +188,7 @@ generate:
       group: 'Pro'
       execute: '{group}'
 
+  # Commands executed on various XP events
   get:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have killed &b{xp_type} &7and received &b{xp_get} &7xp.'
   item:
@@ -199,7 +208,10 @@ generate:
   down:
     - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have lost a level and now at Level &b{level}&7.'
 
-  # This section is for inserting commands into a specific level (if it contains) and a name for the execute group must be unique.
+  # Commands and messages tied to specific levels
+  #
+  # Each level can have unique commands for leveling up or down
+  # The "execute" key runs a command unique to that level/group combination
   levels:
     20:
       up:
@@ -218,11 +230,12 @@ generate:
 
 xp:
   default:
-    # lowercase entity names
-    # You can use worlds, items, name in all types here
+    # Entity names must be lowercase
+    # You can specify worlds, items, or custom names in any xp type here
     player:
 
-      # Get more xp with an specific item (PlaceholderAPI support)
+      # Specific item multipliers (PlaceholderAPI supported)
+      # Uncomment and customize to give extra XP based on the item used
       #items:
       #  bow:
       #    name: '&eBow'
@@ -237,20 +250,18 @@ xp:
       #    min: 5
       #    max: 10
 
-      # if has custom name test give another amount of xp
-      # you can still use color codes on entity just not use it here
-      # This can be used for custom mobs
-      # match string of customName
-      # supports PlaceholderAPI
+      # Custom XP for named entities (e.g., custom mobs)
+      # Matches the entity´s custom name (supports PlaceholderAPI)
       #name:
       #  'test':
       #    min: 7
       #    max: 7
 
+      # Base XP range for killing a player
       min: 3
       max: 15
 
-      # Another amount depend on world
+      # World-specific XP modifiers
       world:
         min: 1
         max: 4
@@ -259,12 +270,12 @@ xp:
         min: 5
         max: 10
 
-      # xp lose, remove this section to disable.
+      # XP Lost on death, remove this section to disable XP loss
       xp-lose:
         min: 6
         max: 20
 
-        # Another amount depend on world
+        # World-specific XP loss modifiers
         world:
           min: 1
           max: 4
@@ -572,13 +583,14 @@ xp:
       min: 30
       max: 50
 
-    # All is used if not found other xp-lose use this (remove all section to disable)
+    # Default XP loss applied if no specific xp-lose section is found for an entity
+    # Remove this entire "all" section to disable default XP loss
     all:
       xp-lose:
         min: 2
         max: 2
 
-# If you dont use you can just remove this section.
+# Remove this entire section if you don't want to use kill milestone commands
 kills:
   default:
     get: []
@@ -587,7 +599,7 @@ kills:
     10:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have reached &b10 &7kills.'
 
-# If you dont use you can just remove this section.
+# Remove this entire section if you don't want to use death milestone commands
 deaths:
   default:
     only-player: false
@@ -598,7 +610,7 @@ deaths:
       - 'pvplevels message {player} &7[&f&lP&b&lL&7] &f&l» &7You have been slammed by &b{source}&7!'
       - 'pvplevels reset killstreak {player}'
 
-# If you dont use you can just remove this section.
+# Remove this entire section if you don't want to use killstreak milestone commands
 killstreak:
   default:
     get: []

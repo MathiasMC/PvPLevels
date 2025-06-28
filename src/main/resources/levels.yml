@@ -6,7 +6,7 @@
 #           contact me on spigot          #
 #                                         #
 default:
-  # executor for get xp section in execute.yml
+  # Executor used for the "get xp" section in execute.yml by default
   execute: default
   '1':
     prefix: '&7[&bDefault&7] [&b1&7]'
@@ -37,8 +37,8 @@ default:
     prefix: '&7[&bDefault&7] [&b5&7]'
     suffix: ''
     group: 'Master'
-    # override top executor for get xp section in execute.yml
+    # Override the default executor used in the "get xp" section of execute.yml for this level
     override: default-last
-    # The execute: executor (this is only the level.up and level.down)
+    # Executor specifically for level up and level down actions at this highest level
     execute: default-last
     xp: 750
